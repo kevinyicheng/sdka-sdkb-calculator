@@ -1,708 +1,776 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>富邦 SDKA/SDKB 重大傷病險保費試算</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #0b0c14;
-      --surface: rgba(255,255,255,0.04);
-      --surface-hover: rgba(255,255,255,0.07);
-      --border: rgba(255,255,255,0.08);
-      --border-active: rgba(255,255,255,0.18);
-      --text: #f0f0f8;
-      --muted: rgba(255,255,255,0.4);
-      --cyan: #4fd1c5;
-      --green: #68d391;
-      --amber: #f6ad55;
-      --purple: #b794f4;
-      --blue: #63b3ed;
-      --red: #fc8181;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>富邦 SDKA/SDKB 重大傷病險保費試算</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0b0d17;
+  --s1:rgba(255,255,255,.04);
+  --s2:rgba(255,255,255,.07);
+  --b1:rgba(255,255,255,.08);
+  --b2:rgba(255,255,255,.16);
+  --tx:#eef0f8;
+  --mu:rgba(255,255,255,.38);
+  --cyan:#4fd1c5;
+  --green:#68d391;
+  --amber:#f6ad55;
+  --purple:#b794f4;
+  --blue:#63b3ed;
+  --red:#fc8181;
+  --c1:#63b3ed;--c2:#68d391;--c3:#f6ad55;
+}
+html{font-size:16px}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;
+  background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 55% at 15% 5%,rgba(79,209,197,.1) 0%,transparent 55%),
+    radial-gradient(ellipse 55% 70% at 85% 85%,rgba(99,179,237,.09) 0%,transparent 55%),
+    radial-gradient(ellipse 45% 45% at 55% 45%,rgba(183,148,244,.05) 0%,transparent 65%);
+}
 
-    /* ── Background ── */
-    body::before {
-      content: '';
-      position: fixed; inset: 0; z-index: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(79,209,197,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 80% 80%, rgba(99,179,237,0.07) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(183,148,244,0.04) 0%, transparent 70%);
-      pointer-events: none;
-    }
+/* ── Page ── */
+.page{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:28px 20px 100px}
 
-    /* ── Layout ── */
-    .page { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; padding: 24px 16px 80px; }
+/* ── Header ── */
+header{display:flex;align-items:center;justify-content:space-between;padding-bottom:36px}
+.logo{display:flex;align-items:center;gap:14px}
+.logo-mark{
+  width:44px;height:44px;border-radius:13px;
+  background:linear-gradient(135deg,var(--cyan),var(--blue));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:16px;color:#0b0d17;letter-spacing:-.5px;
+  box-shadow:0 0 24px rgba(79,209,197,.3);
+}
+.logo-info strong{display:block;font-size:17px;font-weight:700;letter-spacing:-.01em}
+.logo-info span{font-size:12px;color:var(--mu)}
+.badge{
+  padding:6px 16px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.06em;
+  background:rgba(79,209,197,.1);border:1px solid rgba(79,209,197,.25);color:var(--cyan);
+}
 
-    /* ── Header ── */
-    header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 0 32px;
-    }
-    .logo-wrap { display: flex; align-items: center; gap: 12px; }
-    .logo-dot {
-      width: 36px; height: 36px; border-radius: 10px;
-      background: linear-gradient(135deg, var(--cyan), var(--blue));
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 14px; color: #0b0c14;
-    }
-    .logo-text { font-size: 13px; }
-    .logo-text strong { display: block; font-size: 15px; font-weight: 700; letter-spacing: 0.01em; }
-    .logo-text span { color: var(--muted); font-size: 12px; }
-    .header-badge {
-      background: rgba(79,209,197,0.12); border: 1px solid rgba(79,209,197,0.25);
-      color: var(--cyan); padding: 4px 12px; border-radius: 999px;
-      font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
-    }
+/* ── Glass Card ── */
+.card{
+  background:var(--s1);border:1px solid var(--b1);
+  border-radius:24px;padding:32px;
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+}
+.card+.card,.card+.results{margin-top:16px}
+.section-label{
+  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--mu);margin-bottom:24px;
+}
 
-    /* ── Glass Card ── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 28px;
-    }
-    .card + .card { margin-top: 16px; }
-    .card-title {
-      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--muted);
-      margin-bottom: 20px;
-    }
+/* ── Gender Pills ── */
+.gender-row{display:flex;gap:10px;margin-bottom:28px}
+.g-btn{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:18px 12px;border:1px solid var(--b1);border-radius:16px;
+  cursor:pointer;transition:all .2s;background:var(--s1);
+  font-size:16px;font-weight:600;color:var(--mu);
+}
+.g-btn input{display:none}
+.g-btn .g-icon{font-size:22px;line-height:1}
+.g-btn:hover{border-color:var(--b2);color:var(--tx);background:var(--s2)}
+.g-btn.male-on{border-color:rgba(99,179,237,.55);background:rgba(99,179,237,.1);color:var(--c1)}
+.g-btn.female-on{border-color:rgba(183,148,244,.55);background:rgba(183,148,244,.1);color:var(--purple)}
 
-    /* ── Form Controls ── */
-    .field { margin-bottom: 20px; }
-    .field label {
-      display: block; font-size: 12px; color: var(--muted);
-      font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
-      margin-bottom: 10px;
-    }
+/* ── Date Row ── */
+.field-label{font-size:12px;color:var(--mu);font-weight:600;letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px}
+.date-row{display:flex;gap:10px;margin-bottom:28px}
+.date-row input,.date-row select{
+  background:rgba(255,255,255,.05);border:1px solid var(--b1);
+  border-radius:14px;color:var(--tx);font-size:15px;padding:14px 16px;
+  outline:none;transition:border-color .2s,background .2s;
+  appearance:none;-webkit-appearance:none;width:100%;
+}
+.date-row input:focus,.date-row select:focus{border-color:var(--b2);background:rgba(255,255,255,.08)}
+.date-row input::placeholder{color:rgba(255,255,255,.18)}
+.date-row input::-webkit-inner-spin-button{display:none}
+.date-row select option{background:#15172a}
+.yr{flex:1.6}.mo,.dy{flex:1}
 
-    /* Gender Toggle */
-    .gender-row { display: flex; gap: 10px; }
-    .gender-btn {
-      flex: 1; display: flex; align-items: center; justify-content: center;
-      gap: 8px; padding: 14px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      cursor: pointer; transition: all 0.2s;
-      font-size: 14px; font-weight: 500;
-      background: var(--surface); color: var(--muted);
-      position: relative; overflow: hidden;
-    }
-    .gender-btn input { display: none; }
-    .gender-btn:hover { border-color: var(--border-active); color: var(--text); }
-    .gender-btn.active-male {
-      border-color: rgba(99,179,237,0.6);
-      background: rgba(99,179,237,0.1);
-      color: var(--blue);
-    }
-    .gender-btn.active-female {
-      border-color: rgba(183,148,244,0.6);
-      background: rgba(183,148,244,0.1);
-      color: var(--purple);
-    }
-    .gender-btn .icon { font-size: 18px; }
+#age-tag{
+  display:none;align-items:center;gap:8px;margin-top:12px;margin-bottom:28px;
+  font-size:15px;font-weight:600;color:var(--cyan);
+}
+#age-tag.on{display:flex}
+#age-tag::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--cyan);flex-shrink:0;box-shadow:0 0 8px var(--cyan)}
 
-    /* Date row */
-    .date-row { display: flex; gap: 8px; }
-    .date-row .year-wrap { flex: 1.5; }
-    .date-row .month-wrap, .date-row .day-wrap { flex: 1; }
+/* ── Coverage Slider ── */
+.coverage-section{margin-bottom:8px}
+.coverage-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
+.coverage-big{font-size:48px;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--tx)}
+.coverage-big .unit{font-size:20px;font-weight:600;color:var(--mu);margin-left:4px}
+.coverage-input-wrap{position:relative}
+.coverage-input{
+  background:transparent;border:none;outline:none;
+  font-size:48px;font-weight:800;letter-spacing:-.03em;color:var(--tx);
+  width:160px;text-align:right;
+}
+.coverage-input::-webkit-inner-spin-button{display:none}
 
-    input[type="number"], select {
-      width: 100%; padding: 13px 16px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
-      border-radius: 12px; color: var(--text);
-      font-size: 14px; outline: none;
-      transition: border-color 0.2s, background 0.2s;
-      appearance: none; -webkit-appearance: none;
-    }
-    input[type="number"]:focus, select:focus {
-      border-color: var(--border-active);
-      background: rgba(255,255,255,0.08);
-    }
-    input[type="number"]::placeholder { color: rgba(255,255,255,0.2); }
-    input[type="number"]::-webkit-inner-spin-button { display: none; }
-    select option { background: #1a1a2e; }
+/* Custom Range Slider */
+.slider-wrap{position:relative;margin-bottom:8px}
+input[type=range]{
+  width:100%;height:6px;appearance:none;-webkit-appearance:none;
+  border-radius:999px;outline:none;cursor:pointer;
+  background:linear-gradient(to right, var(--cyan) 0%, var(--cyan) var(--pct,20%), rgba(255,255,255,.1) var(--pct,20%));
+}
+input[type=range]::-webkit-slider-thumb{
+  appearance:none;-webkit-appearance:none;
+  width:26px;height:26px;border-radius:50%;
+  background:#fff;cursor:grab;
+  box-shadow:0 0 0 4px rgba(79,209,197,.3), 0 4px 12px rgba(0,0,0,.4);
+  transition:box-shadow .2s;
+}
+input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 8px rgba(79,209,197,.2),0 4px 12px rgba(0,0,0,.4)}
+.slider-ticks{display:flex;justify-content:space-between;margin-top:8px}
+.slider-tick{font-size:11px;color:var(--mu);font-weight:500}
 
-    /* Coverage row */
-    .coverage-wrap { position: relative; }
-    .coverage-wrap input { padding-right: 56px; }
-    .coverage-unit {
-      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-      font-size: 12px; color: var(--muted); font-weight: 500;
-    }
+/* ── Calc Button ── */
+.calc-btn{
+  width:100%;padding:20px;margin-top:8px;
+  background:linear-gradient(135deg,rgba(79,209,197,.18),rgba(99,179,237,.15));
+  border:1px solid rgba(79,209,197,.3);border-radius:16px;
+  color:var(--cyan);font-size:17px;font-weight:800;letter-spacing:.04em;
+  cursor:pointer;transition:all .2s;
+}
+.calc-btn:hover{background:linear-gradient(135deg,rgba(79,209,197,.28),rgba(99,179,237,.25));border-color:rgba(79,209,197,.55);transform:translateY(-2px);box-shadow:0 8px 32px rgba(79,209,197,.15)}
+.calc-btn:active{transform:translateY(0)}
+#err{display:none;margin-top:14px;font-size:14px;color:var(--red);text-align:center}
+#err.on{display:block}
 
-    /* Age badge */
-    #age-display {
-      display: none; margin-top: 10px;
-      font-size: 12px; color: var(--cyan);
-      display: none; align-items: center; gap: 6px;
-    }
-    #age-display.show { display: flex; }
-    #age-display::before { content: '●'; font-size: 8px; }
+/* ── Results ── */
+.results{display:none}
+.results.on{display:block;animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-    /* Calculate button */
-    .calc-btn {
-      width: 100%; padding: 16px;
-      background: linear-gradient(135deg, rgba(79,209,197,0.2), rgba(99,179,237,0.2));
-      border: 1px solid rgba(79,209,197,0.35);
-      border-radius: 14px; color: var(--cyan);
-      font-size: 15px; font-weight: 700;
-      cursor: pointer; transition: all 0.2s;
-      letter-spacing: 0.05em;
-    }
-    .calc-btn:hover {
-      background: linear-gradient(135deg, rgba(79,209,197,0.3), rgba(99,179,237,0.3));
-      border-color: rgba(79,209,197,0.6);
-      transform: translateY(-1px);
-    }
-    .calc-btn:active { transform: translateY(0); }
+/* ── Hero ── */
+.hero{
+  background:linear-gradient(135deg,rgba(79,209,197,.1),rgba(99,179,237,.07));
+  border:1px solid rgba(79,209,197,.18);border-radius:24px;padding:32px;margin-bottom:16px;
+}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:24px}
+.hero-who{font-size:15px;font-weight:600;color:var(--cyan);margin-top:4px}
+.hero-label{font-size:11px;color:var(--mu);font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.hero-big{font-size:52px;font-weight:900;letter-spacing:-.03em;line-height:1}
+.hero-big .cur{font-size:26px;font-weight:600;color:var(--mu);margin-right:2px}
+.hero-meta{font-size:13px;color:var(--mu);text-align:right;line-height:2}
+.hero-meta strong{color:var(--tx)}
 
-    #error-msg {
-      display: none; margin-top: 12px;
-      color: var(--red); font-size: 13px; text-align: center;
-    }
-    #error-msg.show { display: block; }
+/* ── Timeline Bar ── */
+.timeline{margin-top:4px}
+.tl-label{font-size:11px;color:var(--mu);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.tl-track{
+  display:flex;border-radius:12px;overflow:hidden;height:36px;
+  background:rgba(255,255,255,.04);border:1px solid var(--b1);
+}
+.tl-seg{
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;letter-spacing:.05em;
+  transition:flex .5s cubic-bezier(.4,0,.2,1);
+  cursor:default;position:relative;overflow:hidden;
+}
+.tl-seg::after{content:'';position:absolute;inset:0;background:inherit;opacity:.15}
+.tl-seg-1{background:rgba(99,179,237,.3);color:var(--c1);border-right:1px solid rgba(255,255,255,.06)}
+.tl-seg-2{background:rgba(104,211,145,.3);color:var(--c2);border-right:1px solid rgba(255,255,255,.06)}
+.tl-seg-3{background:rgba(246,173,85,.3);color:var(--c3)}
+.tl-seg-invalid{background:rgba(255,255,255,.04);color:var(--mu)}
+.tl-ages{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--mu)}
 
-    /* ── Results ── */
-    #results { display: none; margin-top: 16px; }
-    #results.show { display: block; animation: fadeUp 0.35s ease; }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+/* ── Period Cards ── */
+.periods{display:flex;flex-direction:column;gap:14px;margin-bottom:16px}
+.pc{
+  border-radius:22px;padding:26px;border:1px solid var(--b1);
+  position:relative;overflow:hidden;
+}
+.pc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.pc-1{background:rgba(99,179,237,.06)}
+.pc-1::before{background:linear-gradient(90deg,var(--c1),transparent)}
+.pc-2{background:rgba(104,211,145,.06)}
+.pc-2::before{background:linear-gradient(90deg,var(--c2),transparent)}
+.pc-3{background:rgba(246,173,85,.06)}
+.pc-3::before{background:linear-gradient(90deg,var(--c3),transparent)}
+.pc-invalid{background:rgba(255,255,255,.02);opacity:.45}
 
-    /* Summary hero */
-    .summary-hero {
-      background: linear-gradient(135deg, rgba(79,209,197,0.1), rgba(99,179,237,0.08));
-      border: 1px solid rgba(79,209,197,0.2);
-      border-radius: 20px; padding: 28px;
-      margin-bottom: 16px;
-    }
-    .summary-label { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
-    .summary-who { font-size: 15px; font-weight: 600; color: var(--cyan); }
-    .summary-net-row {
-      display: flex; align-items: flex-end; justify-content: space-between;
-      margin-top: 20px; flex-wrap: wrap; gap: 12px;
-    }
-    .net-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-    .net-amount { font-size: 40px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
-    .net-amount .currency { font-size: 22px; font-weight: 600; margin-right: 2px; color: var(--muted); }
-    .net-amount .cents { font-size: 22px; font-weight: 600; color: var(--muted); }
-    .summary-meta { font-size: 12px; color: var(--muted); line-height: 1.8; text-align: right; }
-    .summary-meta strong { color: var(--text); font-weight: 600; }
+.pc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.pc-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.07em;
+}
+.b1{background:rgba(99,179,237,.15);color:var(--c1);border:1px solid rgba(99,179,237,.3)}
+.b2{background:rgba(104,211,145,.15);color:var(--c2);border:1px solid rgba(104,211,145,.3)}
+.b3{background:rgba(246,173,85,.15);color:var(--c3);border:1px solid rgba(246,173,85,.3)}
+.pc-range{font-size:13px;color:var(--mu)}
+.pc-tag{font-size:11px;color:var(--mu);letter-spacing:.05em}
 
-    /* Period cards grid */
-    .periods-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+/* Annual big number */
+.pc-annual{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px}
+.annual-wrap .al{font-size:11px;color:var(--mu);margin-bottom:6px;font-weight:600;letter-spacing:.07em;text-transform:uppercase}
+.annual-num{font-size:38px;font-weight:900;letter-spacing:-.02em;line-height:1}
+.annual-num .u{font-size:16px;font-weight:600;color:var(--mu);margin-left:4px}
+.rate-chip{
+  font-size:12px;color:var(--mu);
+  background:rgba(255,255,255,.05);border:1px solid var(--b1);
+  padding:5px 10px;border-radius:8px;
+}
 
-    .period-card {
-      border-radius: 18px; padding: 22px;
-      border: 1px solid var(--border); position: relative; overflow: hidden;
-    }
-    .period-card::before {
-      content: ''; position: absolute;
-      top: 0; left: 0; right: 0; height: 2px;
-    }
-    .period-1 { background: rgba(99,179,237,0.06); }
-    .period-1::before { background: linear-gradient(90deg, var(--blue), transparent); }
-    .period-2 { background: rgba(104,211,145,0.06); }
-    .period-2::before { background: linear-gradient(90deg, var(--green), transparent); }
-    .period-3 { background: rgba(246,173,85,0.06); }
-    .period-3::before { background: linear-gradient(90deg, var(--amber), transparent); }
-    .period-invalid { background: rgba(255,255,255,0.02); opacity: 0.5; }
+/* Bar breakdown */
+.breakdown-bar{margin-bottom:18px}
+.bb-label{display:flex;justify-content:space-between;font-size:12px;color:var(--mu);margin-bottom:8px}
+.bb-track{height:10px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;position:relative}
+.bb-fill{
+  height:100%;border-radius:999px;
+  transition:width .7s cubic-bezier(.4,0,.2,1);
+  position:relative;
+}
+.bb-fill::after{
+  content:'';position:absolute;right:0;top:0;bottom:0;
+  width:4px;background:rgba(255,255,255,.4);border-radius:999px;
+}
 
-    .period-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-    .period-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 5px 12px; border-radius: 999px;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
-    }
-    .badge-1 { background: rgba(99,179,237,0.15); color: var(--blue); border: 1px solid rgba(99,179,237,0.3); }
-    .badge-2 { background: rgba(104,211,145,0.15); color: var(--green); border: 1px solid rgba(104,211,145,0.3); }
-    .badge-3 { background: rgba(246,173,85,0.15); color: var(--amber); border: 1px solid rgba(246,173,85,0.3); }
-    .period-range { font-size: 12px; color: var(--muted); }
-    .period-tag { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; }
+/* Stats row */
+.pc-stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{
+  flex:1;min-width:120px;padding:12px 16px;border-radius:14px;
+  background:rgba(255,255,255,.04);border:1px solid var(--b1);
+}
+.stat .sl{font-size:11px;color:var(--mu);margin-bottom:6px;font-weight:500}
+.stat .sv{font-size:17px;font-weight:800;letter-spacing:-.01em}
+.sv-green{color:var(--green)}
+.sv-1{color:var(--c1)}.sv-2{color:var(--c2)}.sv-3{color:var(--c3)}
 
-    .period-annual {
-      margin-bottom: 16px;
-    }
-    .annual-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-    .annual-amount { font-size: 32px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
-    .annual-amount .unit { font-size: 14px; font-weight: 500; color: var(--muted); margin-left: 4px; }
+/* ── Until Selector ── */
+.total-card{
+  background:var(--s1);border:1px solid var(--b1);
+  border-radius:24px;padding:28px;
+}
+.until-title{font-size:22px;font-weight:800;margin-bottom:6px}
+.until-sub{font-size:14px;color:var(--mu);margin-bottom:22px}
 
-    .period-rows { display: flex; flex-direction: column; gap: 8px; }
-    .period-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 8px 12px; border-radius: 10px;
-      background: rgba(255,255,255,0.03);
-      font-size: 13px;
-    }
-    .period-row .row-label { color: var(--muted); }
-    .period-row .row-val { font-weight: 600; }
-    .period-row.refund-row .row-val { color: var(--green); }
-    .period-row.net-row {
-      margin-top: 4px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.05);
-    }
-    .period-row.net-row .row-label { font-weight: 600; color: var(--text); }
-    .period-row.net-row .row-val { font-size: 16px; }
-    .val-1 { color: var(--blue); }
-    .val-2 { color: var(--green); }
-    .val-3 { color: var(--amber); }
+.until-opts{display:flex;flex-direction:column;gap:10px}
+.u-opt{
+  display:flex;align-items:center;gap:14px;
+  padding:18px 20px;border:1px solid var(--b1);border-radius:16px;
+  cursor:pointer;transition:all .2s;background:rgba(255,255,255,.02);
+  position:relative;overflow:hidden;
+}
+.u-opt::after{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:99px;
+  background:var(--cyan);transform:scaleX(0);transform-origin:left;transition:transform .2s;
+}
+.u-opt:hover{border-color:var(--b2);background:var(--s2)}
+.u-opt.sel{border-color:rgba(79,209,197,.35);background:rgba(79,209,197,.07)}
+.u-opt.sel::after{transform:scaleX(1)}
+.u-radio{
+  width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;
+}
+.u-opt.sel .u-radio{border-color:var(--cyan);background:rgba(79,209,197,.2)}
+.u-dot{width:10px;height:10px;border-radius:50%;background:var(--cyan);opacity:0;transition:opacity .15s}
+.u-opt.sel .u-dot{opacity:1}
+.u-text{flex:1;font-size:15px;font-weight:600}
+.u-sub{font-size:12px;color:var(--mu);margin-top:2px;font-weight:400}
+.u-amount{font-size:20px;font-weight:900;color:var(--cyan);letter-spacing:-.01em;text-align:right}
+.u-amount-label{font-size:11px;color:var(--mu);text-align:right;font-weight:500}
 
-    /* Rate chip */
-    .rate-chip {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 11px; color: var(--muted);
-      background: rgba(255,255,255,0.05); padding: 3px 8px; border-radius: 6px;
-    }
+/* ── Total Result Box ── */
+#total-result{
+  display:none;margin-top:20px;
+  border-radius:18px;overflow:hidden;
+}
+#total-result.on{display:block;animation:fadeUp .3s ease}
+.tr-inner{
+  background:linear-gradient(135deg,rgba(79,209,197,.08),rgba(99,179,237,.06));
+  border:1px solid rgba(79,209,197,.18);border-radius:18px;padding:24px;
+}
+.tr-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;font-size:14px;
+}
+.tr-row+.tr-row{border-top:1px solid rgba(255,255,255,.06)}
+.tr-l{color:var(--mu)}
+.tr-v{font-weight:700;font-size:16px}
+.tr-v-green{color:var(--green)}
+.tr-main{padding-top:18px;margin-top:8px;border-top:1px solid rgba(255,255,255,.12) !important}
+.tr-main .tr-l{font-size:16px;font-weight:700;color:var(--tx)}
+.tr-net{font-size:36px;font-weight:900;color:var(--cyan);letter-spacing:-.02em}
 
-    /* ── Total Section ── */
-    .total-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 20px; padding: 24px;
-    }
-    .until-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
-    .until-opts { display: flex; flex-direction: column; gap: 8px; }
-    .until-opt {
-      display: flex; align-items: center; gap: 12px;
-      padding: 13px 16px; border-radius: 12px;
-      border: 1px solid var(--border);
-      cursor: pointer; transition: all 0.15s;
-      background: rgba(255,255,255,0.02);
-    }
-    .until-opt:hover { border-color: var(--border-active); background: var(--surface-hover); }
-    .until-opt input { display: none; }
-    .until-opt.selected {
-      border-color: rgba(79,209,197,0.4);
-      background: rgba(79,209,197,0.07);
-    }
-    .until-radio {
-      width: 18px; height: 18px; border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.2);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: all 0.15s;
-    }
-    .until-opt.selected .until-radio {
-      border-color: var(--cyan);
-      background: rgba(79,209,197,0.2);
-    }
-    .until-radio::after {
-      content: ''; width: 8px; height: 8px; border-radius: 50%;
-      background: var(--cyan); opacity: 0; transition: opacity 0.15s;
-    }
-    .until-opt.selected .until-radio::after { opacity: 1; }
-    .until-text { font-size: 13px; flex: 1; }
-    .until-total { font-size: 13px; font-weight: 700; color: var(--cyan); }
+/* ── Disclaimer ── */
+.disc{
+  margin-top:16px;padding:18px 20px;
+  background:rgba(255,255,255,.02);border-radius:14px;
+  font-size:12px;line-height:2;color:var(--mu);
+}
 
-    /* Total result */
-    #total-result {
-      display: none; margin-top: 16px;
-      background: linear-gradient(135deg, rgba(79,209,197,0.06), rgba(99,179,237,0.04));
-      border: 1px solid rgba(79,209,197,0.15);
-      border-radius: 16px; padding: 20px;
-      animation: fadeUp 0.25s ease;
-    }
-    #total-result.show { display: block; }
-    .total-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 8px 0; font-size: 13px;
-    }
-    .total-row + .total-row { border-top: 1px solid rgba(255,255,255,0.05); }
-    .total-row .t-label { color: var(--muted); }
-    .total-row .t-val { font-weight: 600; }
-    .total-row.main-total { padding-top: 14px; margin-top: 6px; border-top: 1px solid rgba(255,255,255,0.1) !important; }
-    .total-row.main-total .t-label { font-size: 14px; font-weight: 700; color: var(--text); }
-    .main-net { font-size: 28px; font-weight: 800; color: var(--cyan); letter-spacing: -0.02em; }
-
-    /* ── Disclaimer ── */
-    .disclaimer {
-      margin-top: 16px; padding: 16px;
-      background: rgba(255,255,255,0.02); border-radius: 12px;
-      font-size: 11px; line-height: 1.9; color: var(--muted);
-    }
-  </style>
+/* ── Animations ── */
+@keyframes countUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.count-anim{animation:countUp .5s ease forwards}
+</style>
 </head>
 <body>
 <div class="page">
 
-  <!-- Header -->
-  <header>
-    <div class="logo-wrap">
-      <div class="logo-dot">FB</div>
-      <div class="logo-text">
-        <strong>重大傷病定期健康險</strong>
-        <span>SDKA / SDKB 保費試算</span>
-      </div>
+<!-- Header -->
+<header>
+  <div class="logo">
+    <div class="logo-mark">FB</div>
+    <div class="logo-info">
+      <strong>重大傷病定期健康險</strong>
+      <span>SDKA／SDKB 保費試算工具</span>
     </div>
-    <div class="header-badge">10 年期</div>
-  </header>
+  </div>
+  <div class="badge">10 年期</div>
+</header>
 
-  <!-- Input Card -->
-  <div class="card">
-    <div class="card-title">基本資料</div>
+<!-- Input Card -->
+<div class="card">
+  <div class="section-label">基本資料</div>
 
-    <!-- Gender -->
-    <div class="field">
-      <label>性別</label>
-      <div class="gender-row">
-        <label class="gender-btn" id="label-male" onclick="selectGender('male')">
-          <input type="radio" name="gender" value="male">
-          <span class="icon">♂</span> 男性
-        </label>
-        <label class="gender-btn" id="label-female" onclick="selectGender('female')">
-          <input type="radio" name="gender" value="female">
-          <span class="icon">♀</span> 女性
-        </label>
-      </div>
-    </div>
-
-    <!-- Birth Date -->
-    <div class="field">
-      <label>出生日期</label>
-      <div class="date-row">
-        <div class="year-wrap">
-          <input type="number" id="birth-year" placeholder="西元年" min="1930" max="2015" oninput="clearResults()">
-        </div>
-        <div class="month-wrap">
-          <select id="birth-month" onchange="onMonthChange(); clearResults()">
-            <option value="">月</option>
-            <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
-            <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
-            <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
-            <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
-          </select>
-        </div>
-        <div class="day-wrap">
-          <select id="birth-day" onchange="clearResults()">
-            <option value="">日</option>
-          </select>
-        </div>
-      </div>
-      <div id="age-display"></div>
-    </div>
-
-    <!-- Coverage -->
-    <div class="field">
-      <label>保額</label>
-      <div class="coverage-wrap">
-        <input type="number" id="coverage" placeholder="例：100" min="1" oninput="clearResults()">
-        <span class="coverage-unit">萬元</span>
-      </div>
-    </div>
-
-    <button class="calc-btn" onclick="calculate()">開始試算</button>
-    <div id="error-msg"></div>
+  <!-- Gender -->
+  <div class="gender-row">
+    <label class="g-btn" id="lb-m" onclick="setGender('male')">
+      <input type="radio" name="gender" value="male">
+      <span class="g-icon">♂</span><span>男性</span>
+    </label>
+    <label class="g-btn" id="lb-f" onclick="setGender('female')">
+      <input type="radio" name="gender" value="female">
+      <span class="g-icon">♀</span><span>女性</span>
+    </label>
   </div>
 
-  <!-- Results -->
-  <div id="results">
+  <!-- Birth date -->
+  <div class="field-label">出生日期</div>
+  <div class="date-row">
+    <input class="yr" type="number" id="by" placeholder="西元年" min="1930" max="2015" oninput="onDateChange()">
+    <select class="mo" id="bm" onchange="onMonthChange();onDateChange()">
+      <option value="">月</option>
+      <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
+      <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
+      <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
+      <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+    </select>
+    <select class="dy" id="bd" onchange="onDateChange()">
+      <option value="">日</option>
+    </select>
+  </div>
+  <div id="age-tag">
+    <span id="age-txt"></span>
+  </div>
 
-    <!-- Summary Hero -->
-    <div class="summary-hero">
-      <div class="summary-label">試算結果</div>
-      <div class="summary-who" id="result-summary"></div>
-      <div class="summary-net-row">
-        <div>
-          <div class="net-label">三期淨總支出（假設未理賠）</div>
-          <div class="net-amount">
-            <span class="currency">$</span><span id="hero-net">—</span>
-          </div>
-        </div>
-        <div class="summary-meta" id="hero-meta"></div>
-      </div>
-    </div>
-
-    <!-- Period Cards -->
-    <div class="periods-grid" id="period-cards"></div>
-
-    <!-- Total Calculator -->
-    <div class="total-card">
-      <div class="until-title">我想繳到幾歲？</div>
-      <div class="until-opts" id="until-options"></div>
-      <div id="total-result">
-        <div class="total-row">
-          <span class="t-label">累計繳納保費</span>
-          <span class="t-val" id="total-paid"></span>
-        </div>
-        <div class="total-row">
-          <span class="t-label">期滿退還（假設未理賠）</span>
-          <span class="t-val" style="color: var(--green)" id="total-refund"></span>
-        </div>
-        <div class="total-row main-total">
-          <span class="t-label">淨總支出</span>
-          <span class="main-net" id="total-net"></span>
+  <!-- Coverage Slider -->
+  <div class="coverage-section">
+    <div class="field-label">保額</div>
+    <div class="coverage-top">
+      <div>
+        <div style="display:flex;align-items:flex-end;gap:4px">
+          <input type="number" class="coverage-input" id="cov-num" value="100" min="10" max="1000" step="10" oninput="syncSlider(this.value);clearResults()">
+          <span style="font-size:20px;font-weight:600;color:var(--mu);padding-bottom:8px">萬元</span>
         </div>
       </div>
+      <div style="text-align:right;color:var(--mu);font-size:13px;line-height:2">
+        <div>每年保費</div>
+        <div id="preview-annual" style="font-size:20px;font-weight:800;color:var(--tx)">—</div>
+      </div>
     </div>
-
-    <!-- Disclaimer -->
-    <div class="disclaimer">
-      ※ 本試算以費率表資料為基礎，僅供參考，實際保費以富邦人壽核保結果為準。<br>
-      ※「退還一年保費」為假設未發生理賠且完整繳足 10 年之情形。<br>
-      ※ 費率單位：元／每萬元保額；繳費期間：10 年期。<br>
-      ※ 新契約 (SDKA) 投保年齡上限 61 歲；有效契約續保 (SDKB) 最高至 71 歲。
+    <div class="slider-wrap">
+      <input type="range" id="cov-slider" min="10" max="1000" step="10" value="100"
+             style="--pct:9.09%"
+             oninput="syncNum(this.value)">
+    </div>
+    <div class="slider-ticks">
+      <span class="slider-tick">10萬</span>
+      <span class="slider-tick">250萬</span>
+      <span class="slider-tick">500萬</span>
+      <span class="slider-tick">750萬</span>
+      <span class="slider-tick">1000萬</span>
     </div>
   </div>
 
+  <button class="calc-btn" onclick="calculate()">開始試算</button>
+  <div id="err"></div>
+</div>
+
+<!-- Results -->
+<div class="results" id="results">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <div class="hero-label">試算對象</div>
+        <div class="hero-who" id="hero-who"></div>
+      </div>
+      <div id="hero-meta" class="hero-meta"></div>
+    </div>
+    <div style="margin-bottom:20px">
+      <div class="hero-label">三期合計淨支出（假設未理賠）</div>
+      <div class="hero-big"><span class="cur">$</span><span id="hero-net">—</span></div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline">
+      <div class="tl-label">保障時間軸</div>
+      <div class="tl-track" id="tl-track"></div>
+      <div class="tl-ages" id="tl-ages"></div>
+    </div>
+  </div>
+
+  <!-- Period Cards -->
+  <div class="periods" id="period-cards"></div>
+
+  <!-- Total Section -->
+  <div class="total-card">
+    <div class="until-title">我想繳到幾歲？</div>
+    <div class="until-sub">選擇保障期間，計算您的總支出</div>
+    <div class="until-opts" id="until-opts"></div>
+    <div id="total-result">
+      <div class="tr-inner">
+        <div class="tr-row">
+          <span class="tr-l">累計繳納保費</span>
+          <span class="tr-v" id="t-paid"></span>
+        </div>
+        <div class="tr-row">
+          <span class="tr-l">期滿退還（假設未理賠）</span>
+          <span class="tr-v tr-v-green" id="t-refund"></span>
+        </div>
+        <div class="tr-row tr-main">
+          <span class="tr-l">淨總支出</span>
+          <span class="tr-net" id="t-net"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disc">
+    ※ 本試算以費率表資料為基礎，僅供參考，實際保費以富邦人壽核保結果為準。<br>
+    ※「退還一年保費」為假設未發生理賠且完整繳足 10 年之情形。<br>
+    ※ 費率單位：元／每萬元保額；新契約 (SDKA) 上限 61 歲；有效契約續保 (SDKB) 最高 71 歲。
+  </div>
+</div>
 </div>
 
 <script>
-// ── Rate Tables ─────────────────────────────────────────────────
-const SDKA = {
-  male: {
-    15:51,16:53,17:56,18:57,19:58,20:59,
-    21:62,22:65,23:68,24:70,25:73,26:77,27:79,28:83,29:86,30:91,
-    31:98,32:106,33:114,34:123,35:132,36:140,37:147,38:157,39:168,40:181,
-    41:198,42:218,43:238,44:257,45:277,46:296,47:315,48:336,49:355,50:377,
-    51:412,52:448,53:485,54:518,55:555,56:589,57:624,58:658,59:692,60:730,61:768
-  },
-  female: {
-    15:40,16:43,17:46,18:49,19:52,20:55,
-    21:58,22:60,23:63,24:66,25:69,26:72,27:76,28:80,29:84,30:88,
-    31:96,32:104,33:113,34:122,35:130,36:138,37:146,38:156,39:164,40:171,
-    41:183,42:198,43:213,44:229,45:243,46:259,47:275,48:291,49:311,50:328,
-    51:343,52:363,53:383,54:403,55:424,56:445,57:467,58:488,59:511,60:537,61:570
-  }
+// ── Rate Tables ──────────────────────────────────────────────────
+const SDKA={
+  male:{15:51,16:53,17:56,18:57,19:58,20:59,21:62,22:65,23:68,24:70,25:73,26:77,27:79,28:83,29:86,30:91,31:98,32:106,33:114,34:123,35:132,36:140,37:147,38:157,39:168,40:181,41:198,42:218,43:238,44:257,45:277,46:296,47:315,48:336,49:355,50:377,51:412,52:448,53:485,54:518,55:555,56:589,57:624,58:658,59:692,60:730,61:768},
+  female:{15:40,16:43,17:46,18:49,19:52,20:55,21:58,22:60,23:63,24:66,25:69,26:72,27:76,28:80,29:84,30:88,31:96,32:104,33:113,34:122,35:130,36:138,37:146,38:156,39:164,40:171,41:183,42:198,43:213,44:229,45:243,46:259,47:275,48:291,49:311,50:328,51:343,52:363,53:383,54:403,55:424,56:445,57:467,58:488,59:511,60:537,61:570}
 };
-const SDKB = {
-  male: {
-    25:78,26:82,27:85,28:89,29:92,30:97,
-    31:104,32:113,33:122,34:130,35:138,36:147,37:156,38:165,39:177,40:192,
-    41:214,42:237,43:261,44:281,45:303,46:325,47:347,48:370,49:390,50:412,
-    51:448,52:487,53:526,54:560,55:602,56:638,57:675,58:713,59:750,60:785,
-    61:834,62:884,63:934,64:991,65:1048,66:1100,67:1157,68:1212,69:1269,70:1331,71:1403
-  },
-  female: {
-    25:75,26:79,27:82,28:87,29:91,30:96,
-    31:103,32:112,33:121,34:129,35:137,36:146,37:154,38:164,39:175,40:185,
-    41:200,42:215,43:232,44:250,45:267,46:286,47:304,48:324,49:344,50:361,
-    51:381,52:400,53:419,54:442,55:464,56:487,57:510,58:534,59:564,60:597,
-    61:634,62:675,63:723,64:771,65:819,66:867,67:913,68:963,69:1016,70:1060,71:1116
-  }
+const SDKB={
+  male:{25:78,26:82,27:85,28:89,29:92,30:97,31:104,32:113,33:122,34:130,35:138,36:147,37:156,38:165,39:177,40:192,41:214,42:237,43:261,44:281,45:303,46:325,47:347,48:370,49:390,50:412,51:448,52:487,53:526,54:560,55:602,56:638,57:675,58:713,59:750,60:785,61:834,62:884,63:934,64:991,65:1048,66:1100,67:1157,68:1212,69:1269,70:1331,71:1403},
+  female:{25:75,26:79,27:82,28:87,29:91,30:96,31:103,32:112,33:121,34:129,35:137,36:146,37:154,38:164,39:175,40:185,41:200,42:215,43:232,44:250,45:267,46:286,47:304,48:324,49:344,50:361,51:381,52:400,53:419,54:442,55:464,56:487,57:510,58:534,59:564,60:597,61:634,62:675,63:723,64:771,65:819,66:867,67:913,68:963,69:1016,70:1060,71:1116}
 };
 
 // ── Insurance Age ────────────────────────────────────────────────
-function calcInsuranceAge(birthDate, refDate = new Date()) {
-  const b = new Date(birthDate);
-  let yearDiff = refDate.getFullYear() - b.getFullYear();
-  const bdThisYear = new Date(refDate.getFullYear(), b.getMonth(), b.getDate());
-  const bdNextYear = new Date(refDate.getFullYear() + 1, b.getMonth(), b.getDate());
-  const bdLastYear = new Date(refDate.getFullYear() - 1, b.getMonth(), b.getDate());
-  let lastBd, nextBd;
-  if (refDate >= bdThisYear) { lastBd = bdThisYear; nextBd = bdNextYear; }
-  else { yearDiff--; lastBd = bdLastYear; nextBd = bdThisYear; }
-  const fracYear = (refDate - lastBd) / (nextBd - lastBd);
-  return Math.floor(yearDiff + fracYear + 0.5);
+function insAge(bDate,ref=new Date()){
+  const b=new Date(bDate);
+  let yr=ref.getFullYear()-b.getFullYear();
+  const bt=new Date(ref.getFullYear(),b.getMonth(),b.getDate());
+  const bn=new Date(ref.getFullYear()+1,b.getMonth(),b.getDate());
+  const bl=new Date(ref.getFullYear()-1,b.getMonth(),b.getDate());
+  let lo,hi;
+  if(ref>=bt){lo=bt;hi=bn}else{yr--;lo=bl;hi=bt}
+  return Math.floor(yr+(ref-lo)/(hi-lo)+0.5);
 }
 
 // ── Helpers ──────────────────────────────────────────────────────
-function fmt(n) { return Math.round(n).toLocaleString('zh-TW'); }
+function fmt(n){return Math.round(n).toLocaleString('zh-TW')}
 
-function selectGender(g) {
-  document.querySelector(`input[value="${g}"]`).checked = true;
-  document.getElementById('label-male').className =
-    'gender-btn' + (g === 'male' ? ' active-male' : '');
-  document.getElementById('label-female').className =
-    'gender-btn' + (g === 'female' ? ' active-female' : '');
-  clearResults();
+let countTimers=[];
+function countUp(el,target,dur=600){
+  countTimers.forEach(clearInterval);countTimers=[];
+  const start=Date.now();
+  const t=setInterval(()=>{
+    const p=Math.min((Date.now()-start)/dur,1);
+    const ease=1-Math.pow(1-p,3);
+    el.textContent=fmt(Math.round(target*ease));
+    if(p>=1){clearInterval(t);el.textContent=fmt(target)}
+  },16);
+  countTimers.push(t);
 }
 
-function onMonthChange() {
-  const y = +document.getElementById('birth-year').value || 2000;
-  const m = +document.getElementById('birth-month').value;
-  const sel = document.getElementById('birth-day');
-  const prev = +sel.value;
-  sel.innerHTML = '<option value="">日</option>';
-  if (!m) return;
-  const days = new Date(y, m, 0).getDate();
-  for (let d = 1; d <= days; d++) {
-    const o = document.createElement('option');
-    o.value = d; o.textContent = d + '日';
-    if (d === prev) o.selected = true;
+function setGender(g){
+  document.querySelector(`input[value="${g}"]`).checked=true;
+  document.getElementById('lb-m').className='g-btn'+(g==='male'?' male-on':'');
+  document.getElementById('lb-f').className='g-btn'+(g==='female'?' female-on':'');
+  clearResults();updatePreview();
+}
+
+function onMonthChange(){
+  const y=+document.getElementById('by').value||2000;
+  const m=+document.getElementById('bm').value;
+  const sel=document.getElementById('bd');
+  const prev=+sel.value;
+  sel.innerHTML='<option value="">日</option>';
+  if(!m)return;
+  const days=new Date(y,m,0).getDate();
+  for(let d=1;d<=days;d++){
+    const o=document.createElement('option');
+    o.value=d;o.textContent=d+'日';
+    if(d===prev)o.selected=true;
     sel.appendChild(o);
   }
 }
 
-function clearResults() {
-  document.getElementById('results').classList.remove('show');
-  document.getElementById('results').style.display = 'none';
-  document.getElementById('error-msg').classList.remove('show');
+function onDateChange(){
+  clearResults();
+  const y=document.getElementById('by').value;
+  const m=document.getElementById('bm').value;
+  const d=document.getElementById('bd').value;
+  if(!y||!m||!d){document.getElementById('age-tag').className='';return}
+  const age=insAge(new Date(+y,+m-1,+d));
+  const tag=document.getElementById('age-tag');
+  document.getElementById('age-txt').textContent=`保險年齡 ${age} 歲`;
+  tag.className='on';
+  updatePreview();
+}
+
+function updatePreview(){
+  const g=document.querySelector('input[name="gender"]:checked')?.value;
+  const y=document.getElementById('by').value;
+  const m=document.getElementById('bm').value;
+  const d=document.getElementById('bd').value;
+  const cov=+document.getElementById('cov-num').value;
+  if(!g||!y||!m||!d||!cov)return;
+  const age=insAge(new Date(+y,+m-1,+d));
+  const rate=SDKA[g]?.[age];
+  document.getElementById('preview-annual').textContent=
+    rate?fmt(rate*cov)+' 元':'—';
+}
+
+// ── Slider Sync ──────────────────────────────────────────────────
+function syncSlider(v){
+  const sl=document.getElementById('cov-slider');
+  const val=Math.min(Math.max(+v||10),1000);
+  sl.value=val;
+  const pct=((val-10)/(1000-10)*100).toFixed(2);
+  sl.style.setProperty('--pct',pct+'%');
+  updatePreview();
+}
+function syncNum(v){
+  document.getElementById('cov-num').value=v;
+  const pct=((v-10)/(1000-10)*100).toFixed(2);
+  document.getElementById('cov-slider').style.setProperty('--pct',pct+'%');
+  clearResults();updatePreview();
+}
+
+function clearResults(){
+  const r=document.getElementById('results');
+  r.className='results';
+  document.getElementById('err').className='';
 }
 
 // ── Period Data ───────────────────────────────────────────────────
-let periodData = [];
-const PERIOD_STYLES = [
-  { cardClass: 'period-card period-1', badgeClass: 'period-badge badge-1', valClass: 'val-1', num: '01' },
-  { cardClass: 'period-card period-2', badgeClass: 'period-badge badge-2', valClass: 'val-2', num: '02' },
-  { cardClass: 'period-card period-3', badgeClass: 'period-badge badge-3', valClass: 'val-3', num: '03' },
+let PD=[];
+const PS=[
+  {cardC:'pc pc-1',badgeC:'pc-badge b1',vC:'sv-1',barC:'rgba(99,179,237,.7)',num:1},
+  {cardC:'pc pc-2',badgeC:'pc-badge b2',vC:'sv-2',barC:'rgba(104,211,145,.7)',num:2},
+  {cardC:'pc pc-3',badgeC:'pc-badge b3',vC:'sv-3',barC:'rgba(246,173,85,.7)', num:3},
 ];
 
-function buildPeriodCard(p, idx) {
-  const s = PERIOD_STYLES[idx];
-  if (!p.valid) {
-    return `<div class="period-card period-invalid" style="padding:20px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-        <span class="${s.badgeClass}">第 ${idx+1} 期</span>
-        <span class="period-range">${p.ageStart} 歲起</span>
+function buildCard(p,i){
+  const s=PS[i];
+  if(!p.valid)return`<div class="pc pc-invalid" style="padding:22px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="${s.badgeC}">第 ${i+1} 期</span>
+      <span style="font-size:14px;color:var(--mu)">${p.as} 歲起・超出承保年齡範圍（最高 ${p.max} 歲）</span>
+    </div></div>`;
+
+  const netPct=Math.round((p.net/p.total10)*100);
+
+  return`<div class="${s.cardC}">
+    <div class="pc-head">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="${s.badgeC}">第 ${i+1} 期</span>
+        <span class="pc-range">${p.as}～${p.as+9} 歲</span>
       </div>
-      <span style="font-size:13px;color:var(--muted)">超出承保年齡範圍（最高 ${p.maxAge} 歲）</span>
-    </div>`;
-  }
-  return `
-    <div class="${s.cardClass}">
-      <div class="period-header">
-        <div style="display:flex;align-items:center;gap:10px">
-          <span class="${s.badgeClass}">第 ${idx+1} 期</span>
-          <span class="period-range">${p.ageStart}～${p.ageStart+9} 歲</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="rate-chip">費率 ${p.rate} /萬</span>
-          <span class="period-tag">${p.table}</span>
-        </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="rate-chip">費率 ${p.rate}/萬</span>
+        <span class="pc-tag">${p.tbl}</span>
       </div>
-      <div class="period-annual">
-        <div class="annual-label">年繳保費</div>
-        <div class="annual-amount ${s.valClass}">
-          ${fmt(p.annual)}<span class="unit">元</span>
-        </div>
-      </div>
-      <div class="period-rows">
-        <div class="period-row">
-          <span class="row-label">10 年總繳</span>
-          <span class="row-val">${fmt(p.total10)} 元</span>
-        </div>
-        <div class="period-row refund-row">
-          <span class="row-label">期滿退還（未理賠）</span>
-          <span class="row-val">＋${fmt(p.refund)} 元</span>
-        </div>
-        <div class="period-row net-row">
-          <span class="row-label">淨支出</span>
-          <span class="row-val ${s.valClass}">${fmt(p.net)} 元</span>
+    </div>
+
+    <div class="pc-annual">
+      <div class="annual-wrap">
+        <div class="al">年繳保費</div>
+        <div class="annual-num ${s.vC}" data-val="${p.annual}">
+          <span class="num-val">${fmt(p.annual)}</span><span class="u">元</span>
         </div>
       </div>
-    </div>`;
+    </div>
+
+    <div class="breakdown-bar">
+      <div class="bb-label">
+        <span>10 年總繳：${fmt(p.total10)} 元</span>
+        <span style="color:var(--green)">退還 ${fmt(p.refund)} 元（10%）</span>
+      </div>
+      <div class="bb-track">
+        <div class="bb-fill" style="width:0%;background:${s.barC}" data-w="${netPct}"></div>
+      </div>
+    </div>
+
+    <div class="pc-stats">
+      <div class="stat">
+        <div class="sl">10 年總繳</div>
+        <div class="sv">${fmt(p.total10)} <span style="font-size:13px;font-weight:500;color:var(--mu)">元</span></div>
+      </div>
+      <div class="stat">
+        <div class="sl">期滿退還</div>
+        <div class="sv sv-green">＋${fmt(p.refund)} <span style="font-size:13px;font-weight:500;color:var(--mu)">元</span></div>
+      </div>
+      <div class="stat">
+        <div class="sl">淨支出</div>
+        <div class="sv ${s.vC}">${fmt(p.net)} <span style="font-size:13px;font-weight:500;color:var(--mu)">元</span></div>
+      </div>
+    </div>
+  </div>`;
 }
 
-// ── Until-age ─────────────────────────────────────────────────────
-function buildUntilOptions() {
-  const container = document.getElementById('until-options');
-  container.innerHTML = '';
-  periodData.forEach((p, i) => {
-    if (!p.valid) return;
-    const netSoFar = periodData.slice(0, i + 1).reduce((s, x) => s + (x.valid ? x.net : 0), 0);
-    const div = document.createElement('div');
-    div.className = 'until-opt';
-    div.id = `until-opt-${i}`;
-    div.innerHTML = `
-      <div class="until-radio"></div>
-      <span class="until-text">繳到 ${p.ageStart + 9} 歲（完成第 ${i+1} 期）</span>
-      <span class="until-total">${fmt(netSoFar)} 元</span>`;
-    div.onclick = () => selectUntil(i);
-    container.appendChild(div);
+// ── Timeline ─────────────────────────────────────────────────────
+function buildTimeline(age){
+  const totNet=PD.reduce((s,p)=>s+(p.valid?p.net:0),0);
+  const track=document.getElementById('tl-track');
+  const ages=document.getElementById('tl-ages');
+
+  const segs=PD.map((p,i)=>{
+    const cls=p.valid?`tl-seg tl-seg-${i+1}`:'tl-seg tl-seg-invalid';
+    const lbl=p.valid?`第${i+1}期`:'超齡';
+    return`<div class="${cls}" style="flex:${p.valid?1:.3}" data-flex="${p.valid?1:.3}">${lbl}</div>`;
+  });
+  track.innerHTML=segs.join('');
+
+  // Animate widths
+  requestAnimationFrame(()=>{
+    track.querySelectorAll('.tl-seg').forEach(el=>{
+      el.style.flex=el.dataset.flex;
+    });
+  });
+
+  const ageList=[age];
+  PD.forEach(p=>{if(p.valid)ageList.push(p.as+10)});
+  const lastValid=PD.filter(p=>p.valid).pop();
+  ages.innerHTML=ageList.map(a=>`<span>${a} 歲</span>`).join('');
+}
+
+// ── Until Options ────────────────────────────────────────────────
+function buildUntil(){
+  const c=document.getElementById('until-opts');
+  c.innerHTML='';
+  PD.forEach((p,i)=>{
+    if(!p.valid)return;
+    let cumPaid=0,cumRefund=0;
+    for(let j=0;j<=i;j++){if(PD[j].valid){cumPaid+=PD[j].total10;cumRefund+=PD[j].refund}}
+    const cumNet=cumPaid-cumRefund;
+
+    const div=document.createElement('div');
+    div.className='u-opt';
+    div.id=`uo-${i}`;
+    div.innerHTML=`
+      <div class="u-radio"><div class="u-dot"></div></div>
+      <div style="flex:1">
+        <div class="u-text">繳到 ${p.as+9} 歲（完成第 ${i+1} 期）</div>
+        <div class="u-sub">累計 ${(i+1)*10} 年保障</div>
+      </div>
+      <div>
+        <div class="u-amount-label">淨支出</div>
+        <div class="u-amount">${fmt(cumNet)}</div>
+      </div>`;
+    div.onclick=()=>selectUntil(i,cumPaid,cumRefund,cumNet);
+    c.appendChild(div);
   });
 }
 
-function selectUntil(idx) {
-  document.querySelectorAll('.until-opt').forEach((el, i) => {
-    el.classList.toggle('selected', i === idx);
+function selectUntil(idx,paid,refund,net){
+  document.querySelectorAll('.u-opt').forEach((el,i)=>{
+    el.classList.toggle('sel',i===idx);
   });
-  let totalPaid = 0, totalRefund = 0;
-  for (let i = 0; i <= idx; i++) {
-    const p = periodData[i];
-    if (p && p.valid) { totalPaid += p.total10; totalRefund += p.refund; }
-  }
-  document.getElementById('total-paid').textContent = fmt(totalPaid) + ' 元';
-  document.getElementById('total-refund').textContent = '＋' + fmt(totalRefund) + ' 元';
-  document.getElementById('total-net').textContent = fmt(totalPaid - totalRefund) + ' 元';
-  const el = document.getElementById('total-result');
-  el.classList.add('show');
-  el.style.display = 'block';
+  document.getElementById('t-paid').textContent=fmt(paid)+' 元';
+  document.getElementById('t-refund').textContent='＋'+fmt(refund)+' 元';
+  document.getElementById('t-net').textContent=fmt(net)+' 元';
+  const tr=document.getElementById('total-result');
+  tr.style.display='block';
+  tr.className='on';
 }
 
 // ── Main Calculate ────────────────────────────────────────────────
-function calculate() {
-  const gender = document.querySelector('input[name="gender"]:checked')?.value;
-  const y = document.getElementById('birth-year').value;
-  const m = document.getElementById('birth-month').value;
-  const d = document.getElementById('birth-day').value;
-  const coverage = parseFloat(document.getElementById('coverage').value);
+function calculate(){
+  const g=document.querySelector('input[name="gender"]:checked')?.value;
+  const y=document.getElementById('by').value;
+  const m=document.getElementById('bm').value;
+  const d=document.getElementById('bd').value;
+  const cov=parseFloat(document.getElementById('cov-num').value);
 
-  const errEl = document.getElementById('error-msg');
-  errEl.classList.remove('show');
+  const errEl=document.getElementById('err');
+  errEl.className='';
 
-  if (!gender) { showErr('請選擇性別'); return; }
-  if (!y || !m || !d) { showErr('請完整填寫出生日期'); return; }
-  if (!coverage || coverage <= 0) { showErr('請輸入有效保額'); return; }
-  if (+y < 1930 || +y > 2015) { showErr('請輸入合理的出生年份'); return; }
+  if(!g){showErr('請選擇性別');return}
+  if(!y||!m||!d){showErr('請完整填寫出生日期');return}
+  if(!cov||cov<=0){showErr('請輸入有效保額');return}
+  if(+y<1930||+y>2015){showErr('請輸入合理的出生年份');return}
 
-  const birthDate = new Date(+y, +m - 1, +d);
-  const insAge = calcInsuranceAge(birthDate);
+  const bDate=new Date(+y,+m-1,+d);
+  const age=insAge(bDate);
 
-  if (insAge < 15) { showErr(`保險年齡 ${insAge} 歲，未達最低投保年齡（15 歲）`); return; }
-  if (insAge > 61) { showErr(`保險年齡 ${insAge} 歲，已超過 SDKA 新契約最高投保年齡（61 歲）`); return; }
+  if(age<15){showErr(`保險年齡 ${age} 歲，未達最低投保年齡（15 歲）`);return}
+  if(age>61){showErr(`保險年齡 ${age} 歲，已超過 SDKA 新契約最高投保年齡（61 歲）`);return}
 
-  const ageEl = document.getElementById('age-display');
-  ageEl.textContent = `保險年齡：${insAge} 歲`;
-  ageEl.className = 'show';
-
-  const units = coverage;
-  periodData = [];
-  const defs = [
-    { table: 'SDKA 新契約', ageStart: insAge,      rateTable: SDKA, maxAge: 61 },
-    { table: 'SDKB 續保',   ageStart: insAge + 10, rateTable: SDKB, maxAge: 71 },
-    { table: 'SDKB 續保',   ageStart: insAge + 20, rateTable: SDKB, maxAge: 71 },
+  const defs=[
+    {tbl:'SDKA 新契約',as:age,    rt:SDKA,max:61},
+    {tbl:'SDKB 續保',  as:age+10, rt:SDKB,max:71},
+    {tbl:'SDKB 續保',  as:age+20, rt:SDKB,max:71},
   ];
-  defs.forEach(def => {
-    const rate = def.rateTable[gender][def.ageStart];
-    if (!rate || def.ageStart > def.maxAge) {
-      periodData.push({ valid: false, ageStart: def.ageStart, maxAge: def.maxAge });
-    } else {
-      const annual = rate * units;
-      periodData.push({ valid: true, ageStart: def.ageStart, table: def.table, rate, annual, total10: annual * 10, refund: annual, net: annual * 9 });
-    }
+  PD=defs.map(def=>{
+    const rate=def.rt[g]?.[def.as];
+    if(!rate||def.as>def.max)return{valid:false,as:def.as,max:def.max};
+    const annual=rate*cov;
+    return{valid:true,as:def.as,tbl:def.tbl,rate,annual,total10:annual*10,refund:annual,net:annual*9};
   });
 
-  // Hero net (sum of all valid periods)
-  const totalNet = periodData.reduce((s, p) => s + (p.valid ? p.net : 0), 0);
-  const validCount = periodData.filter(p => p.valid).length;
-  document.getElementById('hero-net').textContent = fmt(totalNet);
-  document.getElementById('result-summary').textContent =
-    `${gender === 'male' ? '男性' : '女性'}・保險年齡 ${insAge} 歲・保額 ${fmt(coverage)} 萬元`;
-  document.getElementById('hero-meta').innerHTML =
-    `<strong>${validCount}</strong> 個保障期間<br>合計 <strong>${validCount * 10}</strong> 年保障`;
+  // Hero
+  const totalNet=PD.reduce((s,p)=>s+(p.valid?p.net:0),0);
+  const validCt=PD.filter(p=>p.valid).length;
+  document.getElementById('hero-who').textContent=
+    `${g==='male'?'男性':'女性'}・保險年齡 ${age} 歲・保額 ${fmt(cov)} 萬元`;
+  document.getElementById('hero-meta').innerHTML=
+    `<strong>${validCt}</strong> 個期間<br>合計 <strong>${validCt*10}</strong> 年保障`;
 
-  document.getElementById('period-cards').innerHTML = periodData.map(buildPeriodCard).join('');
-  buildUntilOptions();
-  document.getElementById('total-result').classList.remove('show');
-  document.getElementById('total-result').style.display = 'none';
+  // Render
+  document.getElementById('period-cards').innerHTML=PD.map(buildCard).join('');
+  buildTimeline(age);
+  buildUntil();
+  document.getElementById('total-result').className='';
+  document.getElementById('total-result').style.display='none';
 
-  const r = document.getElementById('results');
-  r.style.display = 'block';
-  requestAnimationFrame(() => {
-    r.classList.add('show');
-    r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Show results
+  const r=document.getElementById('results');
+  r.style.display='block';
+  requestAnimationFrame(()=>{
+    r.className='results on';
+    r.scrollIntoView({behavior:'smooth',block:'start'});
   });
+
+  // Animate hero number
+  const heroEl=document.getElementById('hero-net');
+  countUp(heroEl,totalNet,700);
+
+  // Animate bars after cards render
+  setTimeout(()=>{
+    document.querySelectorAll('.bb-fill').forEach(el=>{
+      el.style.width=el.dataset.w+'%';
+    });
+  },100);
 }
 
-function showErr(msg) {
-  const el = document.getElementById('error-msg');
-  el.textContent = msg;
-  el.classList.add('show');
-  el.style.display = 'block';
+function showErr(msg){
+  const el=document.getElementById('err');
+  el.textContent=msg;el.className='on';el.style.display='block';
 }
 </script>
 </body>
