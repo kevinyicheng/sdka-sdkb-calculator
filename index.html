@@ -349,9 +349,9 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
 .pa-logo{display:flex;align-items:center;gap:10px}
 .pa-logo-mark{
   width:40px;height:40px;border-radius:10px;
-  background:linear-gradient(135deg,#4fd1c5,#63b3ed);
+  background:#4cadb5;
   display:flex;align-items:center;justify-content:center;
-  font-weight:900;font-size:14px;color:#0b0d17;
+  font-weight:900;font-size:14px;color:#fff;
 }
 .pa-title h1{font-size:18px;font-weight:800;color:#1a3a6e;margin-bottom:2px}
 .pa-title p{font-size:12px;color:#555}
@@ -359,10 +359,11 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
 
 .pa-info-box{
   background:#f4f7fb;border-radius:10px;padding:14px 20px;
-  margin-bottom:20px;display:flex;gap:0;flex-wrap:wrap;
+  margin-bottom:20px;display:flex;gap:0;flex-wrap:nowrap;
 }
-.pa-info-item{flex:1;min-width:120px;padding:0 12px;border-right:1px solid #dde3ed}
-.pa-info-item:first-child{padding-left:0}
+.pa-info-item{flex:1;min-width:0;padding:0 12px;border-right:1px solid #dde3ed;white-space:nowrap}
+.pa-info-item:first-child{padding-left:0;flex:.6}
+.pa-info-item:nth-child(2){flex:1.6}
 .pa-info-item:last-child{border-right:none}
 .pa-info-label{font-size:10px;font-weight:700;color:#888;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
 .pa-info-val{font-size:16px;font-weight:800;color:#1a3a6e}
@@ -371,9 +372,9 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
 .pa-periods{display:flex;gap:10px;margin-bottom:20px}
 .pa-period{flex:1;border-radius:10px;padding:14px 16px;border:1.5px solid #e0e8f4;position:relative;overflow:hidden}
 .pa-period::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.pp-1::before{background:linear-gradient(90deg,#63b3ed,transparent)}
-.pp-2::before{background:linear-gradient(90deg,#68d391,transparent)}
-.pp-3::before{background:linear-gradient(90deg,#f6ad55,transparent)}
+.pp-1::before{background:#63b3ed}
+.pp-2::before{background:#68d391}
+.pp-3::before{background:#f6ad55}
 .pa-period.invalid{background:#f9f9f9;opacity:.6}
 .pp-badge{
   display:inline-block;padding:3px 10px;border-radius:999px;
@@ -958,7 +959,7 @@ function printReport(){
       ※ 費率單位：元／每萬元保額；新契約 (SDKA) 投保年齡上限 61 歲；有效契約續保 (SDKB) 最高至 71 歲（含）。<br>
       ※ 繳費期間：10 年期；保障期間：每期 10 年，共最多 3 期（最高至 71 歲）。
     </div>
-    <div class="pa-watermark">此報告由 富邦 SDKA/SDKB 保費試算工具 產出</div>`;
+    <div class="pa-watermark">此報告由 Kevin-Ai 保費試算工具 產出</div>`;
 
   window.print();
 }
