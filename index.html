@@ -4,436 +4,706 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>富邦 SDKA/SDKB 重大傷病險保費試算</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            fubon: {
-              blue: '#003087',
-              light: '#0050b3',
-              pale: '#e6eef8',
-            }
-          }
-        }
-      }
-    }
-  </script>
   <style>
-    body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; }
-    .card-enter { animation: fadeIn 0.3s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0b0c14;
+      --surface: rgba(255,255,255,0.04);
+      --surface-hover: rgba(255,255,255,0.07);
+      --border: rgba(255,255,255,0.08);
+      --border-active: rgba(255,255,255,0.18);
+      --text: #f0f0f8;
+      --muted: rgba(255,255,255,0.4);
+      --cyan: #4fd1c5;
+      --green: #68d391;
+      --amber: #f6ad55;
+      --purple: #b794f4;
+      --blue: #63b3ed;
+      --red: #fc8181;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Background ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(79,209,197,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 80%, rgba(99,179,237,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(183,148,244,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── Layout ── */
+    .page { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; padding: 24px 16px 80px; }
+
+    /* ── Header ── */
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 0 32px;
+    }
+    .logo-wrap { display: flex; align-items: center; gap: 12px; }
+    .logo-dot {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 14px; color: #0b0c14;
+    }
+    .logo-text { font-size: 13px; }
+    .logo-text strong { display: block; font-size: 15px; font-weight: 700; letter-spacing: 0.01em; }
+    .logo-text span { color: var(--muted); font-size: 12px; }
+    .header-badge {
+      background: rgba(79,209,197,0.12); border: 1px solid rgba(79,209,197,0.25);
+      color: var(--cyan); padding: 4px 12px; border-radius: 999px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+    }
+
+    /* ── Glass Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 28px;
+    }
+    .card + .card { margin-top: 16px; }
+    .card-title {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    /* ── Form Controls ── */
+    .field { margin-bottom: 20px; }
+    .field label {
+      display: block; font-size: 12px; color: var(--muted);
+      font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* Gender Toggle */
+    .gender-row { display: flex; gap: 10px; }
+    .gender-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer; transition: all 0.2s;
+      font-size: 14px; font-weight: 500;
+      background: var(--surface); color: var(--muted);
+      position: relative; overflow: hidden;
+    }
+    .gender-btn input { display: none; }
+    .gender-btn:hover { border-color: var(--border-active); color: var(--text); }
+    .gender-btn.active-male {
+      border-color: rgba(99,179,237,0.6);
+      background: rgba(99,179,237,0.1);
+      color: var(--blue);
+    }
+    .gender-btn.active-female {
+      border-color: rgba(183,148,244,0.6);
+      background: rgba(183,148,244,0.1);
+      color: var(--purple);
+    }
+    .gender-btn .icon { font-size: 18px; }
+
+    /* Date row */
+    .date-row { display: flex; gap: 8px; }
+    .date-row .year-wrap { flex: 1.5; }
+    .date-row .month-wrap, .date-row .day-wrap { flex: 1; }
+
+    input[type="number"], select {
+      width: 100%; padding: 13px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px; color: var(--text);
+      font-size: 14px; outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      appearance: none; -webkit-appearance: none;
+    }
+    input[type="number"]:focus, select:focus {
+      border-color: var(--border-active);
+      background: rgba(255,255,255,0.08);
+    }
+    input[type="number"]::placeholder { color: rgba(255,255,255,0.2); }
+    input[type="number"]::-webkit-inner-spin-button { display: none; }
+    select option { background: #1a1a2e; }
+
+    /* Coverage row */
+    .coverage-wrap { position: relative; }
+    .coverage-wrap input { padding-right: 56px; }
+    .coverage-unit {
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      font-size: 12px; color: var(--muted); font-weight: 500;
+    }
+
+    /* Age badge */
+    #age-display {
+      display: none; margin-top: 10px;
+      font-size: 12px; color: var(--cyan);
+      display: none; align-items: center; gap: 6px;
+    }
+    #age-display.show { display: flex; }
+    #age-display::before { content: '●'; font-size: 8px; }
+
+    /* Calculate button */
+    .calc-btn {
+      width: 100%; padding: 16px;
+      background: linear-gradient(135deg, rgba(79,209,197,0.2), rgba(99,179,237,0.2));
+      border: 1px solid rgba(79,209,197,0.35);
+      border-radius: 14px; color: var(--cyan);
+      font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+      letter-spacing: 0.05em;
+    }
+    .calc-btn:hover {
+      background: linear-gradient(135deg, rgba(79,209,197,0.3), rgba(99,179,237,0.3));
+      border-color: rgba(79,209,197,0.6);
+      transform: translateY(-1px);
+    }
+    .calc-btn:active { transform: translateY(0); }
+
+    #error-msg {
+      display: none; margin-top: 12px;
+      color: var(--red); font-size: 13px; text-align: center;
+    }
+    #error-msg.show { display: block; }
+
+    /* ── Results ── */
+    #results { display: none; margin-top: 16px; }
+    #results.show { display: block; animation: fadeUp 0.35s ease; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Summary hero */
+    .summary-hero {
+      background: linear-gradient(135deg, rgba(79,209,197,0.1), rgba(99,179,237,0.08));
+      border: 1px solid rgba(79,209,197,0.2);
+      border-radius: 20px; padding: 28px;
+      margin-bottom: 16px;
+    }
+    .summary-label { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+    .summary-who { font-size: 15px; font-weight: 600; color: var(--cyan); }
+    .summary-net-row {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-top: 20px; flex-wrap: wrap; gap: 12px;
+    }
+    .net-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+    .net-amount { font-size: 40px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+    .net-amount .currency { font-size: 22px; font-weight: 600; margin-right: 2px; color: var(--muted); }
+    .net-amount .cents { font-size: 22px; font-weight: 600; color: var(--muted); }
+    .summary-meta { font-size: 12px; color: var(--muted); line-height: 1.8; text-align: right; }
+    .summary-meta strong { color: var(--text); font-weight: 600; }
+
+    /* Period cards grid */
+    .periods-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+
+    .period-card {
+      border-radius: 18px; padding: 22px;
+      border: 1px solid var(--border); position: relative; overflow: hidden;
+    }
+    .period-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+    }
+    .period-1 { background: rgba(99,179,237,0.06); }
+    .period-1::before { background: linear-gradient(90deg, var(--blue), transparent); }
+    .period-2 { background: rgba(104,211,145,0.06); }
+    .period-2::before { background: linear-gradient(90deg, var(--green), transparent); }
+    .period-3 { background: rgba(246,173,85,0.06); }
+    .period-3::before { background: linear-gradient(90deg, var(--amber), transparent); }
+    .period-invalid { background: rgba(255,255,255,0.02); opacity: 0.5; }
+
+    .period-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .period-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    }
+    .badge-1 { background: rgba(99,179,237,0.15); color: var(--blue); border: 1px solid rgba(99,179,237,0.3); }
+    .badge-2 { background: rgba(104,211,145,0.15); color: var(--green); border: 1px solid rgba(104,211,145,0.3); }
+    .badge-3 { background: rgba(246,173,85,0.15); color: var(--amber); border: 1px solid rgba(246,173,85,0.3); }
+    .period-range { font-size: 12px; color: var(--muted); }
+    .period-tag { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; }
+
+    .period-annual {
+      margin-bottom: 16px;
+    }
+    .annual-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+    .annual-amount { font-size: 32px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+    .annual-amount .unit { font-size: 14px; font-weight: 500; color: var(--muted); margin-left: 4px; }
+
+    .period-rows { display: flex; flex-direction: column; gap: 8px; }
+    .period-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 12px; border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+      font-size: 13px;
+    }
+    .period-row .row-label { color: var(--muted); }
+    .period-row .row-val { font-weight: 600; }
+    .period-row.refund-row .row-val { color: var(--green); }
+    .period-row.net-row {
+      margin-top: 4px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+    }
+    .period-row.net-row .row-label { font-weight: 600; color: var(--text); }
+    .period-row.net-row .row-val { font-size: 16px; }
+    .val-1 { color: var(--blue); }
+    .val-2 { color: var(--green); }
+    .val-3 { color: var(--amber); }
+
+    /* Rate chip */
+    .rate-chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; color: var(--muted);
+      background: rgba(255,255,255,0.05); padding: 3px 8px; border-radius: 6px;
+    }
+
+    /* ── Total Section ── */
+    .total-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 24px;
+    }
+    .until-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .until-opts { display: flex; flex-direction: column; gap: 8px; }
+    .until-opt {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px; border-radius: 12px;
+      border: 1px solid var(--border);
+      cursor: pointer; transition: all 0.15s;
+      background: rgba(255,255,255,0.02);
+    }
+    .until-opt:hover { border-color: var(--border-active); background: var(--surface-hover); }
+    .until-opt input { display: none; }
+    .until-opt.selected {
+      border-color: rgba(79,209,197,0.4);
+      background: rgba(79,209,197,0.07);
+    }
+    .until-radio {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all 0.15s;
+    }
+    .until-opt.selected .until-radio {
+      border-color: var(--cyan);
+      background: rgba(79,209,197,0.2);
+    }
+    .until-radio::after {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--cyan); opacity: 0; transition: opacity 0.15s;
+    }
+    .until-opt.selected .until-radio::after { opacity: 1; }
+    .until-text { font-size: 13px; flex: 1; }
+    .until-total { font-size: 13px; font-weight: 700; color: var(--cyan); }
+
+    /* Total result */
+    #total-result {
+      display: none; margin-top: 16px;
+      background: linear-gradient(135deg, rgba(79,209,197,0.06), rgba(99,179,237,0.04));
+      border: 1px solid rgba(79,209,197,0.15);
+      border-radius: 16px; padding: 20px;
+      animation: fadeUp 0.25s ease;
+    }
+    #total-result.show { display: block; }
+    .total-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0; font-size: 13px;
+    }
+    .total-row + .total-row { border-top: 1px solid rgba(255,255,255,0.05); }
+    .total-row .t-label { color: var(--muted); }
+    .total-row .t-val { font-weight: 600; }
+    .total-row.main-total { padding-top: 14px; margin-top: 6px; border-top: 1px solid rgba(255,255,255,0.1) !important; }
+    .total-row.main-total .t-label { font-size: 14px; font-weight: 700; color: var(--text); }
+    .main-net { font-size: 28px; font-weight: 800; color: var(--cyan); letter-spacing: -0.02em; }
+
+    /* ── Disclaimer ── */
+    .disclaimer {
+      margin-top: 16px; padding: 16px;
+      background: rgba(255,255,255,0.02); border-radius: 12px;
+      font-size: 11px; line-height: 1.9; color: var(--muted);
+    }
   </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body>
+<div class="page">
 
   <!-- Header -->
-  <header class="bg-fubon-blue text-white py-5 px-4 shadow-lg">
-    <div class="max-w-2xl mx-auto">
-      <p class="text-xs text-blue-200 mb-1">富邦人壽醫靠安心</p>
-      <h1 class="text-xl font-bold leading-snug">重大傷病定期健康險</h1>
-      <p class="text-sm text-blue-200 mt-1">SDKA／SDKB 保費試算工具</p>
+  <header>
+    <div class="logo-wrap">
+      <div class="logo-dot">FB</div>
+      <div class="logo-text">
+        <strong>重大傷病定期健康險</strong>
+        <span>SDKA / SDKB 保費試算</span>
+      </div>
     </div>
+    <div class="header-badge">10 年期</div>
   </header>
 
-  <main class="max-w-2xl mx-auto px-4 py-6 space-y-6">
+  <!-- Input Card -->
+  <div class="card">
+    <div class="card-title">基本資料</div>
 
-    <!-- Input Card -->
-    <section class="bg-white rounded-2xl shadow-sm p-6 space-y-5">
-      <h2 class="text-base font-semibold text-gray-700 border-b pb-3">基本資料</h2>
+    <!-- Gender -->
+    <div class="field">
+      <label>性別</label>
+      <div class="gender-row">
+        <label class="gender-btn" id="label-male" onclick="selectGender('male')">
+          <input type="radio" name="gender" value="male">
+          <span class="icon">♂</span> 男性
+        </label>
+        <label class="gender-btn" id="label-female" onclick="selectGender('female')">
+          <input type="radio" name="gender" value="female">
+          <span class="icon">♀</span> 女性
+        </label>
+      </div>
+    </div>
 
-      <!-- Gender -->
-      <div>
-        <label class="block text-sm font-medium text-gray-600 mb-2">性別</label>
-        <div class="flex gap-3">
-          <label class="flex-1 flex items-center justify-center gap-2 border-2 rounded-xl py-3 cursor-pointer transition-all"
-                 id="label-male">
-            <input type="radio" name="gender" value="male" class="hidden" onchange="updateGenderUI()">
-            <span class="text-lg">♂</span><span class="font-medium">男性</span>
-          </label>
-          <label class="flex-1 flex items-center justify-center gap-2 border-2 rounded-xl py-3 cursor-pointer transition-all"
-                 id="label-female">
-            <input type="radio" name="gender" value="female" class="hidden" onchange="updateGenderUI()">
-            <span class="text-lg">♀</span><span class="font-medium">女性</span>
-          </label>
+    <!-- Birth Date -->
+    <div class="field">
+      <label>出生日期</label>
+      <div class="date-row">
+        <div class="year-wrap">
+          <input type="number" id="birth-year" placeholder="西元年" min="1930" max="2015" oninput="clearResults()">
+        </div>
+        <div class="month-wrap">
+          <select id="birth-month" onchange="onMonthChange(); clearResults()">
+            <option value="">月</option>
+            <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
+            <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
+            <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
+            <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+          </select>
+        </div>
+        <div class="day-wrap">
+          <select id="birth-day" onchange="clearResults()">
+            <option value="">日</option>
+          </select>
         </div>
       </div>
+      <div id="age-display"></div>
+    </div>
 
-      <!-- Birth Date -->
-      <div>
-        <label class="block text-sm font-medium text-gray-600 mb-2">出生日期</label>
-        <div class="flex gap-2">
-          <div class="flex-1">
-            <input type="number" id="birth-year" placeholder="年（西元）"
-                   class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-fubon-blue focus:ring-2 focus:ring-fubon-pale"
-                   min="1930" max="2015" oninput="clearResults()">
-          </div>
-          <div class="w-20">
-            <select id="birth-month"
-                    class="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:border-fubon-blue bg-white" onchange="clearResults()">
-              <option value="">月</option>
-              <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
-              <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
-              <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
-              <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
-            </select>
-          </div>
-          <div class="w-20">
-            <select id="birth-day"
-                    class="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:border-fubon-blue bg-white" onchange="clearResults()">
-              <option value="">日</option>
-            </select>
+    <!-- Coverage -->
+    <div class="field">
+      <label>保額</label>
+      <div class="coverage-wrap">
+        <input type="number" id="coverage" placeholder="例：100" min="1" oninput="clearResults()">
+        <span class="coverage-unit">萬元</span>
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calculate()">開始試算</button>
+    <div id="error-msg"></div>
+  </div>
+
+  <!-- Results -->
+  <div id="results">
+
+    <!-- Summary Hero -->
+    <div class="summary-hero">
+      <div class="summary-label">試算結果</div>
+      <div class="summary-who" id="result-summary"></div>
+      <div class="summary-net-row">
+        <div>
+          <div class="net-label">三期淨總支出（假設未理賠）</div>
+          <div class="net-amount">
+            <span class="currency">$</span><span id="hero-net">—</span>
           </div>
         </div>
-        <p id="age-display" class="text-sm text-fubon-blue mt-2 font-medium hidden"></p>
+        <div class="summary-meta" id="hero-meta"></div>
       </div>
+    </div>
 
-      <!-- Coverage Amount -->
-      <div>
-        <label class="block text-sm font-medium text-gray-600 mb-2">保額</label>
-        <div class="relative">
-          <input type="number" id="coverage" placeholder="例：100"
-                 class="w-full border border-gray-300 rounded-xl px-4 py-3 pr-16 text-sm focus:outline-none focus:border-fubon-blue focus:ring-2 focus:ring-fubon-pale"
-                 min="1" oninput="clearResults()">
-          <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">萬元</span>
+    <!-- Period Cards -->
+    <div class="periods-grid" id="period-cards"></div>
+
+    <!-- Total Calculator -->
+    <div class="total-card">
+      <div class="until-title">我想繳到幾歲？</div>
+      <div class="until-opts" id="until-options"></div>
+      <div id="total-result">
+        <div class="total-row">
+          <span class="t-label">累計繳納保費</span>
+          <span class="t-val" id="total-paid"></span>
         </div>
-        <p class="text-xs text-gray-400 mt-1">請輸入整數萬元，最低投保單位依各險種規定</p>
-      </div>
-
-      <!-- Calculate Button -->
-      <button onclick="calculate()"
-              class="w-full bg-fubon-blue hover:bg-fubon-light text-white font-semibold py-4 rounded-xl transition-colors text-base shadow-md active:scale-95">
-        開始試算
-      </button>
-
-      <!-- Error Message -->
-      <p id="error-msg" class="text-red-500 text-sm text-center hidden"></p>
-    </section>
-
-    <!-- Results -->
-    <section id="results" class="hidden space-y-4 card-enter">
-
-      <!-- Summary Bar -->
-      <div class="bg-fubon-blue text-white rounded-2xl p-5">
-        <p class="text-sm text-blue-200">試算結果</p>
-        <p id="result-summary" class="text-lg font-bold mt-1"></p>
-      </div>
-
-      <!-- Period Cards -->
-      <div id="period-cards" class="space-y-3"></div>
-
-      <!-- Total Calculator -->
-      <div class="bg-white rounded-2xl shadow-sm p-6">
-        <h3 class="text-base font-semibold text-gray-700 border-b pb-3 mb-4">我想繳到幾歲？</h3>
-        <div id="until-options" class="space-y-2 mb-5"></div>
-        <div id="total-result" class="hidden bg-fubon-pale rounded-xl p-4 space-y-3">
-          <div class="flex justify-between text-sm">
-            <span class="text-gray-600">累計繳納保費</span>
-            <span id="total-paid" class="font-semibold text-gray-800"></span>
-          </div>
-          <div class="flex justify-between text-sm">
-            <span class="text-gray-600">累計退還（假設未理賠）</span>
-            <span id="total-refund" class="font-semibold text-green-600"></span>
-          </div>
-          <div class="border-t pt-3 flex justify-between">
-            <span class="font-semibold text-gray-800">淨總支出</span>
-            <span id="total-net" class="text-xl font-bold text-fubon-blue"></span>
-          </div>
+        <div class="total-row">
+          <span class="t-label">期滿退還（假設未理賠）</span>
+          <span class="t-val" style="color: var(--green)" id="total-refund"></span>
+        </div>
+        <div class="total-row main-total">
+          <span class="t-label">淨總支出</span>
+          <span class="main-net" id="total-net"></span>
         </div>
       </div>
+    </div>
 
-      <!-- Disclaimer -->
-      <p class="text-xs text-gray-400 px-1">
-        ※ 本試算以費率表資料為基礎，僅供參考，實際保費以富邦人壽核保結果為準。<br>
-        ※ 「退還一年保費」為假設未發生理賠且完整繳足10年之情形。<br>
-        ※ 費率單位：元/每萬元保額；繳費期間：10年期。<br>
-        ※ 新契約(SDKA)投保年齡上限61歲；有效契約續保(SDKB)最高至71歲。
-      </p>
-    </section>
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+      ※ 本試算以費率表資料為基礎，僅供參考，實際保費以富邦人壽核保結果為準。<br>
+      ※「退還一年保費」為假設未發生理賠且完整繳足 10 年之情形。<br>
+      ※ 費率單位：元／每萬元保額；繳費期間：10 年期。<br>
+      ※ 新契約 (SDKA) 投保年齡上限 61 歲；有效契約續保 (SDKB) 最高至 71 歲。
+    </div>
+  </div>
 
-  </main>
+</div>
 
-  <script>
-    // ── Rate Tables ──────────────────────────────────────────────
-    const SDKA = {
-      male: {
-        15:51,16:53,17:56,18:57,19:58,20:59,
-        21:62,22:65,23:68,24:70,25:73,26:77,27:79,28:83,29:86,30:91,
-        31:98,32:106,33:114,34:123,35:132,36:140,37:147,38:157,39:168,40:181,
-        41:198,42:218,43:238,44:257,45:277,46:296,47:315,48:336,49:355,50:377,
-        51:412,52:448,53:485,54:518,55:555,56:589,57:624,58:658,59:692,60:730,
-        61:768
-      },
-      female: {
-        15:40,16:43,17:46,18:49,19:52,20:55,
-        21:58,22:60,23:63,24:66,25:69,26:72,27:76,28:80,29:84,30:88,
-        31:96,32:104,33:113,34:122,35:130,36:138,37:146,38:156,39:164,40:171,
-        41:183,42:198,43:213,44:229,45:243,46:259,47:275,48:291,49:311,50:328,
-        51:343,52:363,53:383,54:403,55:424,56:445,57:467,58:488,59:511,60:537,
-        61:570
-      }
-    };
+<script>
+// ── Rate Tables ─────────────────────────────────────────────────
+const SDKA = {
+  male: {
+    15:51,16:53,17:56,18:57,19:58,20:59,
+    21:62,22:65,23:68,24:70,25:73,26:77,27:79,28:83,29:86,30:91,
+    31:98,32:106,33:114,34:123,35:132,36:140,37:147,38:157,39:168,40:181,
+    41:198,42:218,43:238,44:257,45:277,46:296,47:315,48:336,49:355,50:377,
+    51:412,52:448,53:485,54:518,55:555,56:589,57:624,58:658,59:692,60:730,61:768
+  },
+  female: {
+    15:40,16:43,17:46,18:49,19:52,20:55,
+    21:58,22:60,23:63,24:66,25:69,26:72,27:76,28:80,29:84,30:88,
+    31:96,32:104,33:113,34:122,35:130,36:138,37:146,38:156,39:164,40:171,
+    41:183,42:198,43:213,44:229,45:243,46:259,47:275,48:291,49:311,50:328,
+    51:343,52:363,53:383,54:403,55:424,56:445,57:467,58:488,59:511,60:537,61:570
+  }
+};
+const SDKB = {
+  male: {
+    25:78,26:82,27:85,28:89,29:92,30:97,
+    31:104,32:113,33:122,34:130,35:138,36:147,37:156,38:165,39:177,40:192,
+    41:214,42:237,43:261,44:281,45:303,46:325,47:347,48:370,49:390,50:412,
+    51:448,52:487,53:526,54:560,55:602,56:638,57:675,58:713,59:750,60:785,
+    61:834,62:884,63:934,64:991,65:1048,66:1100,67:1157,68:1212,69:1269,70:1331,71:1403
+  },
+  female: {
+    25:75,26:79,27:82,28:87,29:91,30:96,
+    31:103,32:112,33:121,34:129,35:137,36:146,37:154,38:164,39:175,40:185,
+    41:200,42:215,43:232,44:250,45:267,46:286,47:304,48:324,49:344,50:361,
+    51:381,52:400,53:419,54:442,55:464,56:487,57:510,58:534,59:564,60:597,
+    61:634,62:675,63:723,64:771,65:819,66:867,67:913,68:963,69:1016,70:1060,71:1116
+  }
+};
 
-    const SDKB = {
-      male: {
-        25:78,26:82,27:85,28:89,29:92,30:97,
-        31:104,32:113,33:122,34:130,35:138,36:147,37:156,38:165,39:177,40:192,
-        41:214,42:237,43:261,44:281,45:303,46:325,47:347,48:370,49:390,50:412,
-        51:448,52:487,53:526,54:560,55:602,56:638,57:675,58:713,59:750,60:785,
-        61:834,62:884,63:934,64:991,65:1048,66:1100,67:1157,68:1212,69:1269,70:1331,
-        71:1403
-      },
-      female: {
-        25:75,26:79,27:82,28:87,29:91,30:96,
-        31:103,32:112,33:121,34:129,35:137,36:146,37:154,38:164,39:175,40:185,
-        41:200,42:215,43:232,44:250,45:267,46:286,47:304,48:324,49:344,50:361,
-        51:381,52:400,53:419,54:442,55:464,56:487,57:510,58:534,59:564,60:597,
-        61:634,62:675,63:723,64:771,65:819,66:867,67:913,68:963,69:1016,70:1060,
-        71:1116
-      }
-    };
+// ── Insurance Age ────────────────────────────────────────────────
+function calcInsuranceAge(birthDate, refDate = new Date()) {
+  const b = new Date(birthDate);
+  let yearDiff = refDate.getFullYear() - b.getFullYear();
+  const bdThisYear = new Date(refDate.getFullYear(), b.getMonth(), b.getDate());
+  const bdNextYear = new Date(refDate.getFullYear() + 1, b.getMonth(), b.getDate());
+  const bdLastYear = new Date(refDate.getFullYear() - 1, b.getMonth(), b.getDate());
+  let lastBd, nextBd;
+  if (refDate >= bdThisYear) { lastBd = bdThisYear; nextBd = bdNextYear; }
+  else { yearDiff--; lastBd = bdLastYear; nextBd = bdThisYear; }
+  const fracYear = (refDate - lastBd) / (nextBd - lastBd);
+  return Math.floor(yearDiff + fracYear + 0.5);
+}
 
-    // ── Insurance Age Calculation ─────────────────────────────────
-    function calcInsuranceAge(birthDate, refDate = new Date()) {
-      const b = new Date(birthDate);
-      // birthdate this year relative to refDate
-      let yearDiff = refDate.getFullYear() - b.getFullYear();
-      const bdThisYear = new Date(refDate.getFullYear(), b.getMonth(), b.getDate());
-      const bdNextYear = new Date(refDate.getFullYear() + 1, b.getMonth(), b.getDate());
-      const bdLastYear = new Date(refDate.getFullYear() - 1, b.getMonth(), b.getDate());
+// ── Helpers ──────────────────────────────────────────────────────
+function fmt(n) { return Math.round(n).toLocaleString('zh-TW'); }
 
-      let lastBd, nextBd;
-      if (refDate >= bdThisYear) {
-        lastBd = bdThisYear;
-        nextBd = bdNextYear;
-      } else {
-        yearDiff--;
-        lastBd = bdLastYear;
-        nextBd = bdThisYear;
-      }
+function selectGender(g) {
+  document.querySelector(`input[value="${g}"]`).checked = true;
+  document.getElementById('label-male').className =
+    'gender-btn' + (g === 'male' ? ' active-male' : '');
+  document.getElementById('label-female').className =
+    'gender-btn' + (g === 'female' ? ' active-female' : '');
+  clearResults();
+}
 
-      const daysPast = (refDate - lastBd);
-      const yearLen = (nextBd - lastBd);
-      const fracYear = daysPast / yearLen;
+function onMonthChange() {
+  const y = +document.getElementById('birth-year').value || 2000;
+  const m = +document.getElementById('birth-month').value;
+  const sel = document.getElementById('birth-day');
+  const prev = +sel.value;
+  sel.innerHTML = '<option value="">日</option>';
+  if (!m) return;
+  const days = new Date(y, m, 0).getDate();
+  for (let d = 1; d <= days; d++) {
+    const o = document.createElement('option');
+    o.value = d; o.textContent = d + '日';
+    if (d === prev) o.selected = true;
+    sel.appendChild(o);
+  }
+}
 
-      return Math.floor(yearDiff + fracYear + 0.5);
+function clearResults() {
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('error-msg').classList.remove('show');
+}
+
+// ── Period Data ───────────────────────────────────────────────────
+let periodData = [];
+const PERIOD_STYLES = [
+  { cardClass: 'period-card period-1', badgeClass: 'period-badge badge-1', valClass: 'val-1', num: '01' },
+  { cardClass: 'period-card period-2', badgeClass: 'period-badge badge-2', valClass: 'val-2', num: '02' },
+  { cardClass: 'period-card period-3', badgeClass: 'period-badge badge-3', valClass: 'val-3', num: '03' },
+];
+
+function buildPeriodCard(p, idx) {
+  const s = PERIOD_STYLES[idx];
+  if (!p.valid) {
+    return `<div class="period-card period-invalid" style="padding:20px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span class="${s.badgeClass}">第 ${idx+1} 期</span>
+        <span class="period-range">${p.ageStart} 歲起</span>
+      </div>
+      <span style="font-size:13px;color:var(--muted)">超出承保年齡範圍（最高 ${p.maxAge} 歲）</span>
+    </div>`;
+  }
+  return `
+    <div class="${s.cardClass}">
+      <div class="period-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="${s.badgeClass}">第 ${idx+1} 期</span>
+          <span class="period-range">${p.ageStart}～${p.ageStart+9} 歲</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="rate-chip">費率 ${p.rate} /萬</span>
+          <span class="period-tag">${p.table}</span>
+        </div>
+      </div>
+      <div class="period-annual">
+        <div class="annual-label">年繳保費</div>
+        <div class="annual-amount ${s.valClass}">
+          ${fmt(p.annual)}<span class="unit">元</span>
+        </div>
+      </div>
+      <div class="period-rows">
+        <div class="period-row">
+          <span class="row-label">10 年總繳</span>
+          <span class="row-val">${fmt(p.total10)} 元</span>
+        </div>
+        <div class="period-row refund-row">
+          <span class="row-label">期滿退還（未理賠）</span>
+          <span class="row-val">＋${fmt(p.refund)} 元</span>
+        </div>
+        <div class="period-row net-row">
+          <span class="row-label">淨支出</span>
+          <span class="row-val ${s.valClass}">${fmt(p.net)} 元</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── Until-age ─────────────────────────────────────────────────────
+function buildUntilOptions() {
+  const container = document.getElementById('until-options');
+  container.innerHTML = '';
+  periodData.forEach((p, i) => {
+    if (!p.valid) return;
+    const netSoFar = periodData.slice(0, i + 1).reduce((s, x) => s + (x.valid ? x.net : 0), 0);
+    const div = document.createElement('div');
+    div.className = 'until-opt';
+    div.id = `until-opt-${i}`;
+    div.innerHTML = `
+      <div class="until-radio"></div>
+      <span class="until-text">繳到 ${p.ageStart + 9} 歲（完成第 ${i+1} 期）</span>
+      <span class="until-total">${fmt(netSoFar)} 元</span>`;
+    div.onclick = () => selectUntil(i);
+    container.appendChild(div);
+  });
+}
+
+function selectUntil(idx) {
+  document.querySelectorAll('.until-opt').forEach((el, i) => {
+    el.classList.toggle('selected', i === idx);
+  });
+  let totalPaid = 0, totalRefund = 0;
+  for (let i = 0; i <= idx; i++) {
+    const p = periodData[i];
+    if (p && p.valid) { totalPaid += p.total10; totalRefund += p.refund; }
+  }
+  document.getElementById('total-paid').textContent = fmt(totalPaid) + ' 元';
+  document.getElementById('total-refund').textContent = '＋' + fmt(totalRefund) + ' 元';
+  document.getElementById('total-net').textContent = fmt(totalPaid - totalRefund) + ' 元';
+  const el = document.getElementById('total-result');
+  el.classList.add('show');
+  el.style.display = 'block';
+}
+
+// ── Main Calculate ────────────────────────────────────────────────
+function calculate() {
+  const gender = document.querySelector('input[name="gender"]:checked')?.value;
+  const y = document.getElementById('birth-year').value;
+  const m = document.getElementById('birth-month').value;
+  const d = document.getElementById('birth-day').value;
+  const coverage = parseFloat(document.getElementById('coverage').value);
+
+  const errEl = document.getElementById('error-msg');
+  errEl.classList.remove('show');
+
+  if (!gender) { showErr('請選擇性別'); return; }
+  if (!y || !m || !d) { showErr('請完整填寫出生日期'); return; }
+  if (!coverage || coverage <= 0) { showErr('請輸入有效保額'); return; }
+  if (+y < 1930 || +y > 2015) { showErr('請輸入合理的出生年份'); return; }
+
+  const birthDate = new Date(+y, +m - 1, +d);
+  const insAge = calcInsuranceAge(birthDate);
+
+  if (insAge < 15) { showErr(`保險年齡 ${insAge} 歲，未達最低投保年齡（15 歲）`); return; }
+  if (insAge > 61) { showErr(`保險年齡 ${insAge} 歲，已超過 SDKA 新契約最高投保年齡（61 歲）`); return; }
+
+  const ageEl = document.getElementById('age-display');
+  ageEl.textContent = `保險年齡：${insAge} 歲`;
+  ageEl.className = 'show';
+
+  const units = coverage;
+  periodData = [];
+  const defs = [
+    { table: 'SDKA 新契約', ageStart: insAge,      rateTable: SDKA, maxAge: 61 },
+    { table: 'SDKB 續保',   ageStart: insAge + 10, rateTable: SDKB, maxAge: 71 },
+    { table: 'SDKB 續保',   ageStart: insAge + 20, rateTable: SDKB, maxAge: 71 },
+  ];
+  defs.forEach(def => {
+    const rate = def.rateTable[gender][def.ageStart];
+    if (!rate || def.ageStart > def.maxAge) {
+      periodData.push({ valid: false, ageStart: def.ageStart, maxAge: def.maxAge });
+    } else {
+      const annual = rate * units;
+      periodData.push({ valid: true, ageStart: def.ageStart, table: def.table, rate, annual, total10: annual * 10, refund: annual, net: annual * 9 });
     }
+  });
 
-    // ── UI Helpers ────────────────────────────────────────────────
-    function fmt(n) { return Math.round(n).toLocaleString('zh-TW'); }
+  // Hero net (sum of all valid periods)
+  const totalNet = periodData.reduce((s, p) => s + (p.valid ? p.net : 0), 0);
+  const validCount = periodData.filter(p => p.valid).length;
+  document.getElementById('hero-net').textContent = fmt(totalNet);
+  document.getElementById('result-summary').textContent =
+    `${gender === 'male' ? '男性' : '女性'}・保險年齡 ${insAge} 歲・保額 ${fmt(coverage)} 萬元`;
+  document.getElementById('hero-meta').innerHTML =
+    `<strong>${validCount}</strong> 個保障期間<br>合計 <strong>${validCount * 10}</strong> 年保障`;
 
-    function updateGenderUI() {
-      const male = document.querySelector('input[value="male"]').checked;
-      document.getElementById('label-male').className =
-        'flex-1 flex items-center justify-center gap-2 border-2 rounded-xl py-3 cursor-pointer transition-all ' +
-        (male ? 'border-fubon-blue bg-fubon-pale text-fubon-blue' : 'border-gray-200 text-gray-500');
-      document.getElementById('label-female').className =
-        'flex-1 flex items-center justify-center gap-2 border-2 rounded-xl py-3 cursor-pointer transition-all ' +
-        (!male ? 'border-pink-400 bg-pink-50 text-pink-600' : 'border-gray-200 text-gray-500');
-      clearResults();
-    }
+  document.getElementById('period-cards').innerHTML = periodData.map(buildPeriodCard).join('');
+  buildUntilOptions();
+  document.getElementById('total-result').classList.remove('show');
+  document.getElementById('total-result').style.display = 'none';
 
-    function clearResults() {
-      document.getElementById('results').classList.add('hidden');
-      document.getElementById('error-msg').classList.add('hidden');
-    }
+  const r = document.getElementById('results');
+  r.style.display = 'block';
+  requestAnimationFrame(() => {
+    r.classList.add('show');
+    r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
 
-    // Populate days in birth-day select
-    document.getElementById('birth-month').addEventListener('change', function() {
-      const y = +document.getElementById('birth-year').value || 2000;
-      const m = +this.value;
-      const daysSel = document.getElementById('birth-day');
-      const prev = +daysSel.value;
-      daysSel.innerHTML = '<option value="">日</option>';
-      if (!m) return;
-      const days = new Date(y, m, 0).getDate();
-      for (let d = 1; d <= days; d++) {
-        const opt = document.createElement('option');
-        opt.value = d; opt.textContent = d + '日';
-        if (d === prev) opt.selected = true;
-        daysSel.appendChild(opt);
-      }
-    });
-
-    // ── Period Data ───────────────────────────────────────────────
-    let periodData = [];
-
-    function buildPeriodCard(p, idx) {
-      const colors = [
-        { bg: 'bg-blue-50', border: 'border-blue-200', label: 'text-fubon-blue', badge: 'bg-fubon-blue' },
-        { bg: 'bg-indigo-50', border: 'border-indigo-200', label: 'text-indigo-700', badge: 'bg-indigo-600' },
-        { bg: 'bg-violet-50', border: 'border-violet-200', label: 'text-violet-700', badge: 'bg-violet-600' },
-      ];
-      const c = colors[idx];
-
-      if (!p.valid) {
-        return `
-          <div class="${c.bg} border ${c.border} rounded-2xl p-5">
-            <div class="flex items-center gap-3 mb-2">
-              <span class="${c.badge} text-white text-xs px-2 py-1 rounded-full font-medium">第${idx+1}期</span>
-              <span class="text-sm text-gray-500">${p.ageStart} 歲起</span>
-            </div>
-            <p class="text-gray-400 text-sm">超出承保年齡範圍（最高 ${p.maxAge} 歲）</p>
-          </div>`;
-      }
-
-      return `
-        <div class="${c.bg} border ${c.border} rounded-2xl p-5">
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-2">
-              <span class="${c.badge} text-white text-xs px-2 py-1 rounded-full font-medium">第${idx+1}期</span>
-              <span class="text-sm text-gray-500">${p.ageStart}～${p.ageStart+9} 歲</span>
-            </div>
-            <span class="text-xs text-gray-400">${p.table}</span>
-          </div>
-          <div class="space-y-2">
-            <div class="flex justify-between text-sm">
-              <span class="text-gray-600">費率（${p.ageStart}歲）</span>
-              <span class="font-medium">${p.rate} 元/萬元</span>
-            </div>
-            <div class="flex justify-between text-sm">
-              <span class="text-gray-600">年繳保費</span>
-              <span class="font-semibold ${c.label}">${fmt(p.annual)} 元</span>
-            </div>
-            <div class="flex justify-between text-sm border-t pt-2">
-              <span class="text-gray-600">10 年總繳</span>
-              <span class="font-semibold">${fmt(p.total10)} 元</span>
-            </div>
-            <div class="flex justify-between text-sm">
-              <span class="text-gray-600">期滿退還（未理賠）</span>
-              <span class="font-semibold text-green-600">＋${fmt(p.refund)} 元</span>
-            </div>
-            <div class="flex justify-between border-t pt-2">
-              <span class="font-semibold text-gray-700">淨支出</span>
-              <span class="text-xl font-bold ${c.label}">${fmt(p.net)} 元</span>
-            </div>
-          </div>
-        </div>`;
-    }
-
-    // ── Until-Age Selector ────────────────────────────────────────
-    function buildUntilOptions(entryAge) {
-      const container = document.getElementById('until-options');
-      container.innerHTML = '';
-
-      const options = [];
-      for (let i = 0; i < 3; i++) {
-        const p = periodData[i];
-        if (p && p.valid) {
-          options.push({ label: `繳到 ${p.ageStart + 9} 歲（完成第${i+1}期）`, periods: i + 1 });
-        }
-      }
-
-      if (options.length === 0) return;
-
-      options.forEach((opt, i) => {
-        const div = document.createElement('div');
-        div.innerHTML = `
-          <label class="flex items-center gap-3 p-3 rounded-xl border-2 border-gray-200 cursor-pointer hover:border-fubon-blue transition-all">
-            <input type="radio" name="until" value="${i}" class="text-fubon-blue" onchange="calcTotal(${i})">
-            <span class="text-sm text-gray-700">${opt.label}</span>
-          </label>`;
-        container.appendChild(div);
-      });
-    }
-
-    function calcTotal(periodIdx) {
-      let totalPaid = 0, totalRefund = 0;
-      for (let i = 0; i <= periodIdx; i++) {
-        const p = periodData[i];
-        if (p && p.valid) {
-          totalPaid += p.total10;
-          totalRefund += p.refund;
-        }
-      }
-      document.getElementById('total-paid').textContent = fmt(totalPaid) + ' 元';
-      document.getElementById('total-refund').textContent = '＋' + fmt(totalRefund) + ' 元';
-      document.getElementById('total-net').textContent = fmt(totalPaid - totalRefund) + ' 元';
-      document.getElementById('total-result').classList.remove('hidden');
-    }
-
-    // ── Main Calculate ────────────────────────────────────────────
-    function calculate() {
-      const gender = document.querySelector('input[name="gender"]:checked')?.value;
-      const y = document.getElementById('birth-year').value;
-      const m = document.getElementById('birth-month').value;
-      const d = document.getElementById('birth-day').value;
-      const coverage = parseFloat(document.getElementById('coverage').value);
-
-      const err = document.getElementById('error-msg');
-      err.classList.add('hidden');
-
-      if (!gender) { showErr('請選擇性別'); return; }
-      if (!y || !m || !d) { showErr('請完整填寫出生日期'); return; }
-      if (!coverage || coverage <= 0) { showErr('請輸入有效保額'); return; }
-      if (+y < 1930 || +y > 2015) { showErr('請輸入合理的出生年份'); return; }
-
-      const birthDate = new Date(+y, +m - 1, +d);
-      const today = new Date();
-      const insAge = calcInsuranceAge(birthDate, today);
-
-      if (insAge < 15) { showErr(`保險年齡 ${insAge} 歲，未達最低投保年齡（15歲）`); return; }
-      if (insAge > 61) { showErr(`保險年齡 ${insAge} 歲，已超過 SDKA 新契約最高投保年齡（61歲）`); return; }
-
-      // Display insurance age
-      document.getElementById('age-display').textContent =
-        `保險年齡：${insAge} 歲`;
-      document.getElementById('age-display').classList.remove('hidden');
-
-      const units = coverage; // coverage in 萬元, rate is per 萬元
-
-      // Build 3 periods
-      periodData = [];
-      const periods = [
-        { table: 'SDKA（新契約）', ageStart: insAge, rateTable: SDKA, maxAge: 61 },
-        { table: 'SDKB（續保）',   ageStart: insAge + 10, rateTable: SDKB, maxAge: 71 },
-        { table: 'SDKB（續保）',   ageStart: insAge + 20, rateTable: SDKB, maxAge: 71 },
-      ];
-
-      periods.forEach((def) => {
-        const rate = def.rateTable[gender][def.ageStart];
-        if (!rate || def.ageStart > def.maxAge) {
-          periodData.push({ valid: false, ageStart: def.ageStart, maxAge: def.maxAge });
-        } else {
-          const annual = rate * units;
-          periodData.push({
-            valid: true,
-            ageStart: def.ageStart,
-            table: def.table,
-            rate,
-            annual,
-            total10: annual * 10,
-            refund: annual,
-            net: annual * 9,
-          });
-        }
-      });
-
-      // Render period cards
-      document.getElementById('period-cards').innerHTML =
-        periodData.map((p, i) => buildPeriodCard(p, i)).join('');
-
-      // Summary
-      document.getElementById('result-summary').textContent =
-        `${gender === 'male' ? '男性' : '女性'}・保險年齡 ${insAge} 歲・保額 ${fmt(coverage)} 萬元`;
-
-      // Until-age options
-      buildUntilOptions(insAge);
-      document.getElementById('total-result').classList.add('hidden');
-
-      // Show results
-      document.getElementById('results').classList.remove('hidden');
-      document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    function showErr(msg) {
-      const el = document.getElementById('error-msg');
-      el.textContent = msg;
-      el.classList.remove('hidden');
-    }
-  </script>
-
+function showErr(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.classList.add('show');
+  el.style.display = 'block';
+}
+</script>
 </body>
 </html>
