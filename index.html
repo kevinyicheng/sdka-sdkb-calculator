@@ -313,6 +313,98 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
 /* ── Animations ── */
 @keyframes countUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .count-anim{animation:countUp .5s ease forwards}
+
+/* ── Print Button ── */
+.print-btn{
+  width:100%;padding:20px;margin-top:16px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.14);border-radius:16px;
+  color:rgba(255,255,255,.7);font-size:17px;font-weight:700;letter-spacing:.04em;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.print-btn:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.25);color:#fff}
+.print-btn svg{flex-shrink:0}
+
+/* ── @media print ── */
+@media print{
+  @page{size:A4 portrait;margin:14mm 16mm}
+  html{zoom:1 !important}
+  body{background:#fff !important;color:#111 !important}
+  body::before{display:none !important}
+  .page{display:none !important}
+  #print-area{display:block !important}
+  .print-btn{display:none !important}
+}
+
+/* ── Print Area (hidden on screen) ── */
+#print-area{
+  display:none;
+  font-family:'Helvetica Neue','Arial',sans-serif;
+  color:#1a1a2e;font-size:13px;line-height:1.6;
+}
+.pa-header{
+  border-bottom:3px solid #1a3a6e;padding-bottom:14px;margin-bottom:20px;
+  display:flex;justify-content:space-between;align-items:flex-start;
+}
+.pa-logo{display:flex;align-items:center;gap:10px}
+.pa-logo-mark{
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(135deg,#4fd1c5,#63b3ed);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:14px;color:#0b0d17;
+}
+.pa-title h1{font-size:18px;font-weight:800;color:#1a3a6e;margin-bottom:2px}
+.pa-title p{font-size:12px;color:#555}
+.pa-date{font-size:12px;color:#777;text-align:right}
+
+.pa-info-box{
+  background:#f4f7fb;border-radius:10px;padding:14px 20px;
+  margin-bottom:20px;display:flex;gap:0;flex-wrap:wrap;
+}
+.pa-info-item{flex:1;min-width:120px;padding:0 12px;border-right:1px solid #dde3ed}
+.pa-info-item:first-child{padding-left:0}
+.pa-info-item:last-child{border-right:none}
+.pa-info-label{font-size:10px;font-weight:700;color:#888;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.pa-info-val{font-size:16px;font-weight:800;color:#1a3a6e}
+
+.pa-periods-title{font-size:12px;font-weight:700;color:#888;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.pa-periods{display:flex;gap:10px;margin-bottom:20px}
+.pa-period{flex:1;border-radius:10px;padding:14px 16px;border:1.5px solid #e0e8f4;position:relative;overflow:hidden}
+.pa-period::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.pp-1::before{background:linear-gradient(90deg,#63b3ed,transparent)}
+.pp-2::before{background:linear-gradient(90deg,#68d391,transparent)}
+.pp-3::before{background:linear-gradient(90deg,#f6ad55,transparent)}
+.pa-period.invalid{background:#f9f9f9;opacity:.6}
+.pp-badge{
+  display:inline-block;padding:3px 10px;border-radius:999px;
+  font-size:10px;font-weight:800;letter-spacing:.07em;margin-bottom:10px;
+}
+.pb-1{background:#ebf4ff;color:#2b7bc8}
+.pb-2{background:#ebfaf3;color:#22863a}
+.pb-3{background:#fff8eb;color:#b96800}
+.pp-age{font-size:11px;color:#888;margin-bottom:12px}
+.pp-annual-label{font-size:10px;color:#888;font-weight:600;letter-spacing:.07em;text-transform:uppercase}
+.pp-annual{font-size:26px;font-weight:900;color:#1a3a6e;letter-spacing:-.02em;margin-bottom:12px}
+.pp-annual span{font-size:13px;font-weight:600;color:#888}
+.pp-row{display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-top:1px solid #eef2f8}
+.pp-row-label{color:#777}
+.pp-row-val{font-weight:700;color:#1a3a6e}
+.pp-row-val.green{color:#22863a}
+.pp-row-val.accent-1{color:#2b7bc8}
+.pp-row-val.accent-2{color:#22863a}
+.pp-row-val.accent-3{color:#b96800}
+.pp-net-row{display:flex;justify-content:space-between;padding:7px 0 0;font-size:13px;border-top:2px solid #d0dce8;margin-top:4px}
+.pp-net-label{font-weight:700;color:#1a3a6e}
+.pp-net-val{font-size:18px;font-weight:900}
+
+.pa-disclaimer{
+  border-top:1px solid #dde3ed;padding-top:12px;
+  font-size:10.5px;color:#888;line-height:1.9;
+}
+.pa-watermark{
+  text-align:center;margin-top:14px;
+  font-size:10px;color:#bbb;letter-spacing:.06em;
+}
 </style>
 </head>
 <body>
@@ -454,8 +546,20 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
     ※「退還一年保費」為假設未發生理賠且完整繳足 10 年之情形。<br>
     ※ 費率單位：元／每萬元保額；新契約 (SDKA) 上限 61 歲；有效契約續保 (SDKB) 最高 71 歲。
   </div>
+
+  <button class="print-btn" onclick="printReport()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 6 2 18 2 18 9"></polyline>
+      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+      <rect x="6" y="14" width="12" height="8"></rect>
+    </svg>
+    列印 PDF
+  </button>
 </div>
 </div>
+
+<!-- ── Print Area ── -->
+<div id="print-area"></div>
 
 <script>
 // ── Rate Tables ──────────────────────────────────────────────────
@@ -566,6 +670,9 @@ function clearResults(){
   r.className='results';
   document.getElementById('err').className='';
 }
+
+// ── Global state for print ────────────────────────────────────────
+let _g='',_y='',_m='',_d='',_age=0,_cov=0;
 
 // ── Period Data ───────────────────────────────────────────────────
 let PD=[];
@@ -717,6 +824,7 @@ function calculate(){
 
   const bDate=new Date(+y,+m-1,+d);
   const age=insAge(bDate);
+  _g=g;_y=y;_m=m;_d=d;_age=age;_cov=cov;
 
   if(age<15){showErr(`保險年齡 ${age} 歲，未達最低投保年齡（15 歲）`);return}
   if(age>61){showErr(`保險年齡 ${age} 歲，已超過 SDKA 新契約最高投保年齡（61 歲）`);return}
@@ -771,6 +879,88 @@ function calculate(){
 function showErr(msg){
   const el=document.getElementById('err');
   el.textContent=msg;el.className='on';el.style.display='block';
+}
+
+// ── Print Report ──────────────────────────────────────────────────
+function printReport(){
+  const today=new Date();
+  const dateStr=`${today.getFullYear()}/${String(today.getMonth()+1).padStart(2,'0')}/${String(today.getDate()).padStart(2,'0')}`;
+  const genderTxt=_g==='male'?'男性':'女性';
+  const birthTxt=`${_y} 年 ${_m} 月 ${_d} 日`;
+
+  const accentCls=['accent-1','accent-2','accent-3'];
+  const pbCls=['pb-1','pb-2','pb-3'];
+  const ppCls=['pp-1','pp-2','pp-3'];
+
+  const periodHTML=PD.map((p,i)=>{
+    if(!p.valid)return`<div class="pa-period invalid">
+      <span class="pp-badge ${pbCls[i]}">第 ${i+1} 期</span>
+      <div class="pp-age">超出承保年齡範圍（最高 ${p.max} 歲）</div>
+    </div>`;
+    return`<div class="pa-period ${ppCls[i]}">
+      <span class="pp-badge ${pbCls[i]}">第 ${i+1} 期</span>
+      <div class="pp-age">${p.as}～${p.as+9} 歲・${p.tbl}</div>
+      <div class="pp-annual-label">年繳保費</div>
+      <div class="pp-annual">${fmt(p.annual)}<span> 元</span></div>
+      <div class="pp-row"><span class="pp-row-label">費率（${p.as} 歲）</span><span class="pp-row-val">${p.rate} 元/萬</span></div>
+      <div class="pp-row"><span class="pp-row-label">10 年總繳</span><span class="pp-row-val">${fmt(p.total10)} 元</span></div>
+      <div class="pp-row"><span class="pp-row-label">期滿退還（未理賠）</span><span class="pp-row-val green">＋${fmt(p.refund)} 元</span></div>
+      <div class="pp-net-row">
+        <span class="pp-net-label">淨支出</span>
+        <span class="pp-net-val ${accentCls[i]}">${fmt(p.net)} 元</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  const totalNet=PD.reduce((s,p)=>s+(p.valid?p.net:0),0);
+
+  document.getElementById('print-area').innerHTML=`
+    <div class="pa-header">
+      <div class="pa-logo">
+        <div class="pa-logo-mark">FB</div>
+        <div class="pa-title">
+          <h1>富邦人壽醫靠安心重大傷病定期健康保險</h1>
+          <p>SDKA／SDKB・10 年期・保費試算報告</p>
+        </div>
+      </div>
+      <div class="pa-date">試算日期：${dateStr}</div>
+    </div>
+
+    <div class="pa-info-box">
+      <div class="pa-info-item">
+        <div class="pa-info-label">性別</div>
+        <div class="pa-info-val">${genderTxt}</div>
+      </div>
+      <div class="pa-info-item">
+        <div class="pa-info-label">出生年月日</div>
+        <div class="pa-info-val">${birthTxt}</div>
+      </div>
+      <div class="pa-info-item">
+        <div class="pa-info-label">保險年齡</div>
+        <div class="pa-info-val">${_age} 歲</div>
+      </div>
+      <div class="pa-info-item">
+        <div class="pa-info-label">保額</div>
+        <div class="pa-info-val">${fmt(_cov)} 萬元</div>
+      </div>
+      <div class="pa-info-item">
+        <div class="pa-info-label">三期淨總支出</div>
+        <div class="pa-info-val" style="color:#1a7c5a">${fmt(totalNet)} 元</div>
+      </div>
+    </div>
+
+    <div class="pa-periods-title">各期保費明細</div>
+    <div class="pa-periods">${periodHTML}</div>
+
+    <div class="pa-disclaimer">
+      ※ 本試算以費率表資料為基礎，僅供參考，實際保費以富邦人壽核保結果為準。<br>
+      ※「退還一年保費」為假設未發生理賠且完整繳足 10 年之情形。計算基礎：年保費 × 9 年 ＝ 淨支出。<br>
+      ※ 費率單位：元／每萬元保額；新契約 (SDKA) 投保年齡上限 61 歲；有效契約續保 (SDKB) 最高至 71 歲（含）。<br>
+      ※ 繳費期間：10 年期；保障期間：每期 10 年，共最多 3 期（最高至 71 歲）。
+    </div>
+    <div class="pa-watermark">此報告由 富邦 SDKA/SDKB 保費試算工具 產出</div>`;
+
+  window.print();
 }
 </script>
 </body>
