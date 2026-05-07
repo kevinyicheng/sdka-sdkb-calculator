@@ -22,7 +22,9 @@
   --red:#fc8181;
   --c1:#63b3ed;--c2:#68d391;--c3:#f6ad55;
 }
-html{font-size:16px;zoom:1.4}
+html{font-size:16px}
+@media(min-width:1025px){html{zoom:1.4}}
+@media(min-width:641px) and (max-width:1024px){html{zoom:1.15}}
 body{
   font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;
   background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;
@@ -464,7 +466,7 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
     <div class="coverage-top">
       <div>
         <div style="display:flex;align-items:flex-end;gap:4px">
-          <input type="number" class="coverage-input" id="cov-num" value="100" min="10" max="1000" step="10" oninput="syncSlider(this.value);clearResults()">
+          <input type="number" class="coverage-input" id="cov-num" value="100" min="0" max="200" step="10" oninput="syncSlider(this.value);clearResults()">
           <span style="font-size:20px;font-weight:600;color:var(--mu);padding-bottom:8px">萬元</span>
         </div>
       </div>
@@ -474,16 +476,16 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
       </div>
     </div>
     <div class="slider-wrap">
-      <input type="range" id="cov-slider" min="10" max="1000" step="10" value="100"
-             style="--pct:9.09%"
+      <input type="range" id="cov-slider" min="0" max="200" step="10" value="100"
+             style="--pct:50%"
              oninput="syncNum(this.value)">
     </div>
     <div class="slider-ticks">
-      <span class="slider-tick">10萬</span>
-      <span class="slider-tick">250萬</span>
-      <span class="slider-tick">500萬</span>
-      <span class="slider-tick">750萬</span>
-      <span class="slider-tick">1000萬</span>
+      <span class="slider-tick">0萬</span>
+      <span class="slider-tick">50萬</span>
+      <span class="slider-tick">100萬</span>
+      <span class="slider-tick">150萬</span>
+      <span class="slider-tick">200萬</span>
     </div>
   </div>
 
@@ -653,16 +655,18 @@ function updatePreview(){
 // ── Slider Sync ──────────────────────────────────────────────────
 function syncSlider(v){
   const sl=document.getElementById('cov-slider');
-  const val=Math.min(Math.max(+v||10),1000);
+  const val=Math.min(Math.max(+v||0),200);
   sl.value=val;
-  const pct=((val-10)/(1000-10)*100).toFixed(2);
+  const pct=(val/200*100).toFixed(2);
   sl.style.setProperty('--pct',pct+'%');
   updatePreview();
 }
 function syncNum(v){
-  document.getElementById('cov-num').value=v;
-  const pct=((v-10)/(1000-10)*100).toFixed(2);
+  const val=Math.min(Math.max(+v||0),200);
+  document.getElementById('cov-num').value=val;
+  const pct=(val/200*100).toFixed(2);
   document.getElementById('cov-slider').style.setProperty('--pct',pct+'%');
+  if(navigator.vibrate)navigator.vibrate(8);
   clearResults();updatePreview();
 }
 
