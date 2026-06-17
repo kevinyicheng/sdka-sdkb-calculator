@@ -2,760 +2,501 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>富邦 SDKA/SDKB 重大傷病險保費試算</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0; -webkit-tap-highlight-color: transparent;}
 :root{
-  --bg:#F1F0F9;
-  --surface:#FFFFFF;
-  --border:#E5E7EB;
-  --border-hover:#D1D5DB;
-  --tx:#1F2937;
-  --tx2:#6B7280;
-  --mu:#9CA3AF;
-  --brand:#6366F1;
-  --brand-light:rgba(99,102,241,.08);
-  --brand-mid:rgba(99,102,241,.15);
-  --green:#16A34A;
-  --green-light:rgba(22,163,74,.08);
-  --red:#DC2626;
-  --c1:#6366F1;--c2:#10B981;--c3:#F59E0B;
-  --c1-bg:rgba(99,102,241,.07);--c2-bg:rgba(16,185,129,.07);--c3-bg:rgba(245,158,11,.07);
-  --c1-border:rgba(99,102,241,.22);--c2-border:rgba(16,185,129,.22);--c3-border:rgba(245,158,11,.22);
-  --shadow:0 2px 12px rgba(0,0,0,.06);
-  --shadow-hover:0 8px 30px rgba(0,0,0,.10);
-}
-html{font-size:15px}
-body{
-  font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Noto Sans TC','Segoe UI',sans-serif;
-  background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;
-}
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap');
+  /* Premium FinTech Color Palette */
+  --bg: #F4F7FA;
+  --surface: #FFFFFF;
+  --border: rgba(0,0,0,0.06);
+  --border-hover: rgba(0,0,0,0.12);
+  --tx-main: #0F172A; /* Slate 900 */
+  --tx-sub: #475569;  /* Slate 600 */
+  --tx-muted: #94A3B8; /* Slate 400 */
 
-/* ── Page ── */
-.page{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:24px 18px 80px}
+  /* Trustworthy Oceanic Blue (Fubon vibe) */
+  --brand-dark: #0369A1;
+  --brand: #0284C7;
+  --brand-light: #38BDF8;
+  --brand-bg: #F0F9FF;
+
+  --green: #059669;
+  --red: #E11D48;
+
+  /* Period Colors - Soft & Elegant */
+  --c1: #0284C7; --c1-bg: #F0F9FF; --c1-border: rgba(2,132,199,0.15);
+  --c2: #059669; --c2-bg: #ECFDF5; --c2-border: rgba(5,150,105,0.15);
+  --c3: #D97706; --c3-bg: #FFFBEB; --c3-border: rgba(217,119,6,0.15);
+
+  /* Modern Soft Shadows */
+  --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+html{font-size:15px; background:var(--bg);}
+body{
+  font-family:'Montserrat', -apple-system, BlinkMacSystemFont, 'Noto Sans TC', sans-serif;
+  color:var(--tx-main); min-height:100vh; overflow-x:hidden;
+  -webkit-font-smoothing: antialiased;
+}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;600;700&display=swap');
+
+/* ── Page Layout ── */
+.page{position:relative; z-index:1; max-width:640px; margin:0 auto; padding:32px 20px 100px;}
 
 /* ── Header ── */
-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:36px}
-.logo{display:flex;align-items:center;gap:14px}
+header{display:flex; align-items:center; justify-content:space-between; padding-bottom:32px;}
+.logo{display:flex; align-items:center; gap:16px;}
 .logo-mark{
-  width:38px;height:38px;border-radius:11px;
-  background:linear-gradient(135deg,var(--brand),#818CF8);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:900;font-size:14px;color:#fff;letter-spacing:-.5px;
-  box-shadow:0 4px 16px rgba(99,102,241,.25);
+  width:44px; height:44px; border-radius:14px;
+  background:linear-gradient(135deg, var(--brand), var(--brand-light));
+  display:flex; align-items:center; justify-content:center;
+  font-weight:900; font-size:16px; color:#fff; letter-spacing:-.5px;
+  box-shadow: 0 8px 16px rgba(2, 132, 199, 0.25);
 }
-.logo-info strong{display:block;font-size:15px;font-weight:700;letter-spacing:-.01em;color:var(--tx)}
-.logo-info span{font-size:11px;color:var(--mu)}
+.logo-info strong{display:block; font-size:17px; font-weight:800; color:var(--tx-main); margin-bottom:2px;}
+.logo-info span{font-size:12px; font-weight:500; color:var(--tx-muted);}
 .badge{
-  padding:5px 13px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;
-  background:var(--brand-light);border:1px solid var(--c1-border);color:var(--brand);
+  padding:6px 14px; border-radius:999px; font-size:12px; font-weight:700; letter-spacing:.05em;
+  background:var(--brand-bg); color:var(--brand-dark);
 }
 
-/* ── Card ── */
+/* ── Global Cards ── */
 .card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:16px;padding:26px;
-  box-shadow:var(--shadow);
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:24px; padding:32px;
+  box-shadow:var(--shadow-md); transition: transform 0.3s ease;
 }
-.card+.card,.card+.results{margin-top:14px}
+.card+.card, .card+.results{margin-top:16px;}
 .section-label{
-  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--mu);margin-bottom:24px;
+  font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--tx-muted); margin-bottom:20px; display:flex; align-items:center; gap:8px;
+}
+.section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
 }
 
-/* ── Gender Pills ── */
-.gender-row{display:flex;gap:10px;margin-bottom:28px}
+/* ── Gender Toggle ── */
+.gender-row{display:flex; gap:12px; margin-bottom:28px;}
 .g-btn{
-  flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
-  padding:14px 10px;border:1.5px solid var(--border);border-radius:12px;
-  cursor:pointer;transition:all .2s;background:var(--surface);
-  font-size:14px;font-weight:600;color:var(--mu);
+  flex:1; display:flex; align-items:center; justify-content:center; gap:10px;
+  padding:16px 12px; border:2px solid var(--border); border-radius:16px;
+  cursor:pointer; transition:all .25s cubic-bezier(0.4, 0, 0.2, 1); background:#FAFAFA;
+  font-size:15px; font-weight:600; color:var(--tx-sub);
 }
-.g-btn input{display:none}
-.g-btn .g-icon{font-size:18px;line-height:1}
-.g-btn:hover{border-color:var(--border-hover);color:var(--tx);background:#F9FAFB}
-.g-btn.male-on{border-color:rgba(99,102,241,.5);background:rgba(99,102,241,.06);color:var(--c1)}
-.g-btn.female-on{border-color:rgba(168,85,247,.5);background:rgba(168,85,247,.06);color:#A855F7}
+.g-btn input{display:none;}
+.g-btn .g-icon{font-size:20px; line-height:1; transition:transform 0.2s;}
+.g-btn:hover{background:var(--surface); border-color:var(--border-hover);}
+.g-btn.male-on, .g-btn.female-on{
+  border-color:var(--brand); background:var(--surface); color:var(--brand-dark);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12);
+}
+.g-btn.male-on .g-icon, .g-btn.female-on .g-icon{transform:scale(1.1);}
 
-/* ── Date Row ── */
-.field-label{font-size:12px;color:var(--mu);font-weight:600;letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px}
-.date-row{display:flex;gap:10px;margin-bottom:28px}
-.date-row input,.date-row select{
-  background:#F9FAFB;border:1.5px solid var(--border);
-  border-radius:10px;color:var(--tx);font-size:14px;padding:12px 14px;
-  outline:none;transition:border-color .2s,background .2s;
-  appearance:none;-webkit-appearance:none;width:100%;
+/* ── Date Inputs ── */
+.date-row{display:flex; gap:12px; margin-bottom:8px;}
+.date-row input, .date-row select{
+  background:#F8FAFC; border:1px solid var(--border); border-radius:14px;
+  color:var(--tx-main); font-size:15px; font-weight:500; padding:14px 16px;
+  outline:none; transition:all .2s; appearance:none; -webkit-appearance:none; width:100%;
 }
-.date-row input:focus,.date-row select:focus{border-color:var(--brand);background:#fff}
-.date-row input::placeholder{color:var(--mu)}
-.date-row input::-webkit-inner-spin-button{display:none}
-.date-row select option{background:#fff}
-.yr{flex:1.6}.mo,.dy{flex:1}
+.date-row input:focus, .date-row select:focus{
+  border-color:var(--brand-light); background:#fff;
+  box-shadow: 0 0 0 4px var(--brand-bg);
+}
+.date-row input::placeholder{color:var(--tx-muted); font-weight:400;}
+.date-row input::-webkit-inner-spin-button{display:none;}
+.yr{flex:1.5} .mo, .dy{flex:1; text-align:center; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394A3B8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;}
 
 #age-tag{
-  display:none;align-items:center;gap:8px;margin-top:12px;margin-bottom:28px;
-  font-size:15px;font-weight:600;color:var(--brand);
+  display:none; align-items:center; gap:8px; margin-top:12px; margin-bottom:32px;
+  font-size:14px; font-weight:600; color:var(--brand); padding:8px 12px; background:var(--brand-bg); border-radius:10px; width: fit-content;
 }
-#age-tag.on{display:flex}
-#age-tag::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--brand);flex-shrink:0;box-shadow:0 0 8px rgba(99,102,241,.4)}
+#age-tag.on{display:flex; animation: fadeIn 0.3s ease;}
 
 /* ── Coverage Slider ── */
-.coverage-section{margin-bottom:8px}
-.coverage-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
-.coverage-big{font-size:36px;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--tx)}
-.coverage-big .unit{font-size:16px;font-weight:600;color:var(--mu);margin-left:4px}
-.coverage-input-wrap{position:relative}
+.coverage-top{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:20px;}
+.coverage-input-wrap{display:flex; align-items:baseline; gap:4px; border-bottom: 2px solid var(--border); transition: border-color 0.2s;}
+.coverage-input-wrap:focus-within{border-color: var(--brand);}
 .coverage-input{
-  background:transparent;border:none;outline:none;
-  font-size:36px;font-weight:800;letter-spacing:-.03em;color:var(--tx);
-  width:130px;text-align:right;
+  background:transparent; border:none; outline:none;
+  font-size:42px; font-weight:900; letter-spacing:-.04em; color:var(--brand-dark);
+  width:100px; text-align:center; font-family: 'Montserrat', sans-serif;
 }
-.coverage-input::-webkit-inner-spin-button{display:none}
+.coverage-input::-webkit-inner-spin-button{display:none;}
 
-/* Custom Range Slider */
-.slider-wrap{position:relative;margin-bottom:8px}
 input[type=range]{
-  width:100%;height:6px;appearance:none;-webkit-appearance:none;
-  border-radius:999px;outline:none;cursor:pointer;
-  background:linear-gradient(to right, var(--brand) 0%, var(--brand) var(--pct,20%), #E5E7EB var(--pct,20%));
+  width:100%; height:8px; appearance:none; -webkit-appearance:none;
+  border-radius:999px; outline:none; cursor:pointer;
+  background:linear-gradient(to right, var(--brand) 0%, var(--brand) var(--pct,20%), #E2E8F0 var(--pct,20%));
 }
 input[type=range]::-webkit-slider-thumb{
-  appearance:none;-webkit-appearance:none;
-  width:26px;height:26px;border-radius:50%;
-  background:#fff;cursor:grab;
-  box-shadow:0 0 0 4px rgba(99,102,241,.2), 0 4px 12px rgba(0,0,0,.12);
-  transition:box-shadow .2s;
+  appearance:none; -webkit-appearance:none;
+  width:28px; height:28px; border-radius:50%; background:#fff; cursor:grab;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1), 0 0 0 4px var(--surface), 0 0 0 6px var(--brand-bg);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 8px rgba(99,102,241,.15),0 4px 12px rgba(0,0,0,.12)}
-.slider-ticks{display:flex;justify-content:space-between;margin-top:8px}
-.slider-tick{font-size:11px;color:var(--mu);font-weight:500}
+input[type=range]::-webkit-slider-thumb:active{
+  cursor:grabbing; transform:scale(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 0 0 4px var(--surface), 0 0 0 8px var(--brand-bg);
+}
+.slider-ticks{display:flex; justify-content:space-between; margin-top:12px; padding:0 4px;}
+.slider-tick{font-size:12px; color:var(--tx-muted); font-weight:600;}
 
-/* ── Calc Button ── */
+/* ── CTA Button ── */
 .calc-btn{
-  width:100%;padding:16px;margin-top:8px;
-  background:var(--brand);
-  border:none;border-radius:12px;
-  color:#fff;font-size:15px;font-weight:800;letter-spacing:.04em;
-  cursor:pointer;transition:all .2s;
+  width:100%; padding:18px; margin-top:16px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  border:none; border-radius:16px;
+  color:#fff; font-size:16px; font-weight:800; letter-spacing:.05em;
+  cursor:pointer; transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.25);
 }
-.calc-btn:hover{background:#4F46E5;transform:translateY(-2px);box-shadow:0 8px 24px rgba(99,102,241,.3)}
-.calc-btn:active{transform:translateY(0)}
-#err{display:none;margin-top:14px;font-size:14px;color:var(--red);text-align:center}
-#err.on{display:block}
+.calc-btn:hover{transform:translateY(-2px); box-shadow: 0 12px 24px rgba(2, 132, 199, 0.35);}
+.calc-btn:active{transform:translateY(1px); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);}
+#err{display:none; margin-top:16px; font-size:14px; font-weight:600; color:var(--red); text-align:center; background:#FFF1F2; padding:10px; border-radius:10px;}
+#err.on{display:block; animation: shake 0.4s ease;}
 
-/* ── Results ── */
-.results{display:none}
-.results.on{display:block;animation:fadeUp .4s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+/* ── Results Area ── */
+.results{display:none;}
+.results.on{display:block; animation:fadeUp .5s cubic-bezier(0.4, 0, 0.2, 1) forwards;}
 
-/* ── Hero ── */
+/* ── Hero / Summary ── */
 .hero{
-  background:var(--surface);
-  border:1px solid var(--border);border-radius:16px;padding:26px;margin-bottom:14px;
-  box-shadow:var(--shadow);
-  border-top:3px solid var(--brand);
+  background:var(--surface); border-radius:24px; padding:32px; margin-bottom:20px;
+  box-shadow:var(--shadow-lg); position: relative; overflow: hidden;
+  border: 1px solid var(--border);
 }
-.hero-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:24px}
-.hero-who{font-size:13px;font-weight:600;color:var(--brand);margin-top:4px}
-.hero-label{font-size:11px;color:var(--mu);font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
-.hero-big{font-size:40px;font-weight:900;letter-spacing:-.03em;line-height:1;color:var(--tx)}
-.hero-big .cur{font-size:20px;font-weight:600;color:var(--mu);margin-right:2px}
-.hero-meta{font-size:12px;color:var(--mu);text-align:right;line-height:2}
-.hero-meta strong{color:var(--tx)}
+.hero::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+  background: linear-gradient(90deg, var(--brand-light), var(--brand));
+}
+.hero-who{font-size:14px; font-weight:700; color:var(--tx-sub); margin-bottom:4px;}
+.hero-big{
+  font-size:48px; font-weight:900; letter-spacing:-.04em; line-height:1.1;
+  background: linear-gradient(to right, var(--brand-dark), var(--brand));
+  -webkit-background-clip: text; color: transparent; margin: 8px 0 24px 0;
+}
+.hero-big .cur{font-size:24px; font-weight:700; margin-right:4px; color:var(--brand);}
 
-/* ── Timeline Bar ── */
-.timeline{margin-top:4px}
-.tl-label{font-size:11px;color:var(--mu);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+/* Timeline */
+.tl-label{font-size:12px; color:var(--tx-muted); font-weight:700; letter-spacing:.05em; margin-bottom:12px;}
 .tl-track{
-  display:flex;border-radius:12px;overflow:hidden;height:36px;
-  background:#F3F4F6;border:1px solid var(--border);
+  display:flex; border-radius:12px; overflow:hidden; height:36px;
+  background:#F1F5F9; border:1px solid var(--border);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
 }
 .tl-seg{
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;letter-spacing:.05em;
-  transition:flex .5s cubic-bezier(.4,0,.2,1);
-  cursor:default;position:relative;overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700; letter-spacing:.05em;
+  transition:flex .8s cubic-bezier(.4,0,.2,1); cursor:default;
 }
-.tl-seg-1{background:rgba(99,102,241,.18);color:var(--c1);border-right:1px solid rgba(255,255,255,.5)}
-.tl-seg-2{background:rgba(16,185,129,.18);color:var(--c2);border-right:1px solid rgba(255,255,255,.5)}
-.tl-seg-3{background:rgba(245,158,11,.18);color:var(--c3)}
-.tl-seg-invalid{background:#F3F4F6;color:var(--mu)}
-.tl-ages{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--mu)}
+.tl-seg-1{background:var(--c1-bg); color:var(--c1); border-right:1px solid rgba(255,255,255,.8);}
+.tl-seg-2{background:var(--c2-bg); color:var(--c2); border-right:1px solid rgba(255,255,255,.8);}
+.tl-seg-3{background:var(--c3-bg); color:var(--c3);}
+.tl-seg-invalid{background:#F1F5F9; color:var(--tx-muted);}
+.tl-ages{display:flex; justify-content:space-between; margin-top:8px; font-size:12px; font-weight:600; color:var(--tx-muted);}
 
 /* ── Period Cards ── */
-.periods{display:flex;flex-direction:column;gap:14px;margin-bottom:16px}
+.periods{display:flex; flex-direction:column; gap:16px; margin-bottom:20px;}
 .pc{
-  border-radius:14px;padding:22px;border:1px solid var(--border);
-  position:relative;overflow:hidden;background:var(--surface);
-  box-shadow:var(--shadow);
+  border-radius:20px; padding:24px; border:1px solid var(--border);
+  background:var(--surface); box-shadow:var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.pc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.pc-1{background:var(--surface)}
-.pc-1::before{background:linear-gradient(90deg,var(--c1),rgba(99,102,241,.2))}
-.pc-2{background:var(--surface)}
-.pc-2::before{background:linear-gradient(90deg,var(--c2),rgba(16,185,129,.2))}
-.pc-3{background:var(--surface)}
-.pc-3::before{background:linear-gradient(90deg,var(--c3),rgba(245,158,11,.2))}
-.pc-invalid{background:#F9FAFB;opacity:.55}
+.pc:hover {box-shadow:var(--shadow-md); transform: translateY(-2px);}
+.pc-invalid{background:#F8FAFC; border-color:transparent; opacity:0.7;}
 
-.pc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.pc-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;}
 .pc-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:5px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.07em;
+  display:inline-flex; align-items:center; padding:6px 14px; border-radius:999px;
+  font-size:12px; font-weight:800; letter-spacing:.05em;
 }
-.b1{background:var(--c1-bg);color:var(--c1);border:1px solid var(--c1-border)}
-.b2{background:var(--c2-bg);color:var(--c2);border:1px solid var(--c2-border)}
-.b3{background:var(--c3-bg);color:var(--c3);border:1px solid var(--c3-border)}
-.pc-range{font-size:13px;color:var(--mu)}
-.pc-tag{font-size:11px;color:var(--mu);letter-spacing:.05em}
+.b1{background:var(--c1-bg); color:var(--c1);}
+.b2{background:var(--c2-bg); color:var(--c2);}
+.b3{background:var(--c3-bg); color:var(--c3);}
+.pc-range{font-size:14px; font-weight:600; color:var(--tx-sub);}
+.rate-chip{font-size:12px; font-weight:600; color:var(--tx-muted); background:#F1F5F9; padding:6px 12px; border-radius:10px;}
 
-/* Annual big number */
-.pc-annual{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px}
-.annual-wrap .al{font-size:11px;color:var(--mu);margin-bottom:6px;font-weight:600;letter-spacing:.07em;text-transform:uppercase}
-.annual-num{font-size:30px;font-weight:900;letter-spacing:-.02em;line-height:1}
-.annual-num .u{font-size:14px;font-weight:600;color:var(--mu);margin-left:4px}
-.rate-chip{
-  font-size:12px;color:var(--tx2);
-  background:#F3F4F6;border:1px solid var(--border);
-  padding:5px 10px;border-radius:8px;
-}
+.annual-wrap .al{font-size:12px; color:var(--tx-muted); margin-bottom:8px; font-weight:700; letter-spacing:.05em;}
+.annual-num{font-size:36px; font-weight:900; letter-spacing:-.03em; line-height:1;}
+.annual-num .u{font-size:16px; font-weight:600; color:var(--tx-muted); margin-left:6px;}
 
-/* Bar breakdown */
-.breakdown-bar{margin-bottom:18px}
-.bb-label{display:flex;justify-content:space-between;font-size:12px;color:var(--mu);margin-bottom:8px}
-.bb-track{height:10px;border-radius:999px;background:#F3F4F6;overflow:hidden;position:relative}
-.bb-fill{
-  height:100%;border-radius:999px;
-  transition:width .7s cubic-bezier(.4,0,.2,1);
-  position:relative;
-}
-.bb-fill::after{
-  content:'';position:absolute;right:0;top:0;bottom:0;
-  width:4px;background:rgba(255,255,255,.6);border-radius:999px;
-}
+.bb-track{height:8px; border-radius:999px; background:#F1F5F9; overflow:hidden; position:relative; margin: 24px 0 20px;}
+.bb-fill{height:100%; border-radius:999px; transition:width 1s cubic-bezier(.4,0,.2,1);}
 
-/* Stats row */
-.pc-stats{display:flex;gap:10px;flex-wrap:wrap}
-.stat{
-  flex:1;min-width:120px;padding:12px 16px;border-radius:12px;
-  background:#F9FAFB;border:1px solid var(--border);
-}
-.stat .sl{font-size:11px;color:var(--mu);margin-bottom:6px;font-weight:500}
-.stat .sv{font-size:15px;font-weight:800;letter-spacing:-.01em;color:var(--tx)}
-.sv-green{color:var(--green) !important}
-.sv-1{color:var(--c1) !important}.sv-2{color:var(--c2) !important}.sv-3{color:var(--c3) !important}
+.pc-stats{display:flex; gap:12px; background:#F8FAFC; padding:16px; border-radius:16px;}
+.stat{flex:1;}
+.stat .sl{font-size:12px; color:var(--tx-muted); margin-bottom:4px; font-weight:600;}
+.stat .sv{font-size:16px; font-weight:800; color:var(--tx-main);}
+.sv-green{color:var(--green) !important;}
 
 /* ── Until Selector ── */
-.total-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:14px;padding:22px;
-  box-shadow:var(--shadow);
-}
-.until-title{font-size:18px;font-weight:800;margin-bottom:6px;color:var(--tx)}
-.until-sub{font-size:14px;color:var(--mu);margin-bottom:22px}
-
-.until-opts{display:flex;flex-direction:column;gap:10px}
+.total-card{background:var(--surface); border-radius:24px; padding:32px; box-shadow:var(--shadow-md); border:1px solid var(--border);}
+.until-title{font-size:20px; font-weight:800; margin-bottom:8px; color:var(--tx-main);}
+.until-sub{font-size:14px; color:var(--tx-muted); font-weight:500; margin-bottom:24px;}
 .u-opt{
-  display:flex;align-items:center;gap:14px;
-  padding:14px 16px;border:1.5px solid var(--border);border-radius:12px;
-  cursor:pointer;transition:all .2s;background:var(--surface);
-  position:relative;overflow:hidden;
+  display:flex; align-items:center; gap:16px; padding:16px 20px;
+  border:2px solid var(--border); border-radius:16px;
+  cursor:pointer; transition:all .2s; background:var(--surface); margin-bottom: 12px;
 }
-.u-opt::after{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:99px;
-  background:var(--brand);transform:scaleX(0);transform-origin:left;transition:transform .2s;
-}
-.u-opt:hover{border-color:var(--border-hover);background:#F9FAFB}
-.u-opt.sel{border-color:rgba(99,102,241,.4);background:rgba(99,102,241,.04)}
-.u-opt.sel::after{transform:scaleX(1)}
+.u-opt:hover{border-color:var(--border-hover);}
+.u-opt.sel{border-color:var(--brand); background:var(--brand-bg); box-shadow: 0 4px 12px rgba(2,132,199,0.08);}
 .u-radio{
-  width:22px;height:22px;border-radius:50%;border:2px solid var(--border);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;
+  width:24px; height:24px; border-radius:50%; border:2px solid var(--border);
+  display:flex; align-items:center; justify-content:center; transition:all .2s;
 }
-.u-opt.sel .u-radio{border-color:var(--brand);background:rgba(99,102,241,.1)}
-.u-dot{width:10px;height:10px;border-radius:50%;background:var(--brand);opacity:0;transition:opacity .15s}
-.u-opt.sel .u-dot{opacity:1}
-.u-text{flex:1;font-size:14px;font-weight:600;color:var(--tx)}
-.u-sub{font-size:12px;color:var(--mu);margin-top:2px;font-weight:400}
-.u-amount{font-size:17px;font-weight:900;color:var(--brand);letter-spacing:-.01em;text-align:right}
-.u-amount-label{font-size:11px;color:var(--mu);text-align:right;font-weight:500}
+.u-opt.sel .u-radio{border-color:var(--brand);}
+.u-dot{width:12px; height:12px; border-radius:50%; background:var(--brand); transform:scale(0); transition:transform .2s cubic-bezier(0.4, 0, 0.2, 1);}
+.u-opt.sel .u-dot{transform:scale(1);}
+.u-text{font-size:15px; font-weight:700; color:var(--tx-main);}
+.u-sub-text{font-size:13px; color:var(--tx-muted); margin-top:4px;}
+.u-amount{font-size:18px; font-weight:900; color:var(--brand); text-align:right;}
 
-/* ── Total Result Box ── */
-#total-result{
-  display:none;margin-top:20px;
-  border-radius:18px;overflow:hidden;
-}
-#total-result.on{display:block;animation:fadeUp .3s ease}
-.tr-inner{
-  background:rgba(99,102,241,.04);
-  border:1px solid var(--c1-border);border-radius:18px;padding:24px;
-}
-.tr-row{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:10px 0;font-size:14px;
-}
-.tr-row+.tr-row{border-top:1px solid #F3F4F6}
-.tr-l{color:var(--mu)}
-.tr-v{font-weight:700;font-size:16px;color:var(--tx)}
-.tr-v-green{color:var(--green)}
-.tr-main{padding-top:18px;margin-top:8px;border-top:2px solid var(--border) !important}
-.tr-main .tr-l{font-size:16px;font-weight:700;color:var(--tx)}
-.tr-net{font-size:28px;font-weight:900;color:var(--brand);letter-spacing:-.02em}
+#total-result{display:none; margin-top:24px; animation:fadeIn .4s ease;}
+.tr-inner{background:#F8FAFC; border-radius:20px; padding:24px;}
+.tr-row{display:flex; justify-content:space-between; align-items:center; padding:12px 0; font-size:15px;}
+.tr-row+.tr-row{border-top:1px solid var(--border);}
+.tr-l{color:var(--tx-sub); font-weight:600;}
+.tr-v{font-weight:800; font-size:17px; color:var(--tx-main);}
+.tr-main{padding-top:20px; margin-top:8px; border-top:2px dashed var(--border) !important;}
+.tr-main .tr-l{font-size:18px; font-weight:800; color:var(--tx-main);}
+.tr-net{font-size:32px; font-weight:900; color:var(--brand-dark); letter-spacing:-.02em;}
 
-/* ── Disclaimer ── */
-.disc{
-  margin-top:16px;padding:18px 20px;
-  background:#F9FAFB;border-radius:14px;border:1px solid var(--border);
-  font-size:12px;line-height:2;color:var(--mu);
+/* ── Utilities ── */
+.disc{margin-top:24px; font-size:12px; line-height:1.8; color:var(--tx-muted); font-weight:500;}
+.print-btn{
+  width:100%; padding:18px; margin-top:20px; background:transparent;
+  border:2px solid var(--border); border-radius:16px;
+  color:var(--tx-sub); font-size:15px; font-weight:700;
+  cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:10px;
 }
+.print-btn:hover{background:#F1F5F9; color:var(--tx-main);}
 
 /* ── Animations ── */
-@keyframes countUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.count-anim{animation:countUp .5s ease forwards}
+@keyframes fadeUp{from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+@keyframes shake{0%,100%{transform:translateX(0);} 25%{transform:translateX(-4px);} 75%{transform:translateX(4px);}}
 
-/* ── Coverage input hint ── */
-.cov-hint{
-  display:flex;align-items:center;gap:6px;margin-top:6px;
-  font-size:11px;color:var(--mu);font-weight:500;letter-spacing:.04em;
+/* ── Premium Watermark ── */
+.ks-watermark {
+  position: fixed; bottom: 24px; right: 24px; z-index: 99;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px 8px 8px; border-radius: 99px;
+  background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  text-decoration: none; color: var(--tx-sub); font-size: 13px; font-weight: 700;
+  transition: all 0.3s ease; opacity: 0.8;
 }
-.cov-hint svg{opacity:.5}
-
-/* ── Tablet (641–1024px) ── */
-@media(max-width:1024px){
-  .page{padding:24px 16px 80px}
-  .hero-big{font-size:44px}
-  .annual-num{font-size:32px}
-  .coverage-input{font-size:42px;width:140px}
+.ks-watermark:hover {
+  opacity: 1; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); background: rgba(255, 255, 255, 0.9);
 }
+.ks-watermark img {width: 28px; height: 28px; border-radius: 50%;}
+@media print { .ks-watermark { display: none !important; } }
 
-/* ── Mobile (≤640px) ── */
+/* ── Mobile Optimization ── */
 @media(max-width:640px){
-  .page{padding:18px 14px 70px}
-  header{padding-bottom:22px}
-  .logo-mark{width:36px;height:36px;border-radius:10px;font-size:13px}
-  .logo-info strong{font-size:15px}
-  .badge{font-size:11px;padding:5px 12px}
-
-  /* Card */
-  .card{padding:20px 18px;border-radius:16px}
-  .section-label{margin-bottom:18px}
-
-  /* Gender */
-  .gender-row{margin-bottom:20px}
-  .g-btn{padding:14px 10px;font-size:15px;border-radius:12px}
-  .g-btn .g-icon{font-size:19px}
-
-  /* Date */
-  .date-row{gap:8px;margin-bottom:20px}
-  .date-row input,.date-row select{font-size:14px;padding:13px 12px;border-radius:10px}
-  .yr{flex:1.8}
-
-  /* Age tag */
-  #age-tag{font-size:14px;margin-top:10px;margin-bottom:20px}
-
-  /* Coverage */
-  .coverage-top{flex-direction:column;gap:10px;margin-bottom:14px}
-  .coverage-input{font-size:38px;width:130px}
-  .coverage-top>div:last-child{display:flex;align-items:center;gap:12px}
-  .coverage-top>div:last-child>div:first-child{font-size:12px}
-  #preview-annual{font-size:18px !important}
-
-  /* Slider */
-  input[type=range]::-webkit-slider-thumb{width:30px;height:30px}
-  .slider-tick{font-size:10px}
-
-  /* Calc btn */
-  .calc-btn{padding:18px;font-size:16px}
-
-  /* Hero */
-  .hero{padding:22px 18px}
-  .hero-big{font-size:36px}
-  .hero-big .cur{font-size:20px}
-  .hero-meta{font-size:12px}
-
-  /* Timeline */
-  .tl-track{height:30px}
-  .tl-seg{font-size:10px}
-  .tl-ages{font-size:10px}
-
-  /* Period cards */
-  .pc{padding:18px 16px;border-radius:16px}
-  .pc-head{flex-wrap:wrap;gap:8px;margin-bottom:14px}
-  .annual-num{font-size:28px}
-  .annual-num .u{font-size:13px}
-  .pc-stats{flex-wrap:wrap}
-  .stat{min-width:calc(50% - 5px)}
-  .stat .sv{font-size:15px}
-
-  /* Until section */
-  .total-card{padding:20px 18px}
-  .until-title{font-size:18px}
-  .u-opt{padding:14px 16px}
-  .u-text{font-size:14px}
-  .u-amount{font-size:17px}
-  .tr-net{font-size:28px}
-
-  /* Print btn */
-  .print-btn{padding:16px;font-size:15px}
-  .disc{font-size:11px}
+  .page{padding:24px 16px 80px;}
+  header{padding-bottom:24px;}
+  .card{padding:24px 20px;}
+  .hero{padding:28px 20px;}
+  .hero-big{font-size:40px;}
+  .annual-num{font-size:32px;}
+  .coverage-input{font-size:36px; width:80px;}
+  .pc{padding:20px;}
+  .pc-stats{flex-direction: column; gap: 8px;}
+  .stat{display:flex; justify-content:space-between; align-items:center;}
+  .stat .sl{margin-bottom:0;}
+  .tr-net{font-size:28px;}
+  .ks-watermark { bottom: 16px; right: 16px; padding: 6px 12px 6px 6px; font-size:12px; }
+  .ks-watermark img {width: 24px; height: 24px;}
 }
 
-/* ── Print Button ── */
-.print-btn{
-  width:100%;padding:16px;margin-top:14px;
-  background:var(--surface);
-  border:1.5px solid var(--border);border-radius:12px;
-  color:var(--tx2);font-size:15px;font-weight:700;letter-spacing:.04em;
-  cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;
-}
-.print-btn:hover{background:#F9FAFB;border-color:var(--border-hover);color:var(--tx)}
-.print-btn svg{flex-shrink:0}
-
-/* ── @media print ── */
+/* ── Print Area ── */
 @media print{
-  @page{size:A4 portrait;margin:14mm 16mm}
-  body{background:#fff !important;color:#111 !important}
-  .page{display:none !important}
-  #print-area{display:block !important}
-  .print-btn{display:none !important}
+  @page{size:A4 portrait; margin:14mm 16mm;}
+  body{background:#fff !important; color:#000 !important;}
+  .page{display:none !important;}
+  #print-area{display:block !important;}
 }
-
-/* ── Print Area (hidden on screen) ── */
-#print-area{
-  display:none;
-  font-family:'Helvetica Neue','Arial',sans-serif;
-  color:#1a1a2e;font-size:13px;line-height:1.6;
-}
-.pa-header{
-  border-bottom:3px solid #1a3a6e;padding-bottom:14px;margin-bottom:20px;
-  display:flex;justify-content:space-between;align-items:flex-start;
-}
-.pa-logo{display:flex;align-items:center;gap:10px}
-.pa-logo-mark{
-  width:40px;height:40px;border-radius:10px;
-  background:#4cadb5;
-  display:flex;align-items:center;justify-content:center;
-  font-weight:900;font-size:14px;color:#fff;
-}
-.pa-title h1{font-size:18px;font-weight:800;color:#1a3a6e;margin-bottom:2px}
-.pa-title p{font-size:12px;color:#555}
-.pa-date{font-size:12px;color:#777;text-align:right}
-
-.pa-info-box{
-  background:#f4f7fb;border-radius:10px;padding:14px 20px;
-  margin-bottom:20px;display:flex;gap:0;flex-wrap:nowrap;
-}
-.pa-info-item{flex:1;min-width:0;padding:0 12px;border-right:1px solid #dde3ed;white-space:nowrap}
-.pa-info-item:first-child{padding-left:0;flex:.6}
-.pa-info-item:nth-child(2){flex:1.6}
-.pa-info-item:last-child{border-right:none}
-.pa-info-label{font-size:10px;font-weight:700;color:#888;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
-.pa-info-val{font-size:16px;font-weight:800;color:#1a3a6e}
-
-.pa-periods-title{font-size:12px;font-weight:700;color:#888;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
-.pa-periods{display:flex;gap:10px;margin-bottom:20px}
-.pa-period{flex:1;border-radius:10px;padding:14px 16px;border:1.5px solid #e0e8f4;position:relative;overflow:hidden}
-.pa-period::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.pp-1::before{background:#63b3ed}
-.pp-2::before{background:#68d391}
-.pp-3::before{background:#f6ad55}
-.pa-period.invalid{background:#f9f9f9;opacity:.6}
-.pp-badge{
-  display:inline-block;padding:3px 10px;border-radius:999px;
-  font-size:10px;font-weight:800;letter-spacing:.07em;margin-bottom:10px;
-}
-.pb-1{background:#ebf4ff;color:#2b7bc8}
-.pb-2{background:#ebfaf3;color:#22863a}
-.pb-3{background:#fff8eb;color:#b96800}
-.pp-age{font-size:11px;color:#888;margin-bottom:12px}
-.pp-annual-label{font-size:10px;color:#888;font-weight:600;letter-spacing:.07em;text-transform:uppercase}
-.pp-annual{font-size:26px;font-weight:900;color:#1a3a6e;letter-spacing:-.02em;margin-bottom:12px}
-.pp-annual span{font-size:13px;font-weight:600;color:#888}
-.pp-row{display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-top:1px solid #eef2f8}
-.pp-row-label{color:#777}
-.pp-row-val{font-weight:700;color:#1a3a6e}
-.pp-row-val.green{color:#22863a}
-.pp-row-val.accent-1{color:#2b7bc8}
-.pp-row-val.accent-2{color:#22863a}
-.pp-row-val.accent-3{color:#b96800}
-.pp-net-row{display:flex;justify-content:space-between;padding:7px 0 0;font-size:13px;border-top:2px solid #d0dce8;margin-top:4px}
-.pp-net-label{font-weight:700;color:#1a3a6e}
-.pp-net-val{font-size:18px;font-weight:900}
-
-.pa-disclaimer{
-  border-top:1px solid #dde3ed;padding-top:12px;
-  font-size:10.5px;color:#888;line-height:1.9;
-}
-.pa-watermark{
-  text-align:center;margin-top:14px;
-  font-size:10px;color:#bbb;letter-spacing:.06em;
-}
+#print-area{display:none; font-family:'Montserrat', sans-serif; color:#0F172A; font-size:13px; line-height:1.6;}
+.pa-header{border-bottom:3px solid var(--brand-dark); padding-bottom:14px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:flex-start;}
+.pa-logo-mark{width:40px; height:40px; border-radius:10px; background:var(--brand); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:14px; color:#fff;}
+.pa-title h1{font-size:18px; font-weight:800; color:var(--brand-dark); margin-bottom:2px;}
+.pa-info-box{background:#F8FAFC; border-radius:12px; padding:16px 20px; margin-bottom:20px; display:flex;}
+.pa-info-item{flex:1; border-right:1px solid #E2E8F0; padding:0 12px;}
+.pa-info-item:last-child{border:none;}
+.pa-info-label{font-size:10px; font-weight:700; color:#64748B; margin-bottom:4px;}
+.pa-info-val{font-size:16px; font-weight:800; color:#0F172A;}
+.pa-periods{display:flex; gap:12px; margin-bottom:20px;}
+.pa-period{flex:1; border-radius:12px; padding:16px; border:2px solid #F1F5F9;}
+.pp-badge{display:inline-block; padding:4px 10px; border-radius:6px; font-size:11px; font-weight:800; margin-bottom:10px; background:#F1F5F9;}
+.pp-annual{font-size:24px; font-weight:900; color:var(--brand-dark); margin-bottom:12px;}
+.pp-row{display:flex; justify-content:space-between; padding:6px 0; font-size:12px; border-top:1px solid #F1F5F9;}
+.pp-net-row{display:flex; justify-content:space-between; padding-top:8px; font-size:14px; border-top:2px solid #E2E8F0; margin-top:4px; font-weight:800;}
+.pa-disclaimer{border-top:1px solid #E2E8F0; padding-top:12px; font-size:11px; color:#64748B;}
 </style>
 </head>
 <body>
 
-<!-- Kevin Supply Hub Back Button -->
-<style>
-@keyframes ks-wiggle {
-  0%,100% { transform: rotate(0deg) scale(1); }
-  15%      { transform: rotate(-6deg) scale(1.05); }
-  30%      { transform: rotate(5deg) scale(1.05); }
-  45%      { transform: rotate(-4deg) scale(1.02); }
-  60%      { transform: rotate(3deg) scale(1.02); }
-  75%      { transform: rotate(-2deg) scale(1); }
-}
-.ks-back {
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 12px 5px 5px;
-  background: rgba(255,255,255,0.88);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0,0,0,0.09);
-  border-radius: 99px;
-  text-decoration: none;
-  color: #111;
-  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-  transition: transform 0.2s, box-shadow 0.2s;
-  white-space: nowrap;
-  transform-origin: left center;
-}
-.ks-back:hover {
-  transform: scale(1.3);
-  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
-}
-.ks-back.wiggle {
-  animation: ks-wiggle 0.6s ease;
-}
-.ks-back img { width: 26px; height: 26px; border-radius: 50%; display: block; }
-@media print { .ks-back { display: none !important; } }
-body { padding-top: 48px !important; }
-@media print { body { padding-top: 0 !important; } }
-</style>
-<a class="ks-back" id="ksBack" href="https://kevinyicheng.github.io/kevin-supply-hub/">
+<!-- Premium Watermark -->
+<a class="ks-watermark" href="https://kevinyicheng.github.io/kevin-supply-hub/">
   <img src="https://kevinyicheng.github.io/kevin-supply-hub/apple-touch-icon.png" alt="Kevin" />
-  返回Kevin Supply Hub
+  Kevin Supply Hub
 </a>
-<script>
-(function(){
-  var btn = document.getElementById('ksBack');
-  function scheduleWiggle() {
-    var delay = 4000 + Math.random() * 8000;
-    setTimeout(function() {
-      btn.classList.add('wiggle');
-      btn.addEventListener('animationend', function onEnd() {
-        btn.classList.remove('wiggle');
-        btn.removeEventListener('animationend', onEnd);
-        scheduleWiggle();
-      });
-    }, delay);
-  }
-  scheduleWiggle();
-})();
-</script>
-<!-- End Kevin Supply Hub Back Button -->
+
 <div class="page">
-
-<!-- Header -->
-<header>
-  <div class="logo">
-    <div class="logo-mark">FB</div>
-    <div class="logo-info">
-      <strong>重大傷病定期健康險</strong>
-      <span>SDKA／SDKB 保費試算工具</span>
-    </div>
-  </div>
-  <div class="badge">10 年期</div>
-</header>
-
-<!-- Input Card -->
-<div class="card">
-  <div class="section-label">基本資料</div>
-
-  <!-- Gender -->
-  <div class="gender-row">
-    <label class="g-btn" id="lb-m" onclick="setGender('male')">
-      <input type="radio" name="gender" value="male">
-      <span class="g-icon">♂</span><span>男性</span>
-    </label>
-    <label class="g-btn" id="lb-f" onclick="setGender('female')">
-      <input type="radio" name="gender" value="female">
-      <span class="g-icon">♀</span><span>女性</span>
-    </label>
-  </div>
-
-  <!-- Birth date -->
-  <div class="field-label">出生日期</div>
-  <div class="date-row">
-    <input class="yr" type="number" id="by" placeholder="西元年" min="1930" max="2015" oninput="onDateChange()">
-    <select class="mo" id="bm" onchange="onMonthChange();onDateChange()">
-      <option value="">月</option>
-      <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
-      <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
-      <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
-      <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
-    </select>
-    <select class="dy" id="bd" onchange="onDateChange()">
-      <option value="">日</option>
-    </select>
-  </div>
-  <div id="age-tag">
-    <span id="age-txt"></span>
-  </div>
-
-  <!-- Coverage Slider -->
-  <div class="coverage-section">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <div class="field-label" style="margin-bottom:0">保額</div>
-      <div class="cov-hint">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        可直接點擊數字輸入
+  <header>
+    <div class="logo">
+      <div class="logo-mark">FB</div>
+      <div class="logo-info">
+        <strong>醫靠安心 重大傷病試算</strong>
+        <span>SDKA / SDKB 提案系統</span>
       </div>
     </div>
+    <div class="badge">10 年期</div>
+  </header>
+
+  <!-- Input Card -->
+  <div class="card">
+    <div class="section-label">保戶基本資料</div>
+
+    <div class="gender-row">
+      <label class="g-btn" id="lb-m" onclick="setGender('male')">
+        <input type="radio" name="gender" value="male">
+        <span class="g-icon">👨🏻</span><span>男性</span>
+      </label>
+      <label class="g-btn" id="lb-f" onclick="setGender('female')">
+        <input type="radio" name="gender" value="female">
+        <span class="g-icon">👩🏻</span><span>女性</span>
+      </label>
+    </div>
+
+    <div class="date-row">
+      <input class="yr" type="number" id="by" placeholder="西元年 (e.g. 1990)" min="1930" max="2015" oninput="onDateChange()">
+      <select class="mo" id="bm" onchange="onMonthChange();onDateChange()">
+        <option value="">月</option>
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+        <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+        <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+      </select>
+      <select class="dy" id="bd" onchange="onDateChange()">
+        <option value="">日</option>
+      </select>
+    </div>
+    <div id="age-tag"><span id="age-txt"></span></div>
+
+    <div class="section-label" style="margin-top: 12px;">規劃保額</div>
     <div class="coverage-top">
-      <div>
-        <div style="display:flex;align-items:flex-end;gap:4px">
-          <input type="number" class="coverage-input" id="cov-num" value="100" min="0" max="200" step="10" oninput="syncSlider(this.value);clearResults()">
-          <span style="font-size:16px;font-weight:600;color:var(--mu);padding-bottom:6px">萬元</span>
-        </div>
+      <div class="coverage-input-wrap">
+        <input type="number" class="coverage-input" id="cov-num" value="100" min="0" max="200" step="10" oninput="syncSlider(this.value);clearResults()">
+        <span style="font-size:18px;font-weight:700;color:var(--tx-sub);">萬元</span>
       </div>
-      <div style="text-align:right;color:var(--mu);font-size:13px;line-height:2">
-        <div>每年保費</div>
-        <div id="preview-annual" style="font-size:17px;font-weight:800;color:var(--tx)">—</div>
+      <div style="text-align:right;">
+        <div style="font-size:12px; font-weight:600; color:var(--tx-muted); margin-bottom:4px;">首期年繳保費預估</div>
+        <div id="preview-annual" style="font-size:20px; font-weight:800; color:var(--tx-main); font-family:'Montserrat', sans-serif;">—</div>
       </div>
     </div>
-    <div class="slider-wrap">
-      <input type="range" id="cov-slider" min="0" max="200" step="10" value="100"
-             style="--pct:50%"
-             oninput="syncNum(this.value)">
+    <div style="margin-bottom:8px">
+      <input type="range" id="cov-slider" min="0" max="200" step="10" value="100" style="--pct:50%" oninput="syncNum(this.value)">
+      <div class="slider-ticks">
+        <span class="slider-tick">0</span>
+        <span class="slider-tick">50</span>
+        <span class="slider-tick">100</span>
+        <span class="slider-tick">150</span>
+        <span class="slider-tick">200萬</span>
+      </div>
     </div>
-    <div class="slider-ticks">
-      <span class="slider-tick">0萬</span>
-      <span class="slider-tick">50萬</span>
-      <span class="slider-tick">100萬</span>
-      <span class="slider-tick">150萬</span>
-      <span class="slider-tick">200萬</span>
-    </div>
+
+    <button class="calc-btn" onclick="calculate()">產生專屬試算報告</button>
+    <div id="err"></div>
   </div>
 
-  <button class="calc-btn" onclick="calculate()">開始試算</button>
-  <div id="err"></div>
-</div>
-
-<!-- Results -->
-<div class="results" id="results">
-
-  <!-- Hero -->
-  <div class="hero">
-    <div class="hero-top">
-      <div>
-        <div class="hero-label">試算對象</div>
-        <div class="hero-who" id="hero-who"></div>
-      </div>
-      <div id="hero-meta" class="hero-meta"></div>
-    </div>
-    <div style="margin-bottom:20px">
-      <div class="hero-label">三期合計淨支出（假設未理賠）</div>
+  <!-- Results -->
+  <div class="results" id="results">
+    <div class="hero">
+      <div class="hero-who" id="hero-who"></div>
+      <div class="hero-label" style="font-size:12px; font-weight:700; color:var(--tx-muted); margin-top:20px;">三期合計淨支出 (未理賠滿期)</div>
       <div class="hero-big"><span class="cur">$</span><span id="hero-net">—</span></div>
-    </div>
 
-    <!-- Timeline -->
-    <div class="timeline">
-      <div class="tl-label">保障時間軸</div>
+      <div class="tl-label">續保時間軸</div>
       <div class="tl-track" id="tl-track"></div>
       <div class="tl-ages" id="tl-ages"></div>
     </div>
-  </div>
 
-  <!-- Period Cards -->
-  <div class="periods" id="period-cards"></div>
+    <div class="periods" id="period-cards"></div>
 
-  <!-- Total Section -->
-  <div class="total-card">
-    <div class="until-title">我想繳到幾歲？</div>
-    <div class="until-sub">選擇保障期間，計算您的總支出</div>
-    <div class="until-opts" id="until-opts"></div>
-    <div id="total-result">
-      <div class="tr-inner">
-        <div class="tr-row">
-          <span class="tr-l">累計繳納保費</span>
-          <span class="tr-v" id="t-paid"></span>
-        </div>
-        <div class="tr-row">
-          <span class="tr-l">期滿退還（假設未理賠）</span>
-          <span class="tr-v tr-v-green" id="t-refund"></span>
-        </div>
-        <div class="tr-row tr-main">
-          <span class="tr-l">淨總支出</span>
-          <span class="tr-net" id="t-net"></span>
+    <div class="total-card">
+      <div class="until-title">資產配置評估</div>
+      <div class="until-sub">請選擇預計持有的保障期間，檢視總體淨支出。</div>
+      <div id="until-opts"></div>
+
+      <div id="total-result">
+        <div class="tr-inner">
+          <div class="tr-row">
+            <span class="tr-l">累計繳納保費</span>
+            <span class="tr-v" id="t-paid"></span>
+          </div>
+          <div class="tr-row">
+            <span class="tr-l">期滿退還保費 (未理賠)</span>
+            <span class="tr-v sv-green" id="t-refund"></span>
+          </div>
+          <div class="tr-row tr-main">
+            <span class="tr-l">總體淨支出</span>
+            <span class="tr-net" id="t-net"></span>
+          </div>
         </div>
       </div>
     </div>
+
+    <div class="disc">
+      ※ 本試算系統以費率表資料為基礎，僅供提案參考，實際保費依富邦人壽核保結果為準。<br>
+      ※「期滿退還」係指假設保障期間未發生理賠，且完整繳足該期 10 年保費之情形。<br>
+      ※ 續保規則：新契約 (SDKA) 上限 61 歲；有效契約續保 (SDKB) 最高至 71 歲。
+    </div>
+
+    <button class="print-btn" onclick="printReport()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+        <rect x="6" y="14" width="12" height="8"></rect>
+      </svg>
+      輸出 PDF 提案書
+    </button>
   </div>
-
-  <div class="disc">
-    ※ 本試算以費率表資料為基礎，僅供參考，實際保費以富邦人壽核保結果為準。<br>
-    ※「退還一年保費」為假設未發生理賠且完整繳足 10 年之情形。<br>
-    ※ 費率單位：元／每萬元保額；新契約 (SDKA) 上限 61 歲；有效契約續保 (SDKB) 最高 71 歲。
-  </div>
-
-  <button class="print-btn" onclick="printReport()">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="6 9 6 2 18 2 18 9"></polyline>
-      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-      <rect x="6" y="14" width="12" height="8"></rect>
-    </svg>
-    列印 PDF
-  </button>
-</div>
 </div>
 
-<!-- ── Print Area ── -->
+<!-- Print Area Container -->
 <div id="print-area"></div>
 
 <script>
-// ── Rate Tables ──────────────────────────────────────────────────
-const SDKA={
-  male:{15:51,16:53,17:56,18:57,19:58,20:59,21:62,22:65,23:68,24:70,25:73,26:77,27:79,28:83,29:86,30:91,31:98,32:106,33:114,34:123,35:132,36:140,37:147,38:157,39:168,40:181,41:198,42:218,43:238,44:257,45:277,46:296,47:315,48:336,49:355,50:377,51:412,52:448,53:485,54:518,55:555,56:589,57:624,58:658,59:692,60:730,61:768},
-  female:{15:40,16:43,17:46,18:49,19:52,20:55,21:58,22:60,23:63,24:66,25:69,26:72,27:76,28:80,29:84,30:88,31:96,32:104,33:113,34:122,35:130,36:138,37:146,38:156,39:164,40:171,41:183,42:198,43:213,44:229,45:243,46:259,47:275,48:291,49:311,50:328,51:343,52:363,53:383,54:403,55:424,56:445,57:467,58:488,59:511,60:537,61:570}
-};
-const SDKB={
-  male:{25:78,26:82,27:85,28:89,29:92,30:97,31:104,32:113,33:122,34:130,35:138,36:147,37:156,38:165,39:177,40:192,41:214,42:237,43:261,44:281,45:303,46:325,47:347,48:370,49:390,50:412,51:448,52:487,53:526,54:560,55:602,56:638,57:675,58:713,59:750,60:785,61:834,62:884,63:934,64:991,65:1048,66:1100,67:1157,68:1212,69:1269,70:1331,71:1403},
-  female:{25:75,26:79,27:82,28:87,29:91,30:96,31:103,32:112,33:121,34:129,35:137,36:146,37:154,38:164,39:175,40:185,41:200,42:215,43:232,44:250,45:267,46:286,47:304,48:324,49:344,50:361,51:381,52:400,53:419,54:442,55:464,56:487,57:510,58:534,59:564,60:597,61:634,62:675,63:723,64:771,65:819,66:867,67:913,68:963,69:1016,70:1060,71:1116}
-};
+// ── Rate Tables (Keep unchanged) ──
+const SDKA={male:{15:51,16:53,17:56,18:57,19:58,20:59,21:62,22:65,23:68,24:70,25:73,26:77,27:79,28:83,29:86,30:91,31:98,32:106,33:114,34:123,35:132,36:140,37:147,38:157,39:168,40:181,41:198,42:218,43:238,44:257,45:277,46:296,47:315,48:336,49:355,50:377,51:412,52:448,53:485,54:518,55:555,56:589,57:624,58:658,59:692,60:730,61:768},female:{15:40,16:43,17:46,18:49,19:52,20:55,21:58,22:60,23:63,24:66,25:69,26:72,27:76,28:80,29:84,30:88,31:96,32:104,33:113,34:122,35:130,36:138,37:146,38:156,39:164,40:171,41:183,42:198,43:213,44:229,45:243,46:259,47:275,48:291,49:311,50:328,51:343,52:363,53:383,54:403,55:424,56:445,57:467,58:488,59:511,60:537,61:570}};
+const SDKB={male:{25:78,26:82,27:85,28:89,29:92,30:97,31:104,32:113,33:122,34:130,35:138,36:147,37:156,38:165,39:177,40:192,41:214,42:237,43:261,44:281,45:303,46:325,47:347,48:370,49:390,50:412,51:448,52:487,53:526,54:560,55:602,56:638,57:675,58:713,59:750,60:785,61:834,62:884,63:934,64:991,65:1048,66:1100,67:1157,68:1212,69:1269,70:1331,71:1403},female:{25:75,26:79,27:82,28:87,29:91,30:96,31:103,32:112,33:121,34:129,35:137,36:146,37:154,38:164,39:175,40:185,41:200,42:215,43:232,44:250,45:267,46:286,47:304,48:324,49:344,50:361,51:381,52:400,53:419,54:442,55:464,56:487,57:510,58:534,59:564,60:597,61:634,62:675,63:723,64:771,65:819,66:867,67:913,68:963,69:1016,70:1060,71:1116}};
 
-// ── Insurance Age ────────────────────────────────────────────────
 function insAge(bDate,ref=new Date()){
-  const b=new Date(bDate);
-  let yr=ref.getFullYear()-b.getFullYear();
+  const b=new Date(bDate); let yr=ref.getFullYear()-b.getFullYear();
   const bt=new Date(ref.getFullYear(),b.getMonth(),b.getDate());
   const bn=new Date(ref.getFullYear()+1,b.getMonth(),b.getDate());
   const bl=new Date(ref.getFullYear()-1,b.getMonth(),b.getDate());
-  let lo,hi;
-  if(ref>=bt){lo=bt;hi=bn}else{yr--;lo=bl;hi=bt}
+  let lo,hi; if(ref>=bt){lo=bt;hi=bn}else{yr--;lo=bl;hi=bt}
   return Math.floor(yr+(ref-lo)/(hi-lo)+0.5);
 }
 
-// ── Helpers ──────────────────────────────────────────────────────
 function fmt(n){return Math.round(n).toLocaleString('zh-TW')}
 
 let countTimers=[];
-function countUp(el,target,dur=600){
+function countUp(el,target,dur=800){
   countTimers.forEach(clearInterval);countTimers=[];
   const start=Date.now();
   const t=setInterval(()=>{
     const p=Math.min((Date.now()-start)/dur,1);
-    const ease=1-Math.pow(1-p,3);
+    const ease=1-Math.pow(1-p,4);
     el.textContent=fmt(Math.round(target*ease));
     if(p>=1){clearInterval(t);el.textContent=fmt(target)}
   },16);
@@ -779,7 +520,7 @@ function onMonthChange(){
   const days=new Date(y,m,0).getDate();
   for(let d=1;d<=days;d++){
     const o=document.createElement('option');
-    o.value=d;o.textContent=d+'日';
+    o.value=d;o.textContent=d;
     if(d===prev)o.selected=true;
     sel.appendChild(o);
   }
@@ -792,9 +533,8 @@ function onDateChange(){
   const d=document.getElementById('bd').value;
   if(!y||!m||!d){document.getElementById('age-tag').className='';return}
   const age=insAge(new Date(+y,+m-1,+d));
-  const tag=document.getElementById('age-tag');
-  document.getElementById('age-txt').textContent=`保險年齡 ${age} 歲`;
-  tag.className='on';
+  document.getElementById('age-txt').textContent=`投保年齡 ${age} 歲`;
+  document.getElementById('age-tag').className='on';
   updatePreview();
 }
 
@@ -804,326 +544,213 @@ function updatePreview(){
   const m=document.getElementById('bm').value;
   const d=document.getElementById('bd').value;
   const cov=+document.getElementById('cov-num').value;
-  if(!g||!y||!m||!d||!cov)return;
+  if(!g||!y||!m||!d||!cov) {
+    document.getElementById('preview-annual').textContent='—';
+    return;
+  }
   const age=insAge(new Date(+y,+m-1,+d));
   const rate=SDKA[g]?.[age];
-  document.getElementById('preview-annual').textContent=
-    rate?fmt(rate*cov)+' 元':'—';
+  document.getElementById('preview-annual').textContent= rate?fmt(rate*cov):'—';
 }
 
-// ── Slider Sync ──────────────────────────────────────────────────
 function syncSlider(v){
   const sl=document.getElementById('cov-slider');
   const val=Math.min(Math.max(+v||0),200);
   sl.value=val;
-  const pct=(val/200*100).toFixed(2);
-  sl.style.setProperty('--pct',pct+'%');
+  sl.style.setProperty('--pct',(val/200*100).toFixed(2)+'%');
   updatePreview();
 }
 function syncNum(v){
   const val=Math.min(Math.max(+v||0),200);
   document.getElementById('cov-num').value=val;
-  const pct=(val/200*100).toFixed(2);
-  document.getElementById('cov-slider').style.setProperty('--pct',pct+'%');
-  if(navigator.vibrate)navigator.vibrate(8);
+  document.getElementById('cov-slider').style.setProperty('--pct',(val/200*100).toFixed(2)+'%');
+  if(navigator.vibrate)navigator.vibrate(5);
   clearResults();updatePreview();
 }
 
 function clearResults(){
-  const r=document.getElementById('results');
-  r.className='results';
+  document.getElementById('results').className='results';
   document.getElementById('err').className='';
 }
 
-// ── Global state for print ────────────────────────────────────────
 let _g='',_y='',_m='',_d='',_age=0,_cov=0;
-
-// ── Period Data ───────────────────────────────────────────────────
 let PD=[];
-const PS=[
-  {cardC:'pc pc-1',badgeC:'pc-badge b1',vC:'sv-1',barC:'rgba(99,102,241,.6)',num:1},
-  {cardC:'pc pc-2',badgeC:'pc-badge b2',vC:'sv-2',barC:'rgba(16,185,129,.6)',num:2},
-  {cardC:'pc pc-3',badgeC:'pc-badge b3',vC:'sv-3',barC:'rgba(245,158,11,.6)', num:3},
-];
 
 function buildCard(p,i){
-  const s=PS[i];
-  if(!p.valid)return`<div class="pc pc-invalid" style="padding:22px">
-    <div style="display:flex;align-items:center;gap:10px">
-      <span class="${s.badgeC}">第 ${i+1} 期</span>
-      <span style="font-size:14px;color:var(--mu)">${p.as} 歲起・超出承保年齡範圍（最高 ${p.max} 歲）</span>
+  const badges = [{bg:'var(--c1-bg)', c:'var(--c1)', fill:'#0284C7'}, {bg:'var(--c2-bg)', c:'var(--c2)', fill:'#059669'}, {bg:'var(--c3-bg)', c:'var(--c3)', fill:'#D97706'}];
+  const s = badges[i];
+
+  if(!p.valid)return`<div class="pc pc-invalid">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="pc-badge" style="background:#F1F5F9; color:#94A3B8">第 ${i+1} 期</span>
+      <span style="font-size:14px;color:#94A3B8;font-weight:600;">超出續保年齡 (上限 ${p.max} 歲)</span>
     </div></div>`;
 
   const netPct=Math.round((p.net/p.total10)*100);
 
-  return`<div class="${s.cardC}">
+  return`<div class="pc">
     <div class="pc-head">
-      <div style="display:flex;align-items:center;gap:10px">
-        <span class="${s.badgeC}">第 ${i+1} 期</span>
-        <span class="pc-range">${p.as}～${p.as+9} 歲</span>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="pc-badge" style="background:${s.bg}; color:${s.c}">第 ${i+1} 期</span>
+        <span class="pc-range">${p.as} – ${p.as+9} 歲</span>
       </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <span class="rate-chip">費率 ${p.rate}/萬</span>
-        <span class="pc-tag">${p.tbl}</span>
-      </div>
+      <span class="rate-chip">${p.tbl} (費率 ${p.rate})</span>
     </div>
 
-    <div class="pc-annual">
-      <div class="annual-wrap">
-        <div class="al">年繳保費</div>
-        <div class="annual-num ${s.vC}" data-val="${p.annual}">
-          <span class="num-val">${fmt(p.annual)}</span><span class="u">元</span>
-        </div>
-      </div>
+    <div class="annual-wrap">
+      <div class="al">首年繳納保費</div>
+      <div class="annual-num" style="color:${s.c}">${fmt(p.annual)}<span class="u">元</span></div>
     </div>
 
-    <div class="breakdown-bar">
-      <div class="bb-label">
-        <span>10 年總繳：${fmt(p.total10)} 元</span>
-        <span style="color:var(--green)">退還 ${fmt(p.refund)} 元（10%）</span>
+    <div style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--tx-sub)">
+        <span>十年總繳 ${fmt(p.total10)}</span>
+        <span style="color:var(--green)">滿期退還 ${fmt(p.refund)}</span>
       </div>
       <div class="bb-track">
-        <div class="bb-fill" style="width:0%;background:${s.barC}" data-w="${netPct}"></div>
+        <div class="bb-fill" style="width:0%;background:${s.fill}" data-w="${netPct}"></div>
       </div>
     </div>
 
     <div class="pc-stats">
-      <div class="stat">
-        <div class="sl">10 年總繳</div>
-        <div class="sv">${fmt(p.total10)} <span style="font-size:13px;font-weight:500;color:var(--mu)">元</span></div>
-      </div>
-      <div class="stat">
-        <div class="sl">期滿退還</div>
-        <div class="sv sv-green">＋${fmt(p.refund)} <span style="font-size:13px;font-weight:500;color:var(--mu)">元</span></div>
-      </div>
-      <div class="stat">
-        <div class="sl">淨支出</div>
-        <div class="sv ${s.vC}">${fmt(p.net)} <span style="font-size:13px;font-weight:500;color:var(--mu)">元</span></div>
-      </div>
+      <div class="stat"><div class="sl">10年總繳</div><div class="sv">${fmt(p.total10)}</div></div>
+      <div class="stat"><div class="sl">滿期退還</div><div class="sv sv-green">+${fmt(p.refund)}</div></div>
+      <div class="stat" style="text-align:right"><div class="sl">實際淨支出</div><div class="sv" style="color:${s.c}">${fmt(p.net)}</div></div>
     </div>
   </div>`;
 }
 
-// ── Timeline ─────────────────────────────────────────────────────
 function buildTimeline(age){
-  const totNet=PD.reduce((s,p)=>s+(p.valid?p.net:0),0);
   const track=document.getElementById('tl-track');
   const ages=document.getElementById('tl-ages');
+  track.innerHTML=PD.map((p,i)=>`<div class="tl-seg ${p.valid?`tl-seg-${i+1}`:'tl-seg-invalid'}" style="flex:${p.valid?1:0.3}" data-flex="${p.valid?1:0.3}">${p.valid?`第${i+1}期`:'超齡'}</div>`).join('');
 
-  const segs=PD.map((p,i)=>{
-    const cls=p.valid?`tl-seg tl-seg-${i+1}`:'tl-seg tl-seg-invalid';
-    const lbl=p.valid?`第${i+1}期`:'超齡';
-    return`<div class="${cls}" style="flex:${p.valid?1:.3}" data-flex="${p.valid?1:.3}">${lbl}</div>`;
-  });
-  track.innerHTML=segs.join('');
-
-  // Animate widths
-  requestAnimationFrame(()=>{
-    track.querySelectorAll('.tl-seg').forEach(el=>{
-      el.style.flex=el.dataset.flex;
-    });
-  });
+  requestAnimationFrame(()=> track.querySelectorAll('.tl-seg').forEach(el=> el.style.flex=el.dataset.flex));
 
   const ageList=[age];
   PD.forEach(p=>{if(p.valid)ageList.push(p.as+10)});
-  const lastValid=PD.filter(p=>p.valid).pop();
   ages.innerHTML=ageList.map(a=>`<span>${a} 歲</span>`).join('');
 }
 
-// ── Until Options ────────────────────────────────────────────────
 function buildUntil(){
-  const c=document.getElementById('until-opts');
-  c.innerHTML='';
+  const c=document.getElementById('until-opts'); c.innerHTML='';
   PD.forEach((p,i)=>{
     if(!p.valid)return;
-    let cumPaid=0,cumRefund=0;
-    for(let j=0;j<=i;j++){if(PD[j].valid){cumPaid+=PD[j].total10;cumRefund+=PD[j].refund}}
-    const cumNet=cumPaid-cumRefund;
+    let paid=0, ref=0; for(let j=0;j<=i;j++){if(PD[j].valid){paid+=PD[j].total10; ref+=PD[j].refund}}
 
     const div=document.createElement('div');
-    div.className='u-opt';
-    div.id=`uo-${i}`;
+    div.className='u-opt'; div.id=`uo-${i}`;
     div.innerHTML=`
       <div class="u-radio"><div class="u-dot"></div></div>
       <div style="flex:1">
-        <div class="u-text">繳到 ${p.as+9} 歲（完成第 ${i+1} 期）</div>
-        <div class="u-sub">累計 ${(i+1)*10} 年保障</div>
+        <div class="u-text">保至 ${p.as+9} 歲 (共 ${(i+1)*10} 年)</div>
+        <div class="u-sub-text">完成第 ${i+1} 期計畫</div>
       </div>
       <div>
-        <div class="u-amount-label">淨支出</div>
-        <div class="u-amount">${fmt(cumNet)}</div>
+        <div style="font-size:11px;color:var(--tx-muted);text-align:right;font-weight:600">淨支出估算</div>
+        <div class="u-amount">${fmt(paid-ref)}</div>
       </div>`;
-    div.onclick=()=>selectUntil(i,cumPaid,cumRefund,cumNet);
+    div.onclick=()=>selectUntil(i,paid,ref,paid-ref);
     c.appendChild(div);
   });
 }
 
 function selectUntil(idx,paid,refund,net){
-  document.querySelectorAll('.u-opt').forEach((el,i)=>{
-    el.classList.toggle('sel',i===idx);
-  });
+  document.querySelectorAll('.u-opt').forEach((el,i)=> el.classList.toggle('sel',i===idx));
   document.getElementById('t-paid').textContent=fmt(paid)+' 元';
-  document.getElementById('t-refund').textContent='＋'+fmt(refund)+' 元';
-  document.getElementById('t-net').textContent=fmt(net)+' 元';
+  document.getElementById('t-refund').textContent='+'+fmt(refund)+' 元';
+  document.getElementById('t-net').textContent=fmt(net);
   const tr=document.getElementById('total-result');
-  tr.style.display='block';
-  tr.className='on';
+  tr.style.display='block'; tr.className='on';
 }
 
-// ── Main Calculate ────────────────────────────────────────────────
 function calculate(){
   const g=document.querySelector('input[name="gender"]:checked')?.value;
-  const y=document.getElementById('by').value;
-  const m=document.getElementById('bm').value;
-  const d=document.getElementById('bd').value;
+  const y=document.getElementById('by').value, m=document.getElementById('bm').value, d=document.getElementById('bd').value;
   const cov=parseFloat(document.getElementById('cov-num').value);
+  const errEl=document.getElementById('err'); errEl.className='';
 
-  const errEl=document.getElementById('err');
-  errEl.className='';
+  if(!g){showErr('請選擇受保人性別');return}
+  if(!y||!m||!d){showErr('請完整填寫出生年月日');return}
+  if(!cov||cov<=0){showErr('請輸入規劃保額');return}
 
-  if(!g){showErr('請選擇性別');return}
-  if(!y||!m||!d){showErr('請完整填寫出生日期');return}
-  if(!cov||cov<=0){showErr('請輸入有效保額');return}
-  if(+y<1930||+y>2015){showErr('請輸入合理的出生年份');return}
-
-  const bDate=new Date(+y,+m-1,+d);
-  const age=insAge(bDate);
+  const age=insAge(new Date(+y,+m-1,+d));
   _g=g;_y=y;_m=m;_d=d;_age=age;_cov=cov;
 
-  if(age<15){showErr(`保險年齡 ${age} 歲，未達最低投保年齡（15 歲）`);return}
-  if(age>61){showErr(`保險年齡 ${age} 歲，已超過 SDKA 新契約最高投保年齡（61 歲）`);return}
+  if(age<15){showErr(`被保人 ${age} 歲，未達最低投保限制 (15歲)`);return}
+  if(age>61){showErr(`被保人 ${age} 歲，已超過新契約最高投保限制 (61歲)`);return}
 
-  const defs=[
-    {tbl:'SDKA 新契約',as:age,    rt:SDKA,max:61},
-    {tbl:'SDKB 續保',  as:age+10, rt:SDKB,max:71},
-    {tbl:'SDKB 續保',  as:age+20, rt:SDKB,max:71},
-  ];
-  PD=defs.map(def=>{
+  PD=[
+    {tbl:'SDKA 新契約', as:age, rt:SDKA, max:61},
+    {tbl:'SDKB 續保', as:age+10, rt:SDKB, max:71},
+    {tbl:'SDKB 續保', as:age+20, rt:SDKB, max:71}
+  ].map(def=>{
     const rate=def.rt[g]?.[def.as];
-    if(!rate||def.as>def.max)return{valid:false,as:def.as,max:def.max};
-    const annual=rate*cov;
-    return{valid:true,as:def.as,tbl:def.tbl,rate,annual,total10:annual*10,refund:annual,net:annual*9};
+    if(!rate||def.as>def.max)return{valid:false, as:def.as, max:def.max};
+    const annual=rate*cov; return{valid:true, as:def.as, tbl:def.tbl, rate, annual, total10:annual*10, refund:annual, net:annual*9};
   });
 
-  // Hero
   const totalNet=PD.reduce((s,p)=>s+(p.valid?p.net:0),0);
   const validCt=PD.filter(p=>p.valid).length;
-  document.getElementById('hero-who').textContent=
-    `${g==='male'?'男性':'女性'}・保險年齡 ${age} 歲・保額 ${fmt(cov)} 萬元`;
-  document.getElementById('hero-meta').innerHTML=
-    `<strong>${validCt}</strong> 個期間<br>合計 <strong>${validCt*10}</strong> 年保障`;
 
-  // Render
+  document.getElementById('hero-who').innerHTML=`<span style="display:inline-block;padding:4px 10px;background:var(--surface);border-radius:6px;border:1px solid var(--border);margin-right:8px;">${g==='male'?'👨🏻 男性':'👩🏻 女性'}</span>保險年齡 <strong style="color:var(--tx-main)">${age}</strong> 歲 · 規劃 <strong style="color:var(--tx-main)">${fmt(cov)}</strong> 萬`;
+
   document.getElementById('period-cards').innerHTML=PD.map(buildCard).join('');
-  buildTimeline(age);
-  buildUntil();
-  document.getElementById('total-result').className='';
+  buildTimeline(age); buildUntil();
   document.getElementById('total-result').style.display='none';
 
-  // Show results
-  const r=document.getElementById('results');
-  r.style.display='block';
+  const r=document.getElementById('results'); r.style.display='block';
   requestAnimationFrame(()=>{
     r.className='results on';
     r.scrollIntoView({behavior:'smooth',block:'start'});
   });
 
-  // Animate hero number
-  const heroEl=document.getElementById('hero-net');
-  countUp(heroEl,totalNet,700);
-
-  // Animate bars after cards render
-  setTimeout(()=>{
-    document.querySelectorAll('.bb-fill').forEach(el=>{
-      el.style.width=el.dataset.w+'%';
-    });
-  },100);
+  countUp(document.getElementById('hero-net'),totalNet);
+  setTimeout(()=> document.querySelectorAll('.bb-fill').forEach(el=> el.style.width=el.dataset.w+'%'), 150);
 }
 
-function showErr(msg){
-  const el=document.getElementById('err');
-  el.textContent=msg;el.className='on';el.style.display='block';
-}
+function showErr(msg){const el=document.getElementById('err'); el.textContent=msg; el.className='on'; el.style.display='block';}
 
-// ── Print Report ──────────────────────────────────────────────────
 function printReport(){
   const today=new Date();
   const dateStr=`${today.getFullYear()}/${String(today.getMonth()+1).padStart(2,'0')}/${String(today.getDate()).padStart(2,'0')}`;
-  const genderTxt=_g==='male'?'男性':'女性';
-  const birthTxt=`${_y} 年 ${_m} 月 ${_d} 日`;
 
-  const accentCls=['accent-1','accent-2','accent-3'];
-  const pbCls=['pb-1','pb-2','pb-3'];
-  const ppCls=['pp-1','pp-2','pp-3'];
-
-  const periodHTML=PD.map((p,i)=>{
-    if(!p.valid)return`<div class="pa-period invalid">
-      <span class="pp-badge ${pbCls[i]}">第 ${i+1} 期</span>
-      <div class="pp-age">超出承保年齡範圍（最高 ${p.max} 歲）</div>
-    </div>`;
-    return`<div class="pa-period ${ppCls[i]}">
-      <span class="pp-badge ${pbCls[i]}">第 ${i+1} 期</span>
-      <div class="pp-age">${p.as}～${p.as+9} 歲・${p.tbl}</div>
-      <div class="pp-annual-label">年繳保費</div>
-      <div class="pp-annual">${fmt(p.annual)}<span> 元</span></div>
-      <div class="pp-row"><span class="pp-row-label">費率（${p.as} 歲）</span><span class="pp-row-val">${p.rate} 元/萬</span></div>
-      <div class="pp-row"><span class="pp-row-label">10 年總繳</span><span class="pp-row-val">${fmt(p.total10)} 元</span></div>
-      <div class="pp-row"><span class="pp-row-label">期滿退還（未理賠）</span><span class="pp-row-val green">＋${fmt(p.refund)} 元</span></div>
-      <div class="pp-net-row">
-        <span class="pp-net-label">淨支出</span>
-        <span class="pp-net-val ${accentCls[i]}">${fmt(p.net)} 元</span>
-      </div>
+  let periodHTML=PD.map((p,i)=>{
+    if(!p.valid)return `<div class="pa-period"><span class="pp-badge">第 ${i+1} 期</span><div style="font-size:12px;color:#94A3B8">超出續保年齡</div></div>`;
+    return `<div class="pa-period">
+      <span class="pp-badge">第 ${i+1} 期</span>
+      <div style="font-size:11px;color:#64748B;margin-bottom:8px">${p.as}～${p.as+9} 歲・${p.tbl}</div>
+      <div style="font-size:10px;color:#94A3B8;font-weight:700;">首年保費</div>
+      <div class="pp-annual">${fmt(p.annual)}<span style="font-size:12px;color:#64748B"> 元</span></div>
+      <div class="pp-row"><span>費率 (${p.as}歲)</span><strong>${p.rate}</strong></div>
+      <div class="pp-row"><span>10年總繳</span><strong>${fmt(p.total10)}</strong></div>
+      <div class="pp-row"><span style="color:#059669">滿期退還</span><strong style="color:#059669">+${fmt(p.refund)}</strong></div>
+      <div class="pp-net-row"><span>淨支出估算</span><span>${fmt(p.net)} 元</span></div>
     </div>`;
   }).join('');
 
-  const totalNet=PD.reduce((s,p)=>s+(p.valid?p.net:0),0);
-
   document.getElementById('print-area').innerHTML=`
     <div class="pa-header">
-      <div class="pa-logo">
+      <div style="display:flex;gap:12px;align-items:center;">
         <div class="pa-logo-mark">FB</div>
-        <div class="pa-title">
-          <h1>富邦人壽醫靠安心重大傷病定期健康保險</h1>
-          <p>SDKA／SDKB・10 年期・保費試算報告</p>
-        </div>
+        <div class="pa-title"><h1>醫靠安心 重大傷病試算報告</h1><p style="font-size:12px;color:#64748B">SDKA / SDKB・10 年定期計畫</p></div>
       </div>
-      <div class="pa-date">試算日期：${dateStr}</div>
+      <div style="text-align:right;font-size:11px;color:#94A3B8;">提案日期<br><strong style="color:#64748B">${dateStr}</strong></div>
     </div>
-
     <div class="pa-info-box">
-      <div class="pa-info-item">
-        <div class="pa-info-label">性別</div>
-        <div class="pa-info-val">${genderTxt}</div>
-      </div>
-      <div class="pa-info-item">
-        <div class="pa-info-label">出生年月日</div>
-        <div class="pa-info-val">${birthTxt}</div>
-      </div>
-      <div class="pa-info-item">
-        <div class="pa-info-label">保險年齡</div>
-        <div class="pa-info-val">${_age} 歲</div>
-      </div>
-      <div class="pa-info-item">
-        <div class="pa-info-label">保額</div>
-        <div class="pa-info-val">${fmt(_cov)} 萬元</div>
-      </div>
-      <div class="pa-info-item">
-        <div class="pa-info-label">三期淨總支出</div>
-        <div class="pa-info-val" style="color:#1a7c5a">${fmt(totalNet)} 元</div>
-      </div>
+      <div class="pa-info-item"><div class="pa-info-label">被保人</div><div class="pa-info-val">${_g==='male'?'男性':'女性'}</div></div>
+      <div class="pa-info-item"><div class="pa-info-label">出生日</div><div class="pa-info-val">${_y}/${_m}/${_d}</div></div>
+      <div class="pa-info-item"><div class="pa-info-label">保險年齡</div><div class="pa-info-val">${_age} 歲</div></div>
+      <div class="pa-info-item"><div class="pa-info-label">規劃保額</div><div class="pa-info-val">${fmt(_cov)} 萬</div></div>
     </div>
-
-    <div class="pa-periods-title">各期保費明細</div>
+    <div style="font-size:13px;font-weight:800;color:#0F172A;margin-bottom:12px;">各期保費明細</div>
     <div class="pa-periods">${periodHTML}</div>
-
     <div class="pa-disclaimer">
-      ※ 本試算以費率表資料為基礎，僅供參考，實際保費以富邦人壽核保結果為準。<br>
-      ※「退還一年保費」為假設未發生理賠且完整繳足 10 年之情形。計算基礎：年保費 × 9 年 ＝ 淨支出。<br>
-      ※ 費率單位：元／每萬元保額；新契約 (SDKA) 投保年齡上限 61 歲；有效契約續保 (SDKB) 最高至 71 歲（含）。<br>
-      ※ 繳費期間：10 年期；保障期間：每期 10 年，共最多 3 期（最高至 71 歲）。
+      ※ 本報告由系統試算產出，僅供資產配置與保費評估參考，實際承保條件以保單條款為準。<br>
+      ※「滿期退還」計算基準：保障期間未發生理賠且完整繳足 10 年。淨支出 = 總繳保費 - 退還保費。<br>
+      ※ 續保規則：新契約 (SDKA) 上限 61 歲；有效契約續保 (SDKB) 最高至 71 歲 (含)。最多 3 期。
     </div>
-    <div class="pa-watermark">此報告由 Kevin-Ai 保費試算工具 產出</div>`;
-
+  `;
   window.print();
 }
 </script>
