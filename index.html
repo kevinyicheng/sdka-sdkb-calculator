@@ -548,9 +548,9 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
 </a>
 <script>
 (function(){
-  const btn = document.getElementById('ksBack');
+  var btn = document.getElementById('ksBack');
   function scheduleWiggle() {
-    const delay = 4000 + Math.random() * 8000; // 4~12秒不定時
+    var delay = 4000 + Math.random() * 8000;
     setTimeout(function() {
       btn.classList.add('wiggle');
       btn.addEventListener('animationend', function onEnd() {
@@ -563,7 +563,569 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
   scheduleWiggle();
 })();
 </script>
+<!-- End Kevin Supply Hub Back Button -->
+<div class="page">
 
+<!-- Header -->
+<header>
+  <div class="logo">
+    <div class="logo-mark">FB</div>
+    <div class="logo-info">
+      <strong>重大傷病定期健康險</strong>
+      <span>SDKA／SDKB 保費試算工具</span>
+    </div>
+  </div>
+  <div class="badge">10 年期</div>
+</header>
 
+<!-- Input Card -->
+<div class="card">
+  <div class="section-label">基本資料</div>
+
+  <!-- Gender -->
+  <div class="gender-row">
+    <label class="g-btn" id="lb-m" onclick="setGender('male')">
+      <input type="radio" name="gender" value="male">
+      <span class="g-icon">♂</span><span>男性</span>
+    </label>
+    <label class="g-btn" id="lb-f" onclick="setGender('female')">
+      <input type="radio" name="gender" value="female">
+      <span class="g-icon">♀</span><span>女性</span>
+    </label>
+  </div>
+
+  <!-- Birth date -->
+  <div class="field-label">出生日期</div>
+  <div class="date-row">
+    <input class="yr" type="number" id="by" placeholder="西元年" min="1930" max="2015" oninput="onDateChange()">
+    <select class="mo" id="bm" onchange="onMonthChange();onDateChange()">
+      <option value="">月</option>
+      <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
+      <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
+      <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
+      <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+    </select>
+    <select class="dy" id="bd" onchange="onDateChange()">
+      <option value="">日</option>
+    </select>
+  </div>
+  <div id="age-tag">
+    <span id="age-txt"></span>
+  </div>
+
+  <!-- Coverage Slider -->
+  <div class="coverage-section">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div class="field-label" style="margin-bottom:0">保額</div>
+      <div class="cov-hint">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        可直接點擊數字輸入
+      </div>
+    </div>
+    <div class="coverage-top">
+      <div>
+        <div style="display:flex;align-items:flex-end;gap:4px">
+          <input type="number" class="coverage-input" id="cov-num" value="100" min="0" max="200" step="10" oninput="syncSlider(this.value);clearResults()">
+          <span style="font-size:20px;font-weight:600;color:var(--mu);padding-bottom:8px">萬元</span>
+        </div>
+      </div>
+      <div style="text-align:right;color:var(--mu);font-size:13px;line-height:2">
+        <div>每年保費</div>
+        <div id="preview-annual" style="font-size:20px;font-weight:800;color:var(--tx)">—</div>
+      </div>
+    </div>
+    <div class="slider-wrap">
+      <input type="range" id="cov-slider" min="0" max="200" step="10" value="100"
+             style="--pct:50%"
+             oninput="syncNum(this.value)">
+    </div>
+    <div class="slider-ticks">
+      <span class="slider-tick">0萬</span>
+      <span class="slider-tick">50萬</span>
+      <span class="slider-tick">100萬</span>
+      <span class="slider-tick">150萬</span>
+      <span class="slider-tick">200萬</span>
+    </div>
+  </div>
+
+  <button class="calc-btn" onclick="calculate()">開始試算</button>
+  <div id="err"></div>
+</div>
+
+<!-- Results -->
+<div class="results" id="results">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <div class="hero-label">試算對象</div>
+        <div class="hero-who" id="hero-who"></div>
+      </div>
+      <div id="hero-meta" class="hero-meta"></div>
+    </div>
+    <div style="margin-bottom:20px">
+      <div class="hero-label">三期合計淨支出（假設未理賠）</div>
+      <div class="hero-big"><span class="cur">$</span><span id="hero-net">—</span></div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline">
+      <div class="tl-label">保障時間軸</div>
+      <div class="tl-track" id="tl-track"></div>
+      <div class="tl-ages" id="tl-ages"></div>
+    </div>
+  </div>
+
+  <!-- Period Cards -->
+  <div class="periods" id="period-cards"></div>
+
+  <!-- Total Section -->
+  <div class="total-card">
+    <div class="until-title">我想繳到幾歲？</div>
+    <div class="until-sub">選擇保障期間，計算您的總支出</div>
+    <div class="until-opts" id="until-opts"></div>
+    <div id="total-result">
+      <div class="tr-inner">
+        <div class="tr-row">
+          <span class="tr-l">累計繳納保費</span>
+          <span class="tr-v" id="t-paid"></span>
+        </div>
+        <div class="tr-row">
+          <span class="tr-l">期滿退還（假設未理賠）</span>
+          <span class="tr-v tr-v-green" id="t-refund"></span>
+        </div>
+        <div class="tr-row tr-main">
+          <span class="tr-l">淨總支出</span>
+          <span class="tr-net" id="t-net"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disc">
+    ※ 本試算以費率表資料為基礎，僅供參考，實際保費以富邦人壽核保結果為準。<br>
+    ※「退還一年保費」為假設未發生理賠且完整繳足 10 年之情形。<br>
+    ※ 費率單位：元／每萬元保額；新契約 (SDKA) 上限 61 歲；有效契約續保 (SDKB) 最高 71 歲。
+  </div>
+
+  <button class="print-btn" onclick="printReport()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 6 2 18 2 18 9"></polyline>
+      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+      <rect x="6" y="14" width="12" height="8"></rect>
+    </svg>
+    列印 PDF
+  </button>
+</div>
+</div>
+
+<!-- ── Print Area ── -->
+<div id="print-area"></div>
+
+<script>
+// ── Rate Tables ──────────────────────────────────────────────────
+const SDKA={
+  male:{15:51,16:53,17:56,18:57,19:58,20:59,21:62,22:65,23:68,24:70,25:73,26:77,27:79,28:83,29:86,30:91,31:98,32:106,33:114,34:123,35:132,36:140,37:147,38:157,39:168,40:181,41:198,42:218,43:238,44:257,45:277,46:296,47:315,48:336,49:355,50:377,51:412,52:448,53:485,54:518,55:555,56:589,57:624,58:658,59:692,60:730,61:768},
+  female:{15:40,16:43,17:46,18:49,19:52,20:55,21:58,22:60,23:63,24:66,25:69,26:72,27:76,28:80,29:84,30:88,31:96,32:104,33:113,34:122,35:130,36:138,37:146,38:156,39:164,40:171,41:183,42:198,43:213,44:229,45:243,46:259,47:275,48:291,49:311,50:328,51:343,52:363,53:383,54:403,55:424,56:445,57:467,58:488,59:511,60:537,61:570}
+};
+const SDKB={
+  male:{25:78,26:82,27:85,28:89,29:92,30:97,31:104,32:113,33:122,34:130,35:138,36:147,37:156,38:165,39:177,40:192,41:214,42:237,43:261,44:281,45:303,46:325,47:347,48:370,49:390,50:412,51:448,52:487,53:526,54:560,55:602,56:638,57:675,58:713,59:750,60:785,61:834,62:884,63:934,64:991,65:1048,66:1100,67:1157,68:1212,69:1269,70:1331,71:1403},
+  female:{25:75,26:79,27:82,28:87,29:91,30:96,31:103,32:112,33:121,34:129,35:137,36:146,37:154,38:164,39:175,40:185,41:200,42:215,43:232,44:250,45:267,46:286,47:304,48:324,49:344,50:361,51:381,52:400,53:419,54:442,55:464,56:487,57:510,58:534,59:564,60:597,61:634,62:675,63:723,64:771,65:819,66:867,67:913,68:963,69:1016,70:1060,71:1116}
+};
+
+// ── Insurance Age ────────────────────────────────────────────────
+function insAge(bDate,ref=new Date()){
+  const b=new Date(bDate);
+  let yr=ref.getFullYear()-b.getFullYear();
+  const bt=new Date(ref.getFullYear(),b.getMonth(),b.getDate());
+  const bn=new Date(ref.getFullYear()+1,b.getMonth(),b.getDate());
+  const bl=new Date(ref.getFullYear()-1,b.getMonth(),b.getDate());
+  let lo,hi;
+  if(ref>=bt){lo=bt;hi=bn}else{yr--;lo=bl;hi=bt}
+  return Math.floor(yr+(ref-lo)/(hi-lo)+0.5);
+}
+
+// ── Helpers ──────────────────────────────────────────────────────
+function fmt(n){return Math.round(n).toLocaleString('zh-TW')}
+
+let countTimers=[];
+function countUp(el,target,dur=600){
+  countTimers.forEach(clearInterval);countTimers=[];
+  const start=Date.now();
+  const t=setInterval(()=>{
+    const p=Math.min((Date.now()-start)/dur,1);
+    const ease=1-Math.pow(1-p,3);
+    el.textContent=fmt(Math.round(target*ease));
+    if(p>=1){clearInterval(t);el.textContent=fmt(target)}
+  },16);
+  countTimers.push(t);
+}
+
+function setGender(g){
+  document.querySelector(`input[value="${g}"]`).checked=true;
+  document.getElementById('lb-m').className='g-btn'+(g==='male'?' male-on':'');
+  document.getElementById('lb-f').className='g-btn'+(g==='female'?' female-on':'');
+  clearResults();updatePreview();
+}
+
+function onMonthChange(){
+  const y=+document.getElementById('by').value||2000;
+  const m=+document.getElementById('bm').value;
+  const sel=document.getElementById('bd');
+  const prev=+sel.value;
+  sel.innerHTML='<option value="">日</option>';
+  if(!m)return;
+  const days=new Date(y,m,0).getDate();
+  for(let d=1;d<=days;d++){
+    const o=document.createElement('option');
+    o.value=d;o.textContent=d+'日';
+    if(d===prev)o.selected=true;
+    sel.appendChild(o);
+  }
+}
+
+function onDateChange(){
+  clearResults();
+  const y=document.getElementById('by').value;
+  const m=document.getElementById('bm').value;
+  const d=document.getElementById('bd').value;
+  if(!y||!m||!d){document.getElementById('age-tag').className='';return}
+  const age=insAge(new Date(+y,+m-1,+d));
+  const tag=document.getElementById('age-tag');
+  document.getElementById('age-txt').textContent=`保險年齡 ${age} 歲`;
+  tag.className='on';
+  updatePreview();
+}
+
+function updatePreview(){
+  const g=document.querySelector('input[name="gender"]:checked')?.value;
+  const y=document.getElementById('by').value;
+  const m=document.getElementById('bm').value;
+  const d=document.getElementById('bd').value;
+  const cov=+document.getElementById('cov-num').value;
+  if(!g||!y||!m||!d||!cov)return;
+  const age=insAge(new Date(+y,+m-1,+d));
+  const rate=SDKA[g]?.[age];
+  document.getElementById('preview-annual').textContent=
+    rate?fmt(rate*cov)+' 元':'—';
+}
+
+// ── Slider Sync ──────────────────────────────────────────────────
+function syncSlider(v){
+  const sl=document.getElementById('cov-slider');
+  const val=Math.min(Math.max(+v||0),200);
+  sl.value=val;
+  const pct=(val/200*100).toFixed(2);
+  sl.style.setProperty('--pct',pct+'%');
+  updatePreview();
+}
+function syncNum(v){
+  const val=Math.min(Math.max(+v||0),200);
+  document.getElementById('cov-num').value=val;
+  const pct=(val/200*100).toFixed(2);
+  document.getElementById('cov-slider').style.setProperty('--pct',pct+'%');
+  if(navigator.vibrate)navigator.vibrate(8);
+  clearResults();updatePreview();
+}
+
+function clearResults(){
+  const r=document.getElementById('results');
+  r.className='results';
+  document.getElementById('err').className='';
+}
+
+// ── Global state for print ────────────────────────────────────────
+let _g='',_y='',_m='',_d='',_age=0,_cov=0;
+
+// ── Period Data ───────────────────────────────────────────────────
+let PD=[];
+const PS=[
+  {cardC:'pc pc-1',badgeC:'pc-badge b1',vC:'sv-1',barC:'rgba(99,179,237,.7)',num:1},
+  {cardC:'pc pc-2',badgeC:'pc-badge b2',vC:'sv-2',barC:'rgba(104,211,145,.7)',num:2},
+  {cardC:'pc pc-3',badgeC:'pc-badge b3',vC:'sv-3',barC:'rgba(246,173,85,.7)', num:3},
+];
+
+function buildCard(p,i){
+  const s=PS[i];
+  if(!p.valid)return`<div class="pc pc-invalid" style="padding:22px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="${s.badgeC}">第 ${i+1} 期</span>
+      <span style="font-size:14px;color:var(--mu)">${p.as} 歲起・超出承保年齡範圍（最高 ${p.max} 歲）</span>
+    </div></div>`;
+
+  const netPct=Math.round((p.net/p.total10)*100);
+
+  return`<div class="${s.cardC}">
+    <div class="pc-head">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="${s.badgeC}">第 ${i+1} 期</span>
+        <span class="pc-range">${p.as}～${p.as+9} 歲</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="rate-chip">費率 ${p.rate}/萬</span>
+        <span class="pc-tag">${p.tbl}</span>
+      </div>
+    </div>
+
+    <div class="pc-annual">
+      <div class="annual-wrap">
+        <div class="al">年繳保費</div>
+        <div class="annual-num ${s.vC}" data-val="${p.annual}">
+          <span class="num-val">${fmt(p.annual)}</span><span class="u">元</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="breakdown-bar">
+      <div class="bb-label">
+        <span>10 年總繳：${fmt(p.total10)} 元</span>
+        <span style="color:var(--green)">退還 ${fmt(p.refund)} 元（10%）</span>
+      </div>
+      <div class="bb-track">
+        <div class="bb-fill" style="width:0%;background:${s.barC}" data-w="${netPct}"></div>
+      </div>
+    </div>
+
+    <div class="pc-stats">
+      <div class="stat">
+        <div class="sl">10 年總繳</div>
+        <div class="sv">${fmt(p.total10)} <span style="font-size:13px;font-weight:500;color:var(--mu)">元</span></div>
+      </div>
+      <div class="stat">
+        <div class="sl">期滿退還</div>
+        <div class="sv sv-green">＋${fmt(p.refund)} <span style="font-size:13px;font-weight:500;color:var(--mu)">元</span></div>
+      </div>
+      <div class="stat">
+        <div class="sl">淨支出</div>
+        <div class="sv ${s.vC}">${fmt(p.net)} <span style="font-size:13px;font-weight:500;color:var(--mu)">元</span></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Timeline ─────────────────────────────────────────────────────
+function buildTimeline(age){
+  const totNet=PD.reduce((s,p)=>s+(p.valid?p.net:0),0);
+  const track=document.getElementById('tl-track');
+  const ages=document.getElementById('tl-ages');
+
+  const segs=PD.map((p,i)=>{
+    const cls=p.valid?`tl-seg tl-seg-${i+1}`:'tl-seg tl-seg-invalid';
+    const lbl=p.valid?`第${i+1}期`:'超齡';
+    return`<div class="${cls}" style="flex:${p.valid?1:.3}" data-flex="${p.valid?1:.3}">${lbl}</div>`;
+  });
+  track.innerHTML=segs.join('');
+
+  // Animate widths
+  requestAnimationFrame(()=>{
+    track.querySelectorAll('.tl-seg').forEach(el=>{
+      el.style.flex=el.dataset.flex;
+    });
+  });
+
+  const ageList=[age];
+  PD.forEach(p=>{if(p.valid)ageList.push(p.as+10)});
+  const lastValid=PD.filter(p=>p.valid).pop();
+  ages.innerHTML=ageList.map(a=>`<span>${a} 歲</span>`).join('');
+}
+
+// ── Until Options ────────────────────────────────────────────────
+function buildUntil(){
+  const c=document.getElementById('until-opts');
+  c.innerHTML='';
+  PD.forEach((p,i)=>{
+    if(!p.valid)return;
+    let cumPaid=0,cumRefund=0;
+    for(let j=0;j<=i;j++){if(PD[j].valid){cumPaid+=PD[j].total10;cumRefund+=PD[j].refund}}
+    const cumNet=cumPaid-cumRefund;
+
+    const div=document.createElement('div');
+    div.className='u-opt';
+    div.id=`uo-${i}`;
+    div.innerHTML=`
+      <div class="u-radio"><div class="u-dot"></div></div>
+      <div style="flex:1">
+        <div class="u-text">繳到 ${p.as+9} 歲（完成第 ${i+1} 期）</div>
+        <div class="u-sub">累計 ${(i+1)*10} 年保障</div>
+      </div>
+      <div>
+        <div class="u-amount-label">淨支出</div>
+        <div class="u-amount">${fmt(cumNet)}</div>
+      </div>`;
+    div.onclick=()=>selectUntil(i,cumPaid,cumRefund,cumNet);
+    c.appendChild(div);
+  });
+}
+
+function selectUntil(idx,paid,refund,net){
+  document.querySelectorAll('.u-opt').forEach((el,i)=>{
+    el.classList.toggle('sel',i===idx);
+  });
+  document.getElementById('t-paid').textContent=fmt(paid)+' 元';
+  document.getElementById('t-refund').textContent='＋'+fmt(refund)+' 元';
+  document.getElementById('t-net').textContent=fmt(net)+' 元';
+  const tr=document.getElementById('total-result');
+  tr.style.display='block';
+  tr.className='on';
+}
+
+// ── Main Calculate ────────────────────────────────────────────────
+function calculate(){
+  const g=document.querySelector('input[name="gender"]:checked')?.value;
+  const y=document.getElementById('by').value;
+  const m=document.getElementById('bm').value;
+  const d=document.getElementById('bd').value;
+  const cov=parseFloat(document.getElementById('cov-num').value);
+
+  const errEl=document.getElementById('err');
+  errEl.className='';
+
+  if(!g){showErr('請選擇性別');return}
+  if(!y||!m||!d){showErr('請完整填寫出生日期');return}
+  if(!cov||cov<=0){showErr('請輸入有效保額');return}
+  if(+y<1930||+y>2015){showErr('請輸入合理的出生年份');return}
+
+  const bDate=new Date(+y,+m-1,+d);
+  const age=insAge(bDate);
+  _g=g;_y=y;_m=m;_d=d;_age=age;_cov=cov;
+
+  if(age<15){showErr(`保險年齡 ${age} 歲，未達最低投保年齡（15 歲）`);return}
+  if(age>61){showErr(`保險年齡 ${age} 歲，已超過 SDKA 新契約最高投保年齡（61 歲）`);return}
+
+  const defs=[
+    {tbl:'SDKA 新契約',as:age,    rt:SDKA,max:61},
+    {tbl:'SDKB 續保',  as:age+10, rt:SDKB,max:71},
+    {tbl:'SDKB 續保',  as:age+20, rt:SDKB,max:71},
+  ];
+  PD=defs.map(def=>{
+    const rate=def.rt[g]?.[def.as];
+    if(!rate||def.as>def.max)return{valid:false,as:def.as,max:def.max};
+    const annual=rate*cov;
+    return{valid:true,as:def.as,tbl:def.tbl,rate,annual,total10:annual*10,refund:annual,net:annual*9};
+  });
+
+  // Hero
+  const totalNet=PD.reduce((s,p)=>s+(p.valid?p.net:0),0);
+  const validCt=PD.filter(p=>p.valid).length;
+  document.getElementById('hero-who').textContent=
+    `${g==='male'?'男性':'女性'}・保險年齡 ${age} 歲・保額 ${fmt(cov)} 萬元`;
+  document.getElementById('hero-meta').innerHTML=
+    `<strong>${validCt}</strong> 個期間<br>合計 <strong>${validCt*10}</strong> 年保障`;
+
+  // Render
+  document.getElementById('period-cards').innerHTML=PD.map(buildCard).join('');
+  buildTimeline(age);
+  buildUntil();
+  document.getElementById('total-result').className='';
+  document.getElementById('total-result').style.display='none';
+
+  // Show results
+  const r=document.getElementById('results');
+  r.style.display='block';
+  requestAnimationFrame(()=>{
+    r.className='results on';
+    r.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+
+  // Animate hero number
+  const heroEl=document.getElementById('hero-net');
+  countUp(heroEl,totalNet,700);
+
+  // Animate bars after cards render
+  setTimeout(()=>{
+    document.querySelectorAll('.bb-fill').forEach(el=>{
+      el.style.width=el.dataset.w+'%';
+    });
+  },100);
+}
+
+function showErr(msg){
+  const el=document.getElementById('err');
+  el.textContent=msg;el.className='on';el.style.display='block';
+}
+
+// ── Print Report ──────────────────────────────────────────────────
+function printReport(){
+  const today=new Date();
+  const dateStr=`${today.getFullYear()}/${String(today.getMonth()+1).padStart(2,'0')}/${String(today.getDate()).padStart(2,'0')}`;
+  const genderTxt=_g==='male'?'男性':'女性';
+  const birthTxt=`${_y} 年 ${_m} 月 ${_d} 日`;
+
+  const accentCls=['accent-1','accent-2','accent-3'];
+  const pbCls=['pb-1','pb-2','pb-3'];
+  const ppCls=['pp-1','pp-2','pp-3'];
+
+  const periodHTML=PD.map((p,i)=>{
+    if(!p.valid)return`<div class="pa-period invalid">
+      <span class="pp-badge ${pbCls[i]}">第 ${i+1} 期</span>
+      <div class="pp-age">超出承保年齡範圍（最高 ${p.max} 歲）</div>
+    </div>`;
+    return`<div class="pa-period ${ppCls[i]}">
+      <span class="pp-badge ${pbCls[i]}">第 ${i+1} 期</span>
+      <div class="pp-age">${p.as}～${p.as+9} 歲・${p.tbl}</div>
+      <div class="pp-annual-label">年繳保費</div>
+      <div class="pp-annual">${fmt(p.annual)}<span> 元</span></div>
+      <div class="pp-row"><span class="pp-row-label">費率（${p.as} 歲）</span><span class="pp-row-val">${p.rate} 元/萬</span></div>
+      <div class="pp-row"><span class="pp-row-label">10 年總繳</span><span class="pp-row-val">${fmt(p.total10)} 元</span></div>
+      <div class="pp-row"><span class="pp-row-label">期滿退還（未理賠）</span><span class="pp-row-val green">＋${fmt(p.refund)} 元</span></div>
+      <div class="pp-net-row">
+        <span class="pp-net-label">淨支出</span>
+        <span class="pp-net-val ${accentCls[i]}">${fmt(p.net)} 元</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  const totalNet=PD.reduce((s,p)=>s+(p.valid?p.net:0),0);
+
+  document.getElementById('print-area').innerHTML=`
+    <div class="pa-header">
+      <div class="pa-logo">
+        <div class="pa-logo-mark">FB</div>
+        <div class="pa-title">
+          <h1>富邦人壽醫靠安心重大傷病定期健康保險</h1>
+          <p>SDKA／SDKB・10 年期・保費試算報告</p>
+        </div>
+      </div>
+      <div class="pa-date">試算日期：${dateStr}</div>
+    </div>
+
+    <div class="pa-info-box">
+      <div class="pa-info-item">
+        <div class="pa-info-label">性別</div>
+        <div class="pa-info-val">${genderTxt}</div>
+      </div>
+      <div class="pa-info-item">
+        <div class="pa-info-label">出生年月日</div>
+        <div class="pa-info-val">${birthTxt}</div>
+      </div>
+      <div class="pa-info-item">
+        <div class="pa-info-label">保險年齡</div>
+        <div class="pa-info-val">${_age} 歲</div>
+      </div>
+      <div class="pa-info-item">
+        <div class="pa-info-label">保額</div>
+        <div class="pa-info-val">${fmt(_cov)} 萬元</div>
+      </div>
+      <div class="pa-info-item">
+        <div class="pa-info-label">三期淨總支出</div>
+        <div class="pa-info-val" style="color:#1a7c5a">${fmt(totalNet)} 元</div>
+      </div>
+    </div>
+
+    <div class="pa-periods-title">各期保費明細</div>
+    <div class="pa-periods">${periodHTML}</div>
+
+    <div class="pa-disclaimer">
+      ※ 本試算以費率表資料為基礎，僅供參考，實際保費以富邦人壽核保結果為準。<br>
+      ※「退還一年保費」為假設未發生理賠且完整繳足 10 年之情形。計算基礎：年保費 × 9 年 ＝ 淨支出。<br>
+      ※ 費率單位：元／每萬元保額；新契約 (SDKA) 投保年齡上限 61 歲；有效契約續保 (SDKB) 最高至 71 歲（含）。<br>
+      ※ 繳費期間：10 年期；保障期間：每期 10 年，共最多 3 期（最高至 71 歲）。
+    </div>
+    <div class="pa-watermark">此報告由 Kevin-Ai 保費試算工具 產出</div>`;
+
+  window.print();
+}
+</script>
 </body>
 </html>
