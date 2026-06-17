@@ -26,9 +26,7 @@
   --shadow:0 2px 12px rgba(0,0,0,.06);
   --shadow-hover:0 8px 30px rgba(0,0,0,.10);
 }
-html{font-size:16px}
-@media(min-width:1025px){html{zoom:1.4}}
-@media(min-width:641px) and (max-width:1024px){html{zoom:1.15}}
+html{font-size:15px}
 body{
   font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Noto Sans TC','Segoe UI',sans-serif;
   background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;
@@ -36,32 +34,32 @@ body{
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap');
 
 /* ── Page ── */
-.page{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:28px 20px 100px}
+.page{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:24px 18px 80px}
 
 /* ── Header ── */
 header{display:flex;align-items:center;justify-content:space-between;padding-bottom:36px}
 .logo{display:flex;align-items:center;gap:14px}
 .logo-mark{
-  width:44px;height:44px;border-radius:13px;
+  width:38px;height:38px;border-radius:11px;
   background:linear-gradient(135deg,var(--brand),#818CF8);
   display:flex;align-items:center;justify-content:center;
-  font-weight:900;font-size:16px;color:#fff;letter-spacing:-.5px;
+  font-weight:900;font-size:14px;color:#fff;letter-spacing:-.5px;
   box-shadow:0 4px 16px rgba(99,102,241,.25);
 }
-.logo-info strong{display:block;font-size:17px;font-weight:700;letter-spacing:-.01em;color:var(--tx)}
-.logo-info span{font-size:12px;color:var(--mu)}
+.logo-info strong{display:block;font-size:15px;font-weight:700;letter-spacing:-.01em;color:var(--tx)}
+.logo-info span{font-size:11px;color:var(--mu)}
 .badge{
-  padding:6px 16px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.06em;
+  padding:5px 13px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;
   background:var(--brand-light);border:1px solid var(--c1-border);color:var(--brand);
 }
 
 /* ── Card ── */
 .card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:18px;padding:32px;
+  border-radius:16px;padding:26px;
   box-shadow:var(--shadow);
 }
-.card+.card,.card+.results{margin-top:16px}
+.card+.card,.card+.results{margin-top:14px}
 .section-label{
   font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   color:var(--mu);margin-bottom:24px;
@@ -70,13 +68,13 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
 /* ── Gender Pills ── */
 .gender-row{display:flex;gap:10px;margin-bottom:28px}
 .g-btn{
-  flex:1;display:flex;align-items:center;justify-content:center;gap:10px;
-  padding:18px 12px;border:1.5px solid var(--border);border-radius:14px;
+  flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 10px;border:1.5px solid var(--border);border-radius:12px;
   cursor:pointer;transition:all .2s;background:var(--surface);
-  font-size:16px;font-weight:600;color:var(--mu);
+  font-size:14px;font-weight:600;color:var(--mu);
 }
 .g-btn input{display:none}
-.g-btn .g-icon{font-size:22px;line-height:1}
+.g-btn .g-icon{font-size:18px;line-height:1}
 .g-btn:hover{border-color:var(--border-hover);color:var(--tx);background:#F9FAFB}
 .g-btn.male-on{border-color:rgba(99,102,241,.5);background:rgba(99,102,241,.06);color:var(--c1)}
 .g-btn.female-on{border-color:rgba(168,85,247,.5);background:rgba(168,85,247,.06);color:#A855F7}
@@ -86,7 +84,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
 .date-row{display:flex;gap:10px;margin-bottom:28px}
 .date-row input,.date-row select{
   background:#F9FAFB;border:1.5px solid var(--border);
-  border-radius:12px;color:var(--tx);font-size:15px;padding:14px 16px;
+  border-radius:10px;color:var(--tx);font-size:14px;padding:12px 14px;
   outline:none;transition:border-color .2s,background .2s;
   appearance:none;-webkit-appearance:none;width:100%;
 }
@@ -106,13 +104,13 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
 /* ── Coverage Slider ── */
 .coverage-section{margin-bottom:8px}
 .coverage-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
-.coverage-big{font-size:48px;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--tx)}
-.coverage-big .unit{font-size:20px;font-weight:600;color:var(--mu);margin-left:4px}
+.coverage-big{font-size:36px;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--tx)}
+.coverage-big .unit{font-size:16px;font-weight:600;color:var(--mu);margin-left:4px}
 .coverage-input-wrap{position:relative}
 .coverage-input{
   background:transparent;border:none;outline:none;
-  font-size:48px;font-weight:800;letter-spacing:-.03em;color:var(--tx);
-  width:160px;text-align:right;
+  font-size:36px;font-weight:800;letter-spacing:-.03em;color:var(--tx);
+  width:130px;text-align:right;
 }
 .coverage-input::-webkit-inner-spin-button{display:none}
 
@@ -136,10 +134,10 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
 
 /* ── Calc Button ── */
 .calc-btn{
-  width:100%;padding:20px;margin-top:8px;
+  width:100%;padding:16px;margin-top:8px;
   background:var(--brand);
-  border:none;border-radius:14px;
-  color:#fff;font-size:17px;font-weight:800;letter-spacing:.04em;
+  border:none;border-radius:12px;
+  color:#fff;font-size:15px;font-weight:800;letter-spacing:.04em;
   cursor:pointer;transition:all .2s;
 }
 .calc-btn:hover{background:#4F46E5;transform:translateY(-2px);box-shadow:0 8px 24px rgba(99,102,241,.3)}
@@ -155,16 +153,16 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
 /* ── Hero ── */
 .hero{
   background:var(--surface);
-  border:1px solid var(--border);border-radius:18px;padding:32px;margin-bottom:16px;
+  border:1px solid var(--border);border-radius:16px;padding:26px;margin-bottom:14px;
   box-shadow:var(--shadow);
   border-top:3px solid var(--brand);
 }
 .hero-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:24px}
-.hero-who{font-size:15px;font-weight:600;color:var(--brand);margin-top:4px}
+.hero-who{font-size:13px;font-weight:600;color:var(--brand);margin-top:4px}
 .hero-label{font-size:11px;color:var(--mu);font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
-.hero-big{font-size:52px;font-weight:900;letter-spacing:-.03em;line-height:1;color:var(--tx)}
-.hero-big .cur{font-size:26px;font-weight:600;color:var(--mu);margin-right:2px}
-.hero-meta{font-size:13px;color:var(--mu);text-align:right;line-height:2}
+.hero-big{font-size:40px;font-weight:900;letter-spacing:-.03em;line-height:1;color:var(--tx)}
+.hero-big .cur{font-size:20px;font-weight:600;color:var(--mu);margin-right:2px}
+.hero-meta{font-size:12px;color:var(--mu);text-align:right;line-height:2}
 .hero-meta strong{color:var(--tx)}
 
 /* ── Timeline Bar ── */
@@ -189,7 +187,7 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
 /* ── Period Cards ── */
 .periods{display:flex;flex-direction:column;gap:14px;margin-bottom:16px}
 .pc{
-  border-radius:18px;padding:26px;border:1px solid var(--border);
+  border-radius:14px;padding:22px;border:1px solid var(--border);
   position:relative;overflow:hidden;background:var(--surface);
   box-shadow:var(--shadow);
 }
@@ -216,8 +214,8 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
 /* Annual big number */
 .pc-annual{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px}
 .annual-wrap .al{font-size:11px;color:var(--mu);margin-bottom:6px;font-weight:600;letter-spacing:.07em;text-transform:uppercase}
-.annual-num{font-size:38px;font-weight:900;letter-spacing:-.02em;line-height:1}
-.annual-num .u{font-size:16px;font-weight:600;color:var(--mu);margin-left:4px}
+.annual-num{font-size:30px;font-weight:900;letter-spacing:-.02em;line-height:1}
+.annual-num .u{font-size:14px;font-weight:600;color:var(--mu);margin-left:4px}
 .rate-chip{
   font-size:12px;color:var(--tx2);
   background:#F3F4F6;border:1px solid var(--border);
@@ -245,23 +243,23 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
   background:#F9FAFB;border:1px solid var(--border);
 }
 .stat .sl{font-size:11px;color:var(--mu);margin-bottom:6px;font-weight:500}
-.stat .sv{font-size:17px;font-weight:800;letter-spacing:-.01em;color:var(--tx)}
+.stat .sv{font-size:15px;font-weight:800;letter-spacing:-.01em;color:var(--tx)}
 .sv-green{color:var(--green) !important}
 .sv-1{color:var(--c1) !important}.sv-2{color:var(--c2) !important}.sv-3{color:var(--c3) !important}
 
 /* ── Until Selector ── */
 .total-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:18px;padding:28px;
+  border-radius:14px;padding:22px;
   box-shadow:var(--shadow);
 }
-.until-title{font-size:22px;font-weight:800;margin-bottom:6px;color:var(--tx)}
+.until-title{font-size:18px;font-weight:800;margin-bottom:6px;color:var(--tx)}
 .until-sub{font-size:14px;color:var(--mu);margin-bottom:22px}
 
 .until-opts{display:flex;flex-direction:column;gap:10px}
 .u-opt{
   display:flex;align-items:center;gap:14px;
-  padding:18px 20px;border:1.5px solid var(--border);border-radius:14px;
+  padding:14px 16px;border:1.5px solid var(--border);border-radius:12px;
   cursor:pointer;transition:all .2s;background:var(--surface);
   position:relative;overflow:hidden;
 }
@@ -279,9 +277,9 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
 .u-opt.sel .u-radio{border-color:var(--brand);background:rgba(99,102,241,.1)}
 .u-dot{width:10px;height:10px;border-radius:50%;background:var(--brand);opacity:0;transition:opacity .15s}
 .u-opt.sel .u-dot{opacity:1}
-.u-text{flex:1;font-size:15px;font-weight:600;color:var(--tx)}
+.u-text{flex:1;font-size:14px;font-weight:600;color:var(--tx)}
 .u-sub{font-size:12px;color:var(--mu);margin-top:2px;font-weight:400}
-.u-amount{font-size:20px;font-weight:900;color:var(--brand);letter-spacing:-.01em;text-align:right}
+.u-amount{font-size:17px;font-weight:900;color:var(--brand);letter-spacing:-.01em;text-align:right}
 .u-amount-label{font-size:11px;color:var(--mu);text-align:right;font-weight:500}
 
 /* ── Total Result Box ── */
@@ -304,7 +302,7 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
 .tr-v-green{color:var(--green)}
 .tr-main{padding-top:18px;margin-top:8px;border-top:2px solid var(--border) !important}
 .tr-main .tr-l{font-size:16px;font-weight:700;color:var(--tx)}
-.tr-net{font-size:36px;font-weight:900;color:var(--brand);letter-spacing:-.02em}
+.tr-net{font-size:28px;font-weight:900;color:var(--brand);letter-spacing:-.02em}
 
 /* ── Disclaimer ── */
 .disc{
@@ -406,10 +404,10 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
 
 /* ── Print Button ── */
 .print-btn{
-  width:100%;padding:20px;margin-top:16px;
+  width:100%;padding:16px;margin-top:14px;
   background:var(--surface);
-  border:1.5px solid var(--border);border-radius:14px;
-  color:var(--tx2);font-size:17px;font-weight:700;letter-spacing:.04em;
+  border:1.5px solid var(--border);border-radius:12px;
+  color:var(--tx2);font-size:15px;font-weight:700;letter-spacing:.04em;
   cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;
 }
 .print-btn:hover{background:#F9FAFB;border-color:var(--border-hover);color:var(--tx)}
@@ -418,7 +416,6 @@ input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 0 0 
 /* ── @media print ── */
 @media print{
   @page{size:A4 portrait;margin:14mm 16mm}
-  html{zoom:1 !important}
   body{background:#fff !important;color:#111 !important}
   .page{display:none !important}
   #print-area{display:block !important}
@@ -629,12 +626,12 @@ body { padding-top: 48px !important; }
       <div>
         <div style="display:flex;align-items:flex-end;gap:4px">
           <input type="number" class="coverage-input" id="cov-num" value="100" min="0" max="200" step="10" oninput="syncSlider(this.value);clearResults()">
-          <span style="font-size:20px;font-weight:600;color:var(--mu);padding-bottom:8px">萬元</span>
+          <span style="font-size:16px;font-weight:600;color:var(--mu);padding-bottom:6px">萬元</span>
         </div>
       </div>
       <div style="text-align:right;color:var(--mu);font-size:13px;line-height:2">
         <div>每年保費</div>
-        <div id="preview-annual" style="font-size:20px;font-weight:800;color:var(--tx)">—</div>
+        <div id="preview-annual" style="font-size:17px;font-weight:800;color:var(--tx)">—</div>
       </div>
     </div>
     <div class="slider-wrap">
